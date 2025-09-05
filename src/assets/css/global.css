@@ -1,0 +1,44 @@
+@import './_variables.css';
+
+/* Fonts */
+@import url('https://webfontworld.github.io/gmarket/GmarketSans.css');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+
+/* Reset & Base */
+* {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+}
+
+body {
+   font-family: 'GmarketSans', 'Noto Sans KR', sans-serif;
+   color: var(--text-primary);
+   background-color: var(--bg-main);
+}
+
+/* Margins */
+.mt-20 { margin-top: var(--spacing-20); }
+.mt-40 { margin-top: var(--spacing-40); }
+.mt-80 { margin-top: var(--spacing-80); }
+
+/* Padding */
+.common-padding { padding: var(--spacing-80); }
+
+/* Card */
+.card {
+   transition: box-shadow 0.3s ease;
+   box-shadow: var(--card-shadow);
+}
+
+.card:hover {
+   box-shadow: var(--card-shadow-hover);
+}
+
+/* Common */
+.bg-primary { background-color: var(--primary) !important; }
+.bg-secondary { background-color: var(--secondary) !important; }
+.bg-sub { background-color: var(--bg-sub); }
+
+.text-primary { color: var(--primary) !important; }
+.text-secondary { color: var(--text-secondary) !important; }
