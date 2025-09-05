@@ -2,51 +2,17 @@ import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { statsAPI } from '../../services/api'
 import { faHome, faUsers, faCreditCard, faShoppingCart, faHandshake, faQuestionCircle, faMoon, faSearch } from '@fortawesome/free-solid-svg-icons'
 import './AdminDashboard.css'
-
-const mockInquiries = [
-   {
-      id: 1,
-      userName: '김민지',
-      content: '요금제 변경 문의',
-      status: 'pending',
-      date: '2025-09-05',
-   },
-   {
-      id: 2,
-      userName: '박지훈',
-      content: '결제 오류 문의',
-      status: 'completed',
-      date: '2025-09-04',
-   },
-   {
-      id: 3,
-      userName: '최서연',
-      content: '서비스 이용 문의',
-      status: 'pending',
-      date: '2025-09-03',
-   },
-   {
-      id: 4,
-      userName: '이준호',
-      content: '환불 문의',
-      status: 'completed',
-      date: '2025-09-02',
-   },
-   {
-      id: 5,
-      userName: '정하윤',
-      content: '계정 관련 문의',
-      status: 'pending',
-      date: '2025-09-01',
-   },
-]
 
 const AdminDashboard = () => {
    const navigate = useNavigate()
    const { user } = useSelector((state) => state.auth)
    const [darkMode, setDarkMode] = useState(false)
+   const [loading, setLoading] = useState(true)
+   const [error, setError] = useState(null)
+   const [inquiries, setInquiries] = useState([])
    const [stats, setStats] = useState({
       totalUsers: 0,
       totalRevenue: 0,
@@ -73,7 +39,15 @@ const AdminDashboard = () => {
 
       const fetchStats = async () => {
          try {
-            // 임시 데이터 - 실제로는 API에서 가져올 데이터
+            // API 호출로 데이터 가져오기
+            const [statsResponse, inquiriesResponse] = await Promise.all([statsAPI.getDashboardStats(), statsAPI.getInquiries()])
+
+            setStats(statsResponse.data)
+            setInquiries(inquiriesResponse.data)
+         } catch (error) {
+            console.error('통계 데이터 로드 실패:', error)
+
+            // 임시 데이터로 폴백
             const mockOrders = [
                {
                   id: 1,
@@ -139,8 +113,45 @@ const AdminDashboard = () => {
                averageOrder,
                recentOrders: mockOrders.sort((a, b) => new Date(b.date) - new Date(a.date)),
             })
-         } catch (error) {
-            console.error('통계 데이터 로드 실패:', error)
+
+            // 임시 문의 데이터 설정
+            setInquiries([
+               {
+                  id: 1,
+                  userName: '김민지',
+                  content: '요금제 변경 문의',
+                  status: 'pending',
+                  date: '2025-09-05',
+               },
+               {
+                  id: 2,
+                  userName: '박지훈',
+                  content: '결제 오류 문의',
+                  status: 'completed',
+                  date: '2025-09-04',
+               },
+               {
+                  id: 3,
+                  userName: '최서연',
+                  content: '서비스 이용 문의',
+                  status: 'pending',
+                  date: '2025-09-03',
+               },
+               {
+                  id: 4,
+                  userName: '이준호',
+                  content: '환불 문의',
+                  status: 'completed',
+                  date: '2025-09-02',
+               },
+               {
+                  id: 5,
+                  userName: '정하윤',
+                  content: '계정 관련 문의',
+                  status: 'pending',
+                  date: '2025-09-01',
+               },
+            ])
          }
       }
 
@@ -293,7 +304,7 @@ const AdminDashboard = () => {
                               </tr>
                            </thead>
                            <tbody>
-                              {mockInquiries.map((inquiry) => (
+                              {inquiries.map((inquiry) => (
                                  <tr key={inquiry.id}>
                                     <td>{inquiry.userName}</td>
                                     <td>{inquiry.content}</td>
