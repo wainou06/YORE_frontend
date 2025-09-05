@@ -1,13 +1,15 @@
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
+import logo from '@assets/images/logo.png'
 
 const Header = () => {
    return (
       <header className="bg-white shadow-sm">
          <nav className="navbar navbar-expand-lg navbar-light container py-3">
             <Link className="navbar-brand" to="/">
-               <img src="/images/logo.svg" alt="YORE" height="30" />
+               <img src={logo} alt="YORE" height="30" />
+               <h1 className="d-inline-block align-middle ml-2">YORE</h1>
             </Link>
 
             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">

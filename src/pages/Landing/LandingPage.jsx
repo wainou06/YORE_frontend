@@ -3,6 +3,10 @@ import Slider from 'react-slick'
 import LoginWidget from '@components/common/LoginWidget'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMobileAlt, faWifi, faComments } from '@fortawesome/free-solid-svg-icons'
+import banner1 from '@assets/images/banner/banner1.svg'
+import banner2 from '@assets/images/banner/banner2.svg'
+import banner3 from '@assets/images/banner/banner3.svg'
+import banner4 from '@assets/images/banner/banner4.svg'
 
 const LandingPage = () => {
    const { isAuthenticated } = useSelector((state) => state.auth)
@@ -34,16 +38,16 @@ const LandingPage = () => {
                   <div className="col-lg-8">
                      <Slider {...sliderSettings}>
                         <div>
-                           <img src="/images/banner/banner1.svg" alt="프로모션 1" className="img-fluid rounded" />
+                           <img src={banner1} alt="프로모션 1" className="img-fluid rounded" />
                         </div>
                         <div>
-                           <img src="/images/banner/banner2.svg" alt="프로모션 2" className="img-fluid rounded" />
+                           <img src={banner2} alt="프로모션 2" className="img-fluid rounded" />
                         </div>
                         <div>
-                           <img src="/images/banner/banner3.svg" alt="프로모션 3" className="img-fluid rounded" />
+                           <img src={banner3} alt="프로모션 3" className="img-fluid rounded" />
                         </div>
                         <div>
-                           <img src="/images/banner/banner4.svg" alt="프로모션 4" className="img-fluid rounded" />
+                           <img src={banner4} alt="프로모션 4" className="img-fluid rounded" />
                         </div>
                      </Slider>
                   </div>

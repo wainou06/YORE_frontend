@@ -4,7 +4,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { statsAPI } from '../../services/api'
 import { faHome, faUsers, faCreditCard, faShoppingCart, faHandshake, faQuestionCircle, faMoon, faSearch } from '@fortawesome/free-solid-svg-icons'
-import './AdminDashboard.css'
+import '../../assets/css/AdminDashboard.css'
 
 const AdminDashboard = () => {
    const navigate = useNavigate()

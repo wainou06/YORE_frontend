@@ -1,8 +1,27 @@
 @import './_variables.css';
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
 
 /* Fonts */
-@import url('https://webfontworld.github.io/gmarket/GmarketSans.css');
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+@font-face {
+   font-family: 'GMarketSans';
+   src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff') format('woff');
+   font-weight: 300;
+   font-display: swap;
+}
+
+@font-face {
+   font-family: 'GMarketSans';
+   src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+   font-weight: 500;
+   font-display: swap;
+}
+
+@font-face {
+   font-family: 'GMarketSans';
+   src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff');
+   font-weight: 700;
+   font-display: swap;
+}
 
 /* Reset & Base */
 * {
@@ -12,18 +31,37 @@
 }
 
 body {
-   font-family: 'GmarketSans', 'Noto Sans KR', sans-serif;
+   font-family: 'Noto Sans KR', sans-serif;
    color: var(--text-primary);
    background-color: var(--bg-main);
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+   font-family: 'GMarketSans', sans-serif;
+   color: var(--text-primary);
+   margin-bottom: var(--spacing-10);
+}
+
 /* Margins */
-.mt-20 { margin-top: var(--spacing-20); }
-.mt-40 { margin-top: var(--spacing-40); }
-.mt-80 { margin-top: var(--spacing-80); }
+.mt-20 {
+   margin-top: var(--spacing-20);
+}
+.mt-40 {
+   margin-top: var(--spacing-40);
+}
+.mt-80 {
+   margin-top: var(--spacing-80);
+}
 
 /* Padding */
-.common-padding { padding: var(--spacing-80); }
+.common-padding {
+   padding: var(--spacing-80);
+}
 
 /* Card */
 .card {
@@ -36,9 +74,19 @@ body {
 }
 
 /* Common */
-.bg-primary { background-color: var(--primary) !important; }
-.bg-secondary { background-color: var(--secondary) !important; }
-.bg-sub { background-color: var(--bg-sub); }
+.bg-primary {
+   background-color: var(--primary) !important;
+}
+.bg-secondary {
+   background-color: var(--secondary) !important;
+}
+.bg-sub {
+   background-color: var(--bg-sub);
+}
 
-.text-primary { color: var(--primary) !important; }
-.text-secondary { color: var(--text-secondary) !important; }
+.text-primary {
+   color: var(--primary) !important;
+}
+.text-secondary {
+   color: var(--text-secondary) !important;
+}
