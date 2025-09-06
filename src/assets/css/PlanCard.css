@@ -1,0 +1,93 @@
+.plan-card {
+   width: 255px;
+   height: 363px;
+   position: relative;
+   cursor: pointer;
+   transition: transform 0.2s ease;
+}
+
+.plan-card:hover {
+   transform: translateY(-5px);
+}
+
+.plan-card-container {
+   width: 255px;
+   height: 363px;
+   background: white;
+   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+   border-radius: 15px;
+   position: absolute;
+   top: 0;
+   left: 0;
+}
+
+.plan-content {
+   width: 192px;
+   position: absolute;
+   left: 32px;
+   top: 40px;
+   display: flex;
+   flex-direction: column;
+   gap: 20px;
+}
+
+.plan-title {
+   color: black;
+   font-size: 24px;
+   font-family: 'Noto Sans KR', sans-serif;
+   font-weight: 500;
+   word-wrap: break-word;
+}
+
+.plan-feature {
+   color: #4d4d4d;
+   font-size: 18px;
+   font-family: 'Noto Sans KR', sans-serif;
+   font-weight: 400;
+   word-wrap: break-word;
+}
+
+.price-container {
+   width: 255px;
+   height: 128px;
+   position: absolute;
+   left: 0;
+   top: 235px;
+   background: #f9f9f9;
+   border-bottom-right-radius: 15px;
+   border-bottom-left-radius: 15px;
+}
+
+.price-current {
+   position: absolute;
+   left: 32px;
+   top: 304px;
+   color: #137fec;
+   font-size: 32px;
+   font-family: 'Inter', sans-serif;
+   font-weight: 700;
+   word-wrap: break-word;
+}
+
+.price-original {
+   position: absolute;
+   left: 32px;
+   top: 255px;
+   color: #137fec;
+   font-size: 24px;
+   font-family: 'Inter', sans-serif;
+   font-weight: 700;
+   text-decoration: line-through;
+   word-wrap: break-word;
+}
+
+.price-unit {
+   position: absolute;
+   left: 179px;
+   top: 321px;
+   color: #4d4d4d;
+   font-size: 18px;
+   font-family: 'Noto Sans KR', sans-serif;
+   font-weight: 500;
+   word-wrap: break-word;
+}

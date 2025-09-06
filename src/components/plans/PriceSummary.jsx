@@ -4,7 +4,19 @@ import { calculateTotalPrice, calculatePoints } from '@features/plans/pricing'
 
 const PriceSummary = ({ plan, options, onCheckout }) => {
    const totalPrice = calculateTotalPrice(plan.price, options)
-   const points = calculatePoints(totalPrice, options.contract || 1)
+   const points = calculatePoints(totalPrice, options.dis || '0')
+
+   // OpenAPI 요청을 위한 데이터 변환
+   const getApiParams = () => {
+      return {
+         voice: options.voice || '999999', // 무제한이면 999999
+         data: options.data || '999999', // 무제한이면 999999
+         sms: options.sms || '999999', // 무제한이면 999999
+         age: options.age >= 65 ? '65' : options.age <= 24 ? '18' : '20',
+         type: plan.networkType === '5G' ? '6' : plan.networkType === 'LTE' ? '3' : '2',
+         dis: options.contract ? options.contract.toString() : '0',
+      }
+   }
 
    return (
       <div className="card shadow-sm">
@@ -49,7 +61,18 @@ const PriceSummary = ({ plan, options, onCheckout }) => {
 
             <div className="text-muted small mb-3">12개월 약정 시 적립 포인트: {points.toLocaleString()}P</div>
 
-            <button className="btn btn-primary w-100" onClick={() => onCheckout({ totalPrice, points })}>
+            <button
+               className="btn btn-primary w-100"
+               onClick={() =>
+                  onCheckout({
+                     ...getApiParams(),
+                     totalPrice,
+                     points,
+                     selectedServices: options.services,
+                     planId: plan.id,
+                  })
+               }
+            >
                가입하기
             </button>
          </div>

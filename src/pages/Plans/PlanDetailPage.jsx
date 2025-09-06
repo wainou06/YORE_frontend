@@ -3,6 +3,10 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMobileAlt, faWifi, faEnvelope, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import PriceSummary from '@components/plans/PriceSummary'
+import carrierSKT from '@assets/images/carrier/SK.png'
+import carrierKT from '@assets/images/carrier/KT.png'
+import carrierLGU from '@assets/images/carrier/LGU.png'
+import '@assets/css/PlanDetail.css'
 
 const PlanDetailPage = () => {
    const { id } = useParams()
@@ -12,19 +16,66 @@ const PlanDetailPage = () => {
       age: '',
       contract: '',
       services: [],
+      carrier: '',
    })
 
-   // 임시 데이터
-   const mockPlan = {
-      id: 1,
-      name: '5G 라이트',
-      carrier: 'SKT',
-      data: '5GB',
-      voice: '무제한',
-      sms: '무제한',
-      price: 29900,
-      features: ['데이터 소진 시 1Mbps 무제한', 'T멤버십 기본 제공', 'T우주 무제한 제공'],
-   }
+   const carriers = [
+      { id: 'SKT', name: 'SKT', logo: carrierSKT, color: '#E3383B', bgColor: '#FFF5F5' },
+      { id: 'KT', name: 'KT', logo: carrierKT, color: '#1C89ED', bgColor: '#F5F9FF' },
+      { id: 'LGU', name: 'LG U+', logo: carrierLGU, color: '#E6007E', bgColor: '#FFF5FA' },
+   ]
+
+   // 기본 요금제 데이터
+   const defaultPlans = [
+      {
+         id: 1,
+         name: '5GB 요금제',
+         data: '5GB',
+         voice: '200',
+         sms: '100',
+         price: 29900,
+         carrier: 'SKT',
+         networkType: 'LTE',
+         description: '부담없는 데이터 요금제',
+         features: ['데이터 소진 시 저속 무제한', '부가서비스 무료', 'T멤버십 기본 제공'],
+      },
+      {
+         id: 2,
+         name: '10GB 요금제',
+         data: '10GB',
+         voice: '300',
+         sms: '200',
+         price: 39900,
+         carrier: 'KT',
+         networkType: 'LTE',
+         description: '실속있는 데이터 요금제',
+         features: ['데이터 소진 시 저속 무제한', '부가서비스 2개 무료', 'Y멤버십 제공'],
+      },
+      {
+         id: 3,
+         name: '15GB 요금제',
+         data: '15GB',
+         voice: '무제한',
+         sms: '무제한',
+         price: 49900,
+         carrier: 'LG U+',
+         networkType: '5G',
+         description: '넉넉한 데이터 요금제',
+         features: ['데이터 완전 무제한', '부가서비스 3개 무료', 'U+멤버십 제공'],
+      },
+      {
+         id: 4,
+         name: '무제한 요금제',
+         data: '무제한',
+         voice: '무제한',
+         sms: '무제한',
+         price: 59900,
+         carrier: 'SKT',
+         networkType: '5G',
+         description: '완전 무제한 요금제',
+         features: ['데이터/통화/문자 무제한', '모든 부가서비스 무료', 'T우주 무제한 제공'],
+      },
+   ]
 
    const additionalServices = [
       { id: 1, name: '안심 옵션', description: '분실/도난 보험', price: 3000 },
@@ -34,15 +85,29 @@ const PlanDetailPage = () => {
    ]
 
    useEffect(() => {
-      // TODO: API 연동
-      setPlan(mockPlan)
-   }, [id])
+      // ID에 해당하는 요금제 찾기
+      const selectedPlan = defaultPlans.find((plan) => plan.id === parseInt(id))
+      if (selectedPlan) {
+         setPlan(selectedPlan)
+      } else {
+         // 요금제를 찾지 못한 경우 404 페이지나 홈으로 이동
+         navigate('/')
+      }
+   }, [id, navigate])
 
    const handleOptionChange = (key, value) => {
       setOptions((prev) => ({
          ...prev,
          [key]: value,
       }))
+
+      // 통신사 변경 시 요금제 정보도 업데이트
+      if (key === 'carrier') {
+         setPlan((prev) => ({
+            ...prev,
+            carrier: value,
+         }))
+      }
    }
 
    const handleServiceToggle = (service) => {
@@ -92,7 +157,14 @@ const PlanDetailPage = () => {
             <div className="col-lg-8 mb-4 mb-lg-0">
                <div className="card shadow-sm mb-4">
                   <div className="card-body">
-                     <div className={`badge ${plan.carrier === 'SKT' ? 'bg-danger' : plan.carrier === 'KT' ? 'bg-primary' : 'bg-danger'} mb-3`}>{plan.carrier}</div>
+                     <div
+                        className="badge mb-3"
+                        style={{
+                           backgroundColor: carriers.find((c) => c.id === plan.carrier)?.color || '#6c757d',
+                        }}
+                     >
+                        {plan.carrier}
+                     </div>
                      <h2 className="card-title mb-4">{plan.name}</h2>
 
                      <div className="row mb-4">
@@ -135,6 +207,19 @@ const PlanDetailPage = () => {
                               </li>
                            ))}
                         </ul>
+                     </div>
+
+                     {/* 통신사 선택 */}
+                     <div className="mb-4">
+                        <h5 className="mb-3">통신사 선택</h5>
+                        <div className="carrier-selection">
+                           {carriers.map((carrier) => (
+                              <div key={carrier.id} className={`carrier-option carrier-${carrier.id.toLowerCase()} ${options.carrier === carrier.id ? 'selected' : ''}`} onClick={() => handleOptionChange('carrier', carrier.id)}>
+                                 <img src={carrier.logo} alt={carrier.name} />
+                                 <div className="carrier-name">{carrier.name}</div>
+                              </div>
+                           ))}
+                        </div>
                      </div>
 
                      {/* 옵션 선택 */}
