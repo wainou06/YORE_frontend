@@ -1,9 +1,10 @@
 :root {
    /* Colors */
-   --primary: #137FEC;
-   --secondary: #E0F2FE;
-   --bg-main: #FFF;
-   --bg-sub: #F8FAFC;
+   --primary: #137fec;
+   --primary-rgb: 19, 127, 236;
+   --secondary: #e0f2fe;
+   --bg-main: #fff;
+   --bg-sub: #f8fafc;
    --text-primary: #2e2e2e;
    --text-secondary: #4d4d4d;
 

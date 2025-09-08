@@ -1,0 +1,137 @@
+/* 통신사 페이지 스타일 */
+.carriers-page {
+   overflow-x: hidden;
+}
+
+/* 헤더 영역 반응형 */
+.carriers-page .container {
+   padding-left: 1rem;
+   padding-right: 1rem;
+}
+
+@media (max-width: 576px) {
+   .carriers-page h1 {
+      font-size: 1.75rem;
+   }
+
+   .carriers-page .btn-lg {
+      font-size: 1rem;
+      padding: 0.5rem 1rem;
+   }
+}
+
+/* 통신사 섹션 반응형 */
+@media (max-width: 992px) {
+   .carriers-page .carrier-section {
+      padding: 3rem 0;
+   }
+
+   .carriers-page .lead {
+      font-size: 1.1rem;
+   }
+}
+
+/* 슬라이더 스타일 */
+.carriers-page .plans-swiper {
+   padding: 1rem;
+   margin: 0 -1rem;
+   overflow: visible;
+}
+
+.carriers-page .swiper-wrapper {
+   transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* 기본 Swiper 화살표 숨기기 */
+.carriers-page .swiper-button-prev::after,
+.carriers-page .swiper-button-next::after {
+   display: none;
+}
+
+/* 커스텀 화살표 스타일링 */
+.carriers-page .custom-swiper-button-prev,
+.carriers-page .custom-swiper-button-next {
+   position: absolute;
+   top: 50%;
+   transform: translateY(-50%);
+   width: 3rem;
+   height: 3rem;
+   border-radius: 50%;
+   background-color: white;
+   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+   color: var(--primary);
+   z-index: 10;
+   cursor: pointer;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   transition: all 0.3s ease;
+}
+
+.carriers-page .custom-swiper-button-prev {
+   left: -1rem;
+}
+
+.carriers-page .custom-swiper-button-next {
+   right: -1rem;
+}
+
+.carriers-page .custom-swiper-button-prev svg,
+.carriers-page .custom-swiper-button-next svg {
+   width: 1.2rem;
+   height: 1.2rem;
+   transition: transform 0.3s ease;
+}
+
+.carriers-page .custom-swiper-button-prev:hover,
+.carriers-page .custom-swiper-button-next:hover {
+   background-color: var(--primary);
+   color: white;
+   box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.2);
+   transform: translateY(-50%) scale(1.1);
+}
+
+.carriers-page .custom-swiper-button-prev:hover svg {
+   transform: translateX(-2px);
+}
+
+.carriers-page .custom-swiper-button-next:hover svg {
+   transform: translateX(2px);
+}
+
+.carriers-page .swiper-button-disabled {
+   opacity: 0;
+   cursor: not-allowed;
+   pointer-events: none;
+}
+
+/* 추가 Swiper 스타일 재정의 */
+.swiper {
+   overflow: visible !important;
+}
+
+.carriers-page .card {
+   height: 100%;
+   transition: transform 0.2s ease-in-out;
+}
+
+.carriers-page .card:hover {
+   transform: translateY(-5px);
+}
+
+.carrier-section {
+   border-bottom: 1px solid var(--border-color);
+}
+
+.carrier-section:last-child {
+   border-bottom: none;
+}
+
+/* Swiper FreeMode 스타일 보완 */
+.carriers-page .swiper-wrapper {
+   padding: 1rem 0;
+}
+
+.carriers-page .swiper-slide {
+   height: auto;
+}

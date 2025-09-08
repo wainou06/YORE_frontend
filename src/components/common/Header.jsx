@@ -1,22 +1,24 @@
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSearch } from '@fortawesome/free-solid-svg-icons'
+import { faSearch, faBars, faTimes } from '@fortawesome/free-solid-svg-icons'
 import logo from '@assets/images/logo.png'
 
 const Header = () => {
+   const [isMenuOpen, setIsMenuOpen] = useState(false)
    return (
-      <header className="bg-white shadow-sm">
+      <header className="bg-white shadow-sm sticky-top">
          <nav className="navbar navbar-expand-lg navbar-light container py-3">
             <Link className="navbar-brand" to="/">
                <img src={logo} alt="YORE" height="30" />
-               <h1 className="d-inline-block align-middle ml-2">YORE</h1>
+               <h1>YORE</h1>
             </Link>
 
-            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
-               <span className="navbar-toggler-icon"></span>
+            <button className="navbar-toggler border-0" type="button" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+               <FontAwesomeIcon icon={isMenuOpen ? faTimes : faBars} className="text-primary" />
             </button>
 
-            <div className="collapse navbar-collapse" id="navbarNav">
+            <div className={`navbar-collapse ${isMenuOpen ? 'show' : 'collapse'}`}>
                <form
                   className="form-inline mx-auto w-50"
                   onSubmit={(e) => {
