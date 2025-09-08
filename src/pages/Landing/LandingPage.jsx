@@ -135,7 +135,7 @@ const LandingPage = () => {
                   <h2 className="text-center mb-5">추천 요금제</h2>
                   <div className="row g-4">
                      {recommendedPlans.map((plan) => (
-                        <div key={plan.id} className="col-md-6">
+                        <div key={plan.id} className="col-md-3">
                            <div className="recommend-card">
                               <img className="recommend-card-image" src={`https://placehold.co/255x200`} alt={plan.name} onClick={() => navigate(`/plans/${plan.id}`)} />
                               <div className="recommend-card-content">
