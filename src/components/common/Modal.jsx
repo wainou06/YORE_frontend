@@ -1,4 +1,3 @@
-// import CloseIcon from '@mui/icons-material/Close'
 import '../../assets/css/modal.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { closeModal, getInput } from '../../features/modal/modalSlice'
@@ -13,16 +12,22 @@ export const ModalAlert = () => {
    }
 
    return (
-      <div className="overlay">
-         <div className="popup">
-            <button onClick={onClickClose} className="close-btn">
-               {/* <CloseIcon /> */}
-            </button>
-            <div className="popup-content">
-               <p className="popup-message">{modal.placeholder}</p>
-               <p onClick={onClickClose} style={{ cursor: 'pointer' }} className="popup-message">
-                  {'확인>'}
-               </p>
+      <div className=" overlay modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog" aria-labelledby="modalTitleId" aria-modal="true">
+         <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+               <div className="modal-header">
+                  <h5 className="modal-title" id="modalTitleId">
+                     알려드려요
+                  </h5>
+               </div>
+               <div className="modal-body">
+                  <p>{modal.placeholder}</p>
+               </div>
+               <div className="modal-footer">
+                  <button type="button" className="btn btn-primary" onClick={onClickClose}>
+                     확인
+                  </button>
+               </div>
             </div>
          </div>
       </div>
@@ -43,19 +48,26 @@ export const ModalConfirm = () => {
    }
 
    return (
-      <div className="overlay">
-         <div className="popup">
-            <button onClick={onClickClose} className="close-btn">
-               {/* <CloseIcon /> */}
-            </button>
-            <div className="popup-content">
-               <p className="popup-message">{modal.placeholder}</p>
-               <p onClick={onClickConfirm} style={{ cursor: 'pointer' }} className="popup-message">
-                  {'확인>'}
-               </p>
-               <p onClick={onClickClose} style={{ cursor: 'pointer' }} className="popup-message">
-                  {'취소>'}
-               </p>
+      <div className=" overlay modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog" aria-labelledby="modalTitleId" aria-modal="true">
+         <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+               <div className="modal-header">
+                  <h5 className="modal-title" id="modalTitleId">
+                     선택해주세요
+                  </h5>
+                  <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={onClickClose} />
+               </div>
+               <div className="modal-body">
+                  <p>{modal.placeholder}</p>
+               </div>
+               <div className="modal-footer">
+                  <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={onClickClose}>
+                     취소
+                  </button>
+                  <button type="button" className="btn btn-primary" onClick={onClickConfirm}>
+                     확인
+                  </button>
+               </div>
             </div>
          </div>
       </div>
@@ -65,7 +77,6 @@ export const ModalConfirm = () => {
 export const ModalPrompt = () => {
    const dispatch = useDispatch()
    const modal = useSelector((state) => state.modal)
-   const [input, setInput] = useState('')
 
    const onClickConfirm = () => {
       dispatch(getInput(input))
@@ -88,7 +99,7 @@ export const ModalPrompt = () => {
       <div className="overlay">
          <div className="popup">
             <button onClick={onClickClose} className="close-btn">
-               {/* <CloseIcon /> */}
+               <i class="bi bi-x-circle"></i>
             </button>
             <div className="popup-content">
                <input onChange={(e) => setInput(e.target.value)} value={input} onKeyDown={(e) => onKeydownKey(e)} className="popup-message" placeholder={modal.placeholder}></input>
@@ -122,7 +133,7 @@ export const ModalRating = () => {
       <div className="overlay">
          <div className="popup">
             <button onClick={onClickClose} className="close-btn">
-               {/* <CloseIcon /> */}
+               <i class="bi bi-x-circle"></i>
             </button>
             <div className="popup-content">
                <p className="popup-message">별점 남기기</p>
@@ -147,6 +158,55 @@ export const ModalRating = () => {
                <p onClick={onClickConfirm} style={{ cursor: 'pointer' }} className="popup-message">
                   {'확인>'}
                </p>
+            </div>
+         </div>
+      </div>
+   )
+}
+
+export const ModalManagerLogin = () => {
+   const dispatch = useDispatch()
+
+   const [id, setId] = useState('')
+   const [password, setPassword] = useState('')
+
+   const onClickConfirm = () => {
+      dispatch(getInput({ id, password }))
+      dispatch(closeModal())
+   }
+   const onClickClose = () => {
+      dispatch(getInput(null))
+      dispatch(closeModal())
+   }
+
+   return (
+      <div className=" overlay modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog" aria-labelledby="modalTitleId" aria-modal="true">
+         <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+               <div className="modal-header">
+                  <h5 className="modal-title" id="modalTitleId">
+                     매니저 로그인 화면입니다.
+                  </h5>
+                  <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={onClickClose} />
+               </div>
+               <div className="modal-body text-center">
+                  <ul className="list-unstyled">
+                     <li className="mt-3">
+                        <input onChange={(e) => setId(e.target.value)} value={id} placeholder="아이디를 입력해주세요"></input>
+                     </li>
+                     <li className="mt-3">
+                        <input onChange={(e) => setPassword(e.target.value)} value={password} placeholder="비밀번호를 입력해주세요"></input>
+                     </li>
+                  </ul>
+               </div>
+               <div className="modal-footer">
+                  <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={onClickClose}>
+                     취소
+                  </button>
+                  <button type="button" className="btn btn-primary" onClick={onClickConfirm}>
+                     확인
+                  </button>
+               </div>
             </div>
          </div>
       </div>
