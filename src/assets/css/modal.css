@@ -1,0 +1,157 @@
+.overlay {
+   position: fixed;
+   inset: 0;
+   background: rgba(0, 0, 0, 0.45);
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   z-index: 1400;
+}
+
+.popup {
+   position: relative;
+   width: 880px;
+   height: 600px !important;
+   border-radius: 100px;
+   background-color: #f0907f;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   padding: 24px;
+}
+
+.unflower-icon {
+   cursor: pointer;
+   width: 60px;
+}
+
+.close-btn,
+.back-btn {
+   top: 35px;
+   border: none;
+   border-radius: 50%;
+   background: #fff;
+   color: #f0907f;
+   width: 48px;
+   height: 48px;
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   cursor: pointer;
+}
+.close-btn {
+   right: 50px;
+}
+.back-btn {
+   left: 50px;
+}
+
+.popup-content,
+.popup-inner {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 20px;
+   width: 690px;
+}
+
+.popup-btn,
+.popup-section {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   gap: 14px;
+   width: 100%;
+   height: 88px;
+   border: none;
+   border-radius: 8px;
+   background: #fff;
+   padding: 10px 20px;
+   font-size: 23.55px;
+   font-weight: 500;
+   cursor: pointer;
+}
+
+.icon-accent {
+   color: #f0907f !important;
+   font-size: 44px !important;
+}
+
+.popup-textfield .MuiInputBase-root {
+   height: 88px;
+   border-radius: 8px;
+   background: #fff;
+   font-size: 21px;
+   padding-left: 40px;
+}
+.popup-textfield .MuiInputLabel-root {
+   font-size: 21px;
+   font-weight: 400;
+   padding-left: 40px;
+   line-height: 55px;
+}
+
+.centered-spinner {
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+}
+
+textarea {
+   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+   resize: none;
+}
+
+.popup-content {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 20px;
+}
+
+.popup-message {
+   background-color: white;
+   width: 690px;
+   height: 88px;
+   border-radius: 8px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 23.55px;
+   font-weight: 500;
+   text-align: center;
+}
+
+.popup-message-long {
+   height: 176px;
+   background-color: white;
+   width: 690px;
+   border-radius: 8px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 23.55px;
+   font-weight: 500;
+   text-align: center;
+}
+
+.popup-message-list {
+   cursor: pointer;
+   font-size: 60px;
+}
+
+.popup-link {
+   background-color: white;
+   width: 690px;
+   height: 88px;
+   border: none;
+   border-radius: 8px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 23.55px;
+   font-weight: 500;
+   text-decoration: none;
+   color: black;
+   gap: 10px;
+}
