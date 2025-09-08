@@ -1,8 +1,17 @@
 import { useState } from 'react'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { ModalConfirm } from './Modal'
+import { useDispatch } from 'react-redux'
+import { showModalThunk } from '@/features/modal/modalSlice'
 
 const Footer = () => {
    const [showAdminModal, setShowAdminModal] = useState(false)
+   const dispatch = useDispatch()
+   const modal = useSelector((state) => state.modal)
+   const onClickAdmin = () => {
+      dispatch(showModalThunk({ type: 'confirm', placeholder: '정지 일 수를 입력해주세요' }))
+   }
 
    return (
       <footer className="bg-light mt-auto">
@@ -46,7 +55,7 @@ const Footer = () => {
                         </Link>
                      </li>
                      <li>
-                        <button className="btn btn-link text-muted p-0" onClick={() => setShowAdminModal(true)}>
+                        <button className="btn btn-link text-decoration-none text-muted p-0" onClick={() => onClickAdmin()}>
                            관리자
                         </button>
                      </li>
@@ -56,6 +65,7 @@ const Footer = () => {
             <hr className="my-4" />
             <p className="text-center text-muted mb-0">© 2025 YORE. All rights reserved.</p>
          </div>
+         {modal.type === 'confirm' && <ModalConfirm />}
       </footer>
    )
 }

@@ -1,5 +1,5 @@
 import { Provider } from 'react-redux'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { store } from '@/app/store'
 import { queryClient } from '@/app/queryClient'
@@ -14,7 +14,7 @@ function App() {
    return (
       <Provider store={store}>
          <QueryClientProvider client={queryClient}>
-            <BrowserRouter>
+            <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
                <AppRoutes />
             </BrowserRouter>
          </QueryClientProvider>

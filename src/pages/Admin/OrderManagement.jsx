@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { AdminSidebar } from './AdminSidebar'
 
 const OrderManagement = () => {
    const navigate = useNavigate()
@@ -184,152 +185,154 @@ const OrderManagement = () => {
    }
 
    return (
-      <div className="container py-5">
-         <h2 className="mb-4">주문 관리</h2>
+      <div>
+         <div className="container py-5">
+            <h2 className="mb-4">주문 관리</h2>
 
-         {/* 검색 및 필터 */}
-         <div className="card shadow-sm mb-4">
-            <div className="card-body">
-               <form onSubmit={handleSearch}>
-                  <div className="row g-2">
-                     <div className="col-md-6">
-                        <input type="text" className="form-control" placeholder="고객명, 이메일, 요금제명으로 검색" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+            {/* 검색 및 필터 */}
+            <div className="card shadow-sm mb-4">
+               <div className="card-body">
+                  <form onSubmit={handleSearch}>
+                     <div className="row g-2">
+                        <div className="col-md-6">
+                           <input type="text" className="form-control" placeholder="고객명, 이메일, 요금제명으로 검색" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+                        </div>
+                        <div className="col-md-3">
+                           <select className="form-select" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+                              <option value="">모든 상태</option>
+                              <option value="completed">결제완료</option>
+                              <option value="pending">결제대기</option>
+                              <option value="failed">결제실패</option>
+                              <option value="refunded">환불완료</option>
+                           </select>
+                        </div>
+                        <div className="col-md-2">
+                           <button type="submit" className="btn btn-primary w-100">
+                              검색
+                           </button>
+                        </div>
                      </div>
-                     <div className="col-md-3">
-                        <select className="form-select" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-                           <option value="">모든 상태</option>
-                           <option value="completed">결제완료</option>
-                           <option value="pending">결제대기</option>
-                           <option value="failed">결제실패</option>
-                           <option value="refunded">환불완료</option>
-                        </select>
-                     </div>
-                     <div className="col-md-2">
-                        <button type="submit" className="btn btn-primary w-100">
-                           검색
-                        </button>
-                     </div>
-                  </div>
-               </form>
+                  </form>
+               </div>
             </div>
-         </div>
 
-         {/* 주문 목록 */}
-         <div className="card shadow-sm">
-            <div className="table-responsive">
-               <table className="table table-hover mb-0">
-                  <thead>
-                     <tr>
-                        <th>주문번호</th>
-                        <th>고객 정보</th>
-                        <th>요금제 정보</th>
-                        <th>결제 정보</th>
-                        <th>포인트</th>
-                        <th>상태</th>
-                        <th>관리</th>
-                     </tr>
-                  </thead>
-                  <tbody>
-                     {orders.map((order) => (
-                        <tr key={order.id} className="align-middle">
-                           <td>
-                              <div className="fw-bold">#{order.id}</div>
-                              <div className="small text-muted">{new Date(order.orderDate).toLocaleDateString()}</div>
-                           </td>
-                           <td>
-                              <div className="fw-bold">{order.customerName}</div>
-                              <div className="small">{order.customerEmail}</div>
-                              <div className="small text-muted">{order.customerPhone}</div>
-                           </td>
-                           <td>
-                              <div className="fw-bold">{order.planName}</div>
-                              <div className="small">
-                                 <span className={`badge me-1 ${order.planCarrier === 'SKT' ? 'bg-danger' : order.planCarrier === 'KT' ? 'bg-primary' : 'bg-danger'}`}>{order.planCarrier}</span>
-                                 <span className="text-muted">{order.contract}</span>
-                              </div>
-                              <div className="mt-1">
-                                 {order.features.map((feature, index) => (
-                                    <span key={index} className="badge bg-light text-dark me-1">
-                                       {feature}
-                                    </span>
-                                 ))}
-                              </div>
-                           </td>
-                           <td>
-                              <div className="fw-bold text-primary">{order.amount.toLocaleString()}원</div>
-                              {order.originalPrice !== order.amount && <div className="small text-muted text-decoration-line-through">{order.originalPrice.toLocaleString()}원</div>}
-                              <div className="small">
-                                 {order.paymentMethod === 'card' ? (
-                                    <>
-                                       {order.cardCompany}
-                                       <br />
-                                       {order.cardNumber}
-                                    </>
-                                 ) : (
-                                    <>
-                                       {order.bankName}
-                                       <br />
-                                       {order.accountNumber}
-                                    </>
-                                 )}
-                              </div>
-                           </td>
-                           <td>
-                              {order.usePoint > 0 && <div className="text-danger">-{order.usePoint.toLocaleString()}P</div>}
-                              {order.earnedPoint > 0 && <div className="text-success">+{order.earnedPoint.toLocaleString()}P</div>}
-                           </td>
-                           <td>
-                              <div>
-                                 <span className={`badge bg-${order.status === 'completed' ? 'success' : order.status === 'pending' ? 'warning' : order.status === 'failed' ? 'danger' : 'secondary'}`}>
-                                    {order.status === 'completed' ? '결제완료' : order.status === 'pending' ? '결제대기' : order.status === 'failed' ? '결제실패' : '환불완료'}
-                                 </span>
-                              </div>
-                              {order.completedDate && <div className="small text-muted mt-1">완료: {new Date(order.completedDate).toLocaleTimeString()}</div>}
-                              {order.refundedDate && <div className="small text-muted mt-1">환불: {new Date(order.refundedDate).toLocaleDateString()}</div>}
-                              {order.failReason && <div className="small text-danger mt-1">사유: {order.failReason}</div>}
-                           </td>
-                           <td>
-                              <div className="btn-group-vertical w-100">
-                                 <button className="btn btn-sm btn-outline-primary mb-1" onClick={() => navigate(`/admin/orders/${order.id}`)}>
-                                    상세보기
-                                 </button>
-                                 {order.status === 'completed' && (
-                                    <button className="btn btn-sm btn-outline-danger" onClick={() => handleRefund(order.id)}>
-                                       환불처리
-                                    </button>
-                                 )}
-                              </div>
-                           </td>
+            {/* 주문 목록 */}
+            <div className="card shadow-sm">
+               <div className="table-responsive">
+                  <table className="table table-hover mb-0">
+                     <thead>
+                        <tr>
+                           <th>주문번호</th>
+                           <th>고객 정보</th>
+                           <th>요금제 정보</th>
+                           <th>결제 정보</th>
+                           <th>포인트</th>
+                           <th>상태</th>
+                           <th>관리</th>
                         </tr>
-                     ))}
-                  </tbody>
-               </table>
+                     </thead>
+                     <tbody>
+                        {orders.map((order) => (
+                           <tr key={order.id} className="align-middle">
+                              <td>
+                                 <div className="fw-bold">#{order.id}</div>
+                                 <div className="small text-muted">{new Date(order.orderDate).toLocaleDateString()}</div>
+                              </td>
+                              <td>
+                                 <div className="fw-bold">{order.customerName}</div>
+                                 <div className="small">{order.customerEmail}</div>
+                                 <div className="small text-muted">{order.customerPhone}</div>
+                              </td>
+                              <td>
+                                 <div className="fw-bold">{order.planName}</div>
+                                 <div className="small">
+                                    <span className={`badge me-1 ${order.planCarrier === 'SKT' ? 'bg-danger' : order.planCarrier === 'KT' ? 'bg-primary' : 'bg-danger'}`}>{order.planCarrier}</span>
+                                    <span className="text-muted">{order.contract}</span>
+                                 </div>
+                                 <div className="mt-1">
+                                    {order.features.map((feature, index) => (
+                                       <span key={index} className="badge bg-light text-dark me-1">
+                                          {feature}
+                                       </span>
+                                    ))}
+                                 </div>
+                              </td>
+                              <td>
+                                 <div className="fw-bold text-primary">{order.amount.toLocaleString()}원</div>
+                                 {order.originalPrice !== order.amount && <div className="small text-muted text-decoration-line-through">{order.originalPrice.toLocaleString()}원</div>}
+                                 <div className="small">
+                                    {order.paymentMethod === 'card' ? (
+                                       <>
+                                          {order.cardCompany}
+                                          <br />
+                                          {order.cardNumber}
+                                       </>
+                                    ) : (
+                                       <>
+                                          {order.bankName}
+                                          <br />
+                                          {order.accountNumber}
+                                       </>
+                                    )}
+                                 </div>
+                              </td>
+                              <td>
+                                 {order.usePoint > 0 && <div className="text-danger">-{order.usePoint.toLocaleString()}P</div>}
+                                 {order.earnedPoint > 0 && <div className="text-success">+{order.earnedPoint.toLocaleString()}P</div>}
+                              </td>
+                              <td>
+                                 <div>
+                                    <span className={`badge bg-${order.status === 'completed' ? 'success' : order.status === 'pending' ? 'warning' : order.status === 'failed' ? 'danger' : 'secondary'}`}>
+                                       {order.status === 'completed' ? '결제완료' : order.status === 'pending' ? '결제대기' : order.status === 'failed' ? '결제실패' : '환불완료'}
+                                    </span>
+                                 </div>
+                                 {order.completedDate && <div className="small text-muted mt-1">완료: {new Date(order.completedDate).toLocaleTimeString()}</div>}
+                                 {order.refundedDate && <div className="small text-muted mt-1">환불: {new Date(order.refundedDate).toLocaleDateString()}</div>}
+                                 {order.failReason && <div className="small text-danger mt-1">사유: {order.failReason}</div>}
+                              </td>
+                              <td>
+                                 <div className="btn-group-vertical w-100">
+                                    <button className="btn btn-sm btn-outline-primary mb-1" onClick={() => navigate(`/admin/orders/${order.id}`)}>
+                                       상세보기
+                                    </button>
+                                    {order.status === 'completed' && (
+                                       <button className="btn btn-sm btn-outline-danger" onClick={() => handleRefund(order.id)}>
+                                          환불처리
+                                       </button>
+                                    )}
+                                 </div>
+                              </td>
+                           </tr>
+                        ))}
+                     </tbody>
+                  </table>
+               </div>
             </div>
-         </div>
 
-         {/* 페이지네이션 */}
-         <div className="d-flex justify-content-center mt-4">
-            <nav>
-               <ul className="pagination">
-                  <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                     <button className="page-link" onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}>
-                        이전
-                     </button>
-                  </li>
-                  {[...Array(totalPages)].map((_, i) => (
-                     <li key={i} className={`page-item ${currentPage === i + 1 ? 'active' : ''}`}>
-                        <button className="page-link" onClick={() => setCurrentPage(i + 1)}>
-                           {i + 1}
+            {/* 페이지네이션 */}
+            <div className="d-flex justify-content-center mt-4">
+               <nav>
+                  <ul className="pagination">
+                     <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                        <button className="page-link" onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}>
+                           이전
                         </button>
                      </li>
-                  ))}
-                  <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                     <button className="page-link" onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}>
-                        다음
-                     </button>
-                  </li>
-               </ul>
-            </nav>
+                     {[...Array(totalPages)].map((_, i) => (
+                        <li key={i} className={`page-item ${currentPage === i + 1 ? 'active' : ''}`}>
+                           <button className="page-link" onClick={() => setCurrentPage(i + 1)}>
+                              {i + 1}
+                           </button>
+                        </li>
+                     ))}
+                     <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                        <button className="page-link" onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}>
+                           다음
+                        </button>
+                     </li>
+                  </ul>
+               </nav>
+            </div>
          </div>
       </div>
    )

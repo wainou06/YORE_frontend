@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { statsAPI } from '../../services/api'
 import { faHome, faUsers, faCreditCard, faShoppingCart, faHandshake, faQuestionCircle, faMoon, faSearch } from '@fortawesome/free-solid-svg-icons'
+import { AdminSidebar } from './AdminSidebar'
 import '../../assets/css/AdminDashboard.css'
 
 const AdminDashboard = () => {
@@ -159,169 +160,121 @@ const AdminDashboard = () => {
    }, [user, navigate])
 
    return (
-      <div className="admin-container">
-         <div className="admin-content">
-            <div className="admin-layout-container">
-               {/* 좌측 사이드바 */}
-               <div className="admin-sidebar">
-                  <div className="sidebar-content">
-                     <div className="sidebar-header">
-                        <Link to="/admin" className="logo">
-                           YORE
-                        </Link>
-                     </div>
-                     <nav className="sidebar-menu">
-                        <Link to="/admin" className="menu-item active">
-                           <FontAwesomeIcon icon={faHome} />
-                           <span>홈</span>
-                        </Link>
-                        <Link to="/admin/users" className="menu-item">
-                           <FontAwesomeIcon icon={faUsers} />
-                           <span>사용자</span>
-                        </Link>
-                        <Link to="/admin/plans" className="menu-item">
-                           <FontAwesomeIcon icon={faCreditCard} />
-                           <span>요금제</span>
-                        </Link>
-                        <Link to="/admin/orders" className="menu-item">
-                           <FontAwesomeIcon icon={faShoppingCart} />
-                           <span>결제</span>
-                        </Link>
-                        <Link to="/admin/partners" className="menu-item">
-                           <FontAwesomeIcon icon={faHandshake} />
-                           <span>제휴사</span>
-                        </Link>
-                        <Link to="/admin/inquiries" className="menu-item">
-                           <FontAwesomeIcon icon={faQuestionCircle} />
-                           <span>문의</span>
-                        </Link>
-                     </nav>
-                     <div className="sidebar-footer">
-                        <div
-                           className="menu-item"
-                           onClick={() => {
-                              const newDarkMode = !darkMode
-                              setDarkMode(newDarkMode)
-                              document.documentElement.setAttribute('data-theme', newDarkMode ? 'dark' : 'light')
-                              localStorage.setItem('theme', newDarkMode ? 'dark' : 'light')
-                           }}
-                           style={{ cursor: 'pointer' }}
-                        >
-                           <FontAwesomeIcon icon={faMoon} />
-                           <span>다크 모드 {darkMode ? '끄기' : '켜기'}</span>
-                        </div>
-                     </div>
-                  </div>
+      <div className="admin-main-content">
+         {/* 상단 헤더 */}
+         <div className="main-header">
+            <div className="header-logo">
+               <FontAwesomeIcon icon={faHome} />
+               <span>YORE</span>
+            </div>
+            <div className="header-right">
+               <div className="search-bar">
+                  <FontAwesomeIcon icon={faSearch} />
                </div>
-
-               {/* 메인 컨텐츠 */}
-               <div className="admin-main-content">
-                  {/* 상단 헤더 */}
-                  <div className="main-header">
-                     <div className="header-logo">
-                        <FontAwesomeIcon icon={faHome} />
-                        <span>YORE</span>
-                     </div>
-                     <div className="header-right">
-                        <div className="search-bar">
-                           <FontAwesomeIcon icon={faSearch} />
-                        </div>
-                        <img className="profile-image" src="https://placehold.co/40x40" alt="Profile" />
-                     </div>
-                  </div>
-
-                  {/* 페이지 제목 */}
-                  <div className="page-title">
-                     <h1>홈</h1>
-                  </div>
-
-                  {/* 통계 카드 */}
-                  <div className="stats-grid">
-                     <div className="stat-card">
-                        <h3>총 사용자 수</h3>
-                        <div className="stat-value">{stats.totalUsers.toLocaleString()}</div>
-                        <div className="stat-change positive">+10%</div>
-                     </div>
-                     <div className="stat-card">
-                        <h3>총 수익</h3>
-                        <div className="stat-value">₩{stats.totalRevenue.toLocaleString()}</div>
-                        <div className="stat-change positive">+5%</div>
-                     </div>
-                     <div className="stat-card">
-                        <h3>신규 가입자</h3>
-                        <div className="stat-value">{stats.newUsers.toLocaleString()}</div>
-                        <div className="stat-change positive">+15%</div>
-                     </div>
-                     <div className="stat-card">
-                        <h3>평균 결제 금액</h3>
-                        <div className="stat-value">₩{stats.averageOrder.toLocaleString()}</div>
-                        <div className="stat-change negative">-2%</div>
-                     </div>
-                  </div>
-
-                  {/* 최근 결제 내역 */}
-                  <section className="recent-section">
-                     <h2>최근 결제 내역</h2>
-                     <div className="table-container">
-                        <table className="admin-table">
-                           <thead>
-                              <tr>
-                                 <th>사용자</th>
-                                 <th>요금제</th>
-                                 <th>결제 금액</th>
-                                 <th>상태</th>
-                                 <th>결제일</th>
-                              </tr>
-                           </thead>
-                           <tbody>
-                              {stats.recentOrders.map((order) => (
-                                 <tr key={order.id}>
-                                    <td>{order.customerName}</td>
-                                    <td>{order.planName}</td>
-                                    <td>₩{order.amount.toLocaleString()}</td>
-                                    <td>
-                                       <span className={`status-badge ${order.status}`}>{order.status === 'completed' ? '완료' : order.status === 'pending' ? '대기' : '취소'}</span>
-                                    </td>
-                                    <td>{order.date}</td>
-                                 </tr>
-                              ))}
-                           </tbody>
-                        </table>
-                     </div>
-                  </section>
-
-                  {/* 최근 문의 사항 */}
-                  <section className="recent-section">
-                     <h2>최근 문의 사항</h2>
-                     <div className="table-container">
-                        <table className="admin-table">
-                           <thead>
-                              <tr>
-                                 <th>사용자</th>
-                                 <th>문의 내용</th>
-                                 <th>상태</th>
-                                 <th>문의일</th>
-                              </tr>
-                           </thead>
-                           <tbody>
-                              {inquiries.map((inquiry) => (
-                                 <tr key={inquiry.id}>
-                                    <td>{inquiry.userName}</td>
-                                    <td>{inquiry.content}</td>
-                                    <td>
-                                       <span className={`status-badge ${inquiry.status}`}>{inquiry.status === 'completed' ? '완료' : '처리 중'}</span>
-                                    </td>
-                                    <td>{inquiry.date}</td>
-                                 </tr>
-                              ))}
-                           </tbody>
-                        </table>
-                     </div>
-                  </section>
-               </div>
+               <img className="profile-image" src="https://placehold.co/40x40" alt="Profile" />
             </div>
          </div>
+
+         {/* 페이지 제목 */}
+         <div className="page-title">
+            <h1>홈</h1>
+         </div>
+
+         {/* 통계 카드 */}
+         <div className="stats-grid">
+            <div className="stat-card">
+               <h3>총 사용자 수</h3>
+               <div className="stat-value">{stats.totalUsers.toLocaleString()}</div>
+               <div className="stat-change positive">+10%</div>
+            </div>
+            <div className="stat-card">
+               <h3>총 수익</h3>
+               <div className="stat-value">₩{stats.totalRevenue.toLocaleString()}</div>
+               <div className="stat-change positive">+5%</div>
+            </div>
+            <div className="stat-card">
+               <h3>신규 가입자</h3>
+               <div className="stat-value">{stats.newUsers.toLocaleString()}</div>
+               <div className="stat-change positive">+15%</div>
+            </div>
+            <div className="stat-card">
+               <h3>평균 결제 금액</h3>
+               <div className="stat-value">₩{stats.averageOrder.toLocaleString()}</div>
+               <div className="stat-change negative">-2%</div>
+            </div>
+         </div>
+
+         {/* 최근 결제 내역 */}
+         <section className="recent-section">
+            <h2>최근 결제 내역</h2>
+            <div className="table-container">
+               <table className="admin-table">
+                  <thead>
+                     <tr>
+                        <th>사용자</th>
+                        <th>요금제</th>
+                        <th>결제 금액</th>
+                        <th>상태</th>
+                        <th>결제일</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     {stats.recentOrders.map((order) => (
+                        <tr key={order.id}>
+                           <td>{order.customerName}</td>
+                           <td>{order.planName}</td>
+                           <td>₩{order.amount.toLocaleString()}</td>
+                           <td>
+                              <span className={`status-badge ${order.status}`}>{order.status === 'completed' ? '완료' : order.status === 'pending' ? '대기' : '취소'}</span>
+                           </td>
+                           <td>{order.date}</td>
+                        </tr>
+                     ))}
+                  </tbody>
+               </table>
+            </div>
+         </section>
+
+         {/* 최근 문의 사항 */}
+         <section className="recent-section">
+            <h2>최근 문의 사항</h2>
+            <div className="table-container">
+               <table className="admin-table">
+                  <thead>
+                     <tr>
+                        <th>사용자</th>
+                        <th>문의 내용</th>
+                        <th>상태</th>
+                        <th>문의일</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     {inquiries.map((inquiry) => (
+                        <tr key={inquiry.id}>
+                           <td>{inquiry.userName}</td>
+                           <td>{inquiry.content}</td>
+                           <td>
+                              <span className={`status-badge ${inquiry.status}`}>{inquiry.status === 'completed' ? '완료' : '처리 중'}</span>
+                           </td>
+                           <td>{inquiry.date}</td>
+                        </tr>
+                     ))}
+                  </tbody>
+               </table>
+            </div>
+         </section>
       </div>
+      // <div className="admin-container">
+      //    <div className="admin-content">
+      //       <div className="admin-layout-container">
+      //          {/* 좌측 사이드바 */}
+      //          {/* <div className="admin-sidebar"></div> */}
+      //          {/* <AdminSidebar /> */}
+      //          {/* 메인 컨텐츠 */}
+
+      //       </div>
+      //    </div>
+      // </div>
    )
 }
 

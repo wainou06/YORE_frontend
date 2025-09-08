@@ -4,6 +4,7 @@ import LandingPage from '@pages/Landing/LandingPage'
 import SignupPage from '@pages/Auth/SignupPage'
 import OAuthCallback from '@pages/Auth/OAuthCallback'
 import PlanListPage from '@pages/Plans/PlanListPage'
+import CarrierListPage from '@pages/Carriers/CarrierListPage'
 import PlanDetailPage from '@pages/Plans/PlanDetailPage'
 import CheckoutPage from '@pages/Checkout/CheckoutPage'
 import CheckoutCompletePage from '@pages/Checkout/CheckoutCompletePage'
@@ -12,6 +13,7 @@ import AdminDashboard from '@pages/Admin/AdminDashboard'
 import UserManagement from '@pages/Admin/UserManagement'
 import PlanManagement from '@pages/Admin/PlanManagement'
 import OrderManagement from '@pages/Admin/OrderManagement'
+import NotFoundPage from '@pages/Error/NotFoundPage'
 
 const AppRoutes = () => {
    return (
@@ -22,6 +24,7 @@ const AppRoutes = () => {
             <Route path="auth/callback" element={<OAuthCallback />} />
             <Route path="plans" element={<PlanListPage />} />
             <Route path="plans/:id" element={<PlanDetailPage />} />
+            <Route path="carriers" element={<CarrierListPage />} />
             <Route path="checkout" element={<CheckoutPage />} />
             <Route path="checkout/complete" element={<CheckoutCompletePage />} />
          </Route>
@@ -33,6 +36,9 @@ const AppRoutes = () => {
             <Route path="plans" element={<PlanManagement />} />
             <Route path="orders" element={<OrderManagement />} />
          </Route>
+
+         {/* 404 Not Found 페이지 */}
+         <Route path="*" element={<NotFoundPage />} />
       </Routes>
    )
 }
