@@ -50,16 +50,14 @@ const SignupPage = () => {
                      </div>
 
                      {/* 소셜 로그인 */}
-                     <div className="d-grid gap-2 mb-4">
-                        <button className="btn btn-outline-dark">
-                           <FontAwesomeIcon icon={faGoogle} className="me-2" />
-                           Google로 시작하기
-                        </button>
-                        <button className="btn btn-warning">
-                           <FontAwesomeIcon icon={faComment} className="me-2" />
-                           카카오로 시작하기
-                        </button>
-                     </div>
+                     {userType === 'personal' && (
+                        <div className="d-grid gap-2 mb-4">
+                           <button className="btn btn-warning">
+                              <FontAwesomeIcon icon={faComment} className="me-2" />
+                              카카오로 시작하기
+                           </button>
+                        </div>
+                     )}
 
                      <hr className="my-4" />
 
