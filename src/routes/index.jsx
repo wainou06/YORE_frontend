@@ -14,6 +14,8 @@ import UserManagement from '@pages/Admin/UserManagement'
 import PlanManagement from '@pages/Admin/PlanManagement'
 import OrderManagement from '@pages/Admin/OrderManagement'
 import NotFoundPage from '@pages/Error/NotFoundPage'
+import TermsPage from '@pages/Legal/TermsPage'
+import PrivacyPage from '@pages/Legal/PrivacyPage'
 
 const AppRoutes = () => {
    return (
@@ -27,6 +29,8 @@ const AppRoutes = () => {
             <Route path="carriers" element={<CarrierListPage />} />
             <Route path="checkout" element={<CheckoutPage />} />
             <Route path="checkout/complete" element={<CheckoutCompletePage />} />
+            <Route path="terms" element={<TermsPage />} />
+            <Route path="privacy" element={<PrivacyPage />} />
          </Route>
 
          {/* 관리자 라우트 - 별도의 레이아웃으로 분리 */}

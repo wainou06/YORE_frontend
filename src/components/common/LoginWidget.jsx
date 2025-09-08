@@ -10,11 +10,6 @@ const LoginWidget = () => {
 
    return (
       <div className="card shadow-sm p-4">
-         <div className="login_text">
-            <input type="email" name="email" required placeholder="아이디" onChange={(e) => setEmail(e.target.value)} className="login-textfield" />
-            <input type="password" name="password" required placeholder="비밀번호" onChange={(e) => setPassword(e.target.value)} className="login-textfield" />
-         </div>
-
          <div className="btn-group w-100 mb-4">
             <button className={`btn ${userType === 'personal' ? 'btn-primary' : 'btn-outline-primary'}`} onClick={() => setUserType('personal')}>
                개인회원
@@ -22,6 +17,11 @@ const LoginWidget = () => {
             <button className={`btn ${userType === 'business' ? 'btn-primary' : 'btn-outline-primary'}`} onClick={() => setUserType('business')}>
                기업회원
             </button>
+         </div>
+
+         <div className="text-group mb-4">
+            <input type="email" name="email" required placeholder="아이디" onChange={(e) => setEmail(e.target.value)} className="login-textfield col-12 mb-4" />
+            <input type="password" name="password" required placeholder="비밀번호" onChange={(e) => setPassword(e.target.value)} className="login-textfield col-12 " />
          </div>
 
          {userType === 'personal' && (
