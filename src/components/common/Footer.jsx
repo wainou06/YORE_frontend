@@ -6,7 +6,6 @@ import { useDispatch } from 'react-redux'
 import { showModalThunk } from '@/features/modal/modalSlice'
 
 const Footer = () => {
-   const [showAdminModal, setShowAdminModal] = useState(false)
    const dispatch = useDispatch()
    const modal = useSelector((state) => state.modal)
    const onClickAdmin = () => {
@@ -55,7 +54,7 @@ const Footer = () => {
                         </Link>
                      </li>
                      <li>
-                        <button className="btn btn-link text-muted p-0" onClick={() => onClickAdmin()}>
+                        <button className="text-decoration-none btn btn-link text-muted p-0" onClick={() => onClickAdmin()}>
                            관리자
                         </button>
                      </li>
