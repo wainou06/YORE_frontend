@@ -149,7 +149,7 @@ const LandingPage = () => {
                                        handleLike(plan.id)
                                     }}
                                  >
-                                    ♡ {plan.likes}
+                                    ♡ {plan.likes >= 1000 ? `${(plan.likes / 1000).toFixed(1)}k` : plan.likes}
                                  </div>
                               </div>
                            </div>

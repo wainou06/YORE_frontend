@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faGoogle } from '@fortawesome/free-brands-svg-icons'
 import { faComment } from '@fortawesome/free-solid-svg-icons'
 
 const SignupPage = () => {
@@ -25,10 +24,41 @@ const SignupPage = () => {
       }))
    }
 
-   const handleSubmit = (e) => {
+   const handleSubmit = async (e) => {
       e.preventDefault()
-      // TODO: 회원가입 API 연동
-      console.log('회원가입 데이터:', { userType, ...formData })
+
+      // 비밀번호 확인
+      if (formData.password !== formData.confirmPassword) {
+         alert('비밀번호가 일치하지 않습니다.')
+         return
+      }
+
+      try {
+         const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/api/auth/register`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+               email: formData.email,
+               password: formData.password,
+               name: formData.name,
+               userid: formData.email.split('@')[0], // userid 자동 생성 (이메일 앞부분 사용)
+               phone: formData.phone,
+            }),
+         })
+
+         const data = await response.json()
+         console.log('서버 응답:', data)
+
+         if (data.success) {
+            alert('회원가입 성공!')
+            navigate('/')
+         } else {
+            alert('회원가입 실패: ' + data.message)
+         }
+      } catch (error) {
+         console.error('회원가입 에러:', error)
+         alert('서버 오류가 발생했습니다.')
+      }
    }
 
    return (

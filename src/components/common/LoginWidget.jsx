@@ -37,6 +37,10 @@ const LoginWidget = () => {
             </div>
          </div>
 
+         <div className="login-btn mb-4">
+            <button className="btn btn-primary w-100">로그인</button>
+         </div>
+
          {userType === 'personal' && (
             <div className="d-grid gap-3">
                <button className="btn btn-warning">
