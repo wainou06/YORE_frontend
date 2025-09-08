@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import '@/assets/css/global.css'
 import '@/assets/css/admin.css'
+import { AdminSidebar } from '@/pages/Admin/AdminSidebar'
 
 const AdminLayout = () => {
    const { user } = useSelector((state) => state.auth)
@@ -18,10 +19,20 @@ const AdminLayout = () => {
    }
    return (
       <div className="admin-layout">
-         <nav className="admin-nav">{/* 관리자 네비게이션 */}</nav>
-         <main className="admin-main">
-            <Outlet />
-         </main>
+         <div className="admin-container">
+            <div className="admin-content">
+               <div className="admin-layout-container">
+                  <div className="admin-sidebar">
+                     <AdminSidebar />
+                  </div>
+                  {/* <main className="admin-main"> */}
+                  <Outlet />
+                  {/* </main> */}
+               </div>
+            </div>
+         </div>
+
+         {/* <div></div> */}
       </div>
    )
 }
