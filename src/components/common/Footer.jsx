@@ -55,7 +55,7 @@ const Footer = () => {
                         </Link>
                      </li>
                      <li>
-                        <button className="btn btn-link text-muted p-0" onClick={() => onClickAdmin()}>
+                        <button className="btn btn-link text-decoration-none text-muted p-0" onClick={() => onClickAdmin()}>
                            관리자
                         </button>
                      </li>

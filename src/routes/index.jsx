@@ -13,6 +13,7 @@ import AdminDashboard from '@pages/Admin/AdminDashboard'
 import UserManagement from '@pages/Admin/UserManagement'
 import PlanManagement from '@pages/Admin/PlanManagement'
 import OrderManagement from '@pages/Admin/OrderManagement'
+import NotFoundPage from '@pages/Error/NotFoundPage'
 
 const AppRoutes = () => {
    return (
@@ -35,6 +36,9 @@ const AppRoutes = () => {
             <Route path="plans" element={<PlanManagement />} />
             <Route path="orders" element={<OrderManagement />} />
          </Route>
+
+         {/* 404 Not Found 페이지 */}
+         <Route path="*" element={<NotFoundPage />} />
       </Routes>
    )
 }
