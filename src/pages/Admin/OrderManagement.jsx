@@ -11,9 +11,16 @@ const OrderManagement = () => {
    const [statusFilter, setStatusFilter] = useState('')
    const [currentPage, setCurrentPage] = useState(1)
    const [totalPages, setTotalPages] = useState(1)
+   const [darkMode, setDarkMode] = useState(false)
 
    // 관리자 권한 체크
    useEffect(() => {
+      const savedTheme = localStorage.getItem('theme')
+      if (savedTheme === 'dark') {
+         setDarkMode(true)
+         document.documentElement.setAttribute('data-theme', 'dark')
+      }
+
       if (!user || user.role !== 'admin') {
          navigate('/')
       }
@@ -185,20 +192,22 @@ const OrderManagement = () => {
    }
 
    return (
-      <div>
-         <div className="container py-5">
+      <div className="admin-main-content">
+         <div className="page-title">
             <h2 className="mb-4">주문 관리</h2>
+         </div>
 
+         <div className="container py-5">
             {/* 검색 및 필터 */}
-            <div className="card shadow-sm mb-4">
+            <div className="admin-color card shadow-sm mb-4">
                <div className="card-body">
                   <form onSubmit={handleSearch}>
                      <div className="row g-2">
                         <div className="col-md-6">
-                           <input type="text" className="form-control" placeholder="고객명, 이메일, 요금제명으로 검색" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+                           <input type="text" className="admin-color-second form-control" placeholder="고객명, 이메일, 요금제명으로 검색" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
                         </div>
                         <div className="col-md-3">
-                           <select className="form-select" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+                           <select className="admin-color-second form-select" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
                               <option value="">모든 상태</option>
                               <option value="completed">결제완료</option>
                               <option value="pending">결제대기</option>
@@ -217,9 +226,9 @@ const OrderManagement = () => {
             </div>
 
             {/* 주문 목록 */}
-            <div className="card shadow-sm">
-               <div className="table-responsive">
-                  <table className="table table-hover mb-0">
+            <div className="admin-color card shadow-sm">
+               <div className=" table-responsive">
+                  <table className="admin-color-table table table-hover mb-0">
                      <thead>
                         <tr>
                            <th>주문번호</th>
@@ -236,18 +245,18 @@ const OrderManagement = () => {
                            <tr key={order.id} className="align-middle">
                               <td>
                                  <div className="fw-bold">#{order.id}</div>
-                                 <div className="small text-muted">{new Date(order.orderDate).toLocaleDateString()}</div>
+                                 <div className="admin-color-text small text-muted">{new Date(order.orderDate).toLocaleDateString()}</div>
                               </td>
                               <td>
                                  <div className="fw-bold">{order.customerName}</div>
                                  <div className="small">{order.customerEmail}</div>
-                                 <div className="small text-muted">{order.customerPhone}</div>
+                                 <div className="admin-color-text small text-muted">{order.customerPhone}</div>
                               </td>
                               <td>
                                  <div className="fw-bold">{order.planName}</div>
                                  <div className="small">
                                     <span className={`badge me-1 ${order.planCarrier === 'SKT' ? 'bg-danger' : order.planCarrier === 'KT' ? 'bg-primary' : 'bg-danger'}`}>{order.planCarrier}</span>
-                                    <span className="text-muted">{order.contract}</span>
+                                    <span className="admin-color-text text-muted">{order.contract}</span>
                                  </div>
                                  <div className="mt-1">
                                     {order.features.map((feature, index) => (
@@ -259,7 +268,7 @@ const OrderManagement = () => {
                               </td>
                               <td>
                                  <div className="fw-bold text-primary">{order.amount.toLocaleString()}원</div>
-                                 {order.originalPrice !== order.amount && <div className="small text-muted text-decoration-line-through">{order.originalPrice.toLocaleString()}원</div>}
+                                 {order.originalPrice !== order.amount && <div className="admin-color-text small text-muted text-decoration-line-through">{order.originalPrice.toLocaleString()}원</div>}
                                  <div className="small">
                                     {order.paymentMethod === 'card' ? (
                                        <>
@@ -286,8 +295,8 @@ const OrderManagement = () => {
                                        {order.status === 'completed' ? '결제완료' : order.status === 'pending' ? '결제대기' : order.status === 'failed' ? '결제실패' : '환불완료'}
                                     </span>
                                  </div>
-                                 {order.completedDate && <div className="small text-muted mt-1">완료: {new Date(order.completedDate).toLocaleTimeString()}</div>}
-                                 {order.refundedDate && <div className="small text-muted mt-1">환불: {new Date(order.refundedDate).toLocaleDateString()}</div>}
+                                 {order.completedDate && <div className="admin-color-text small text-muted mt-1">완료: {new Date(order.completedDate).toLocaleTimeString()}</div>}
+                                 {order.refundedDate && <div className="admin-color-text small text-muted mt-1">환불: {new Date(order.refundedDate).toLocaleDateString()}</div>}
                                  {order.failReason && <div className="small text-danger mt-1">사유: {order.failReason}</div>}
                               </td>
                               <td>

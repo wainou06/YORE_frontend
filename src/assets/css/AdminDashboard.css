@@ -230,6 +230,7 @@
    font-weight: 500;
    color: var(--text-secondary);
    border-bottom: 1px solid var(--border-color);
+   background-color: var(--border-color);
 }
 
 .admin-table td {
@@ -249,6 +250,37 @@
    font-weight: 500;
    background-color: var(--primary-color);
    color: white;
+}
+
+.admin-color {
+   background-color: var(--bg-secondary) !important;
+   color: var(--text-primary) !important;
+}
+
+.admin-color-second {
+   background-color: var(--border-color) !important;
+   color: var(--text-primary) !important;
+   border: none;
+}
+
+.admin-color-second::placeholder {
+   background-color: var(--border-color) !important;
+   color: var(--text-primary) !important;
+}
+
+.admin-color-text {
+   color: var(--text-secondary) !important;
+}
+
+.admin-color-table th {
+   background-color: var(--bg-secondary) !important;
+   color: var(--text-primary) !important;
+   border: none;
+}
+.admin-color-table td {
+   background-color: var(--bg-primary) !important;
+   color: var(--text-primary) !important;
+   border: none;
 }
 
 /* 다크 모드 변수 */

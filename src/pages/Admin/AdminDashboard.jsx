@@ -1,10 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { statsAPI } from '../../services/api'
-import { faHome, faUsers, faCreditCard, faShoppingCart, faHandshake, faQuestionCircle, faMoon, faSearch } from '@fortawesome/free-solid-svg-icons'
-import { AdminSidebar } from './AdminSidebar'
 import '../../assets/css/AdminDashboard.css'
 
 const AdminDashboard = () => {
@@ -161,20 +158,6 @@ const AdminDashboard = () => {
 
    return (
       <div className="admin-main-content">
-         {/* 상단 헤더 */}
-         <div className="main-header">
-            <div className="header-logo">
-               <FontAwesomeIcon icon={faHome} />
-               <span>YORE</span>
-            </div>
-            <div className="header-right">
-               <div className="search-bar">
-                  <FontAwesomeIcon icon={faSearch} />
-               </div>
-               <img className="profile-image" src="https://placehold.co/40x40" alt="Profile" />
-            </div>
-         </div>
-
          {/* 페이지 제목 */}
          <div className="page-title">
             <h1>홈</h1>

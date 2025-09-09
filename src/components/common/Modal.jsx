@@ -180,7 +180,7 @@ export const ModalManagerLogin = () => {
    }
 
    return (
-      <div className=" overlay modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog" aria-labelledby="modalTitleId" aria-modal="true">
+      <div className="overlay modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog" aria-labelledby="modalTitleId" aria-modal="true">
          <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
                <div className="modal-header">
