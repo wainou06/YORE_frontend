@@ -13,17 +13,12 @@ const Footer = () => {
    const modal = useSelector((state) => state.modal)
    const admin = useSelector((state) => state.admin)
 
-   useEffect(() => {
-      const isAdminCreated = localStorage.getItem('adminCreated')
-      if (!isAdminCreated) {
-         dispatch(postAdminThunk({ email: 'a@a.com', password: 'admin' })).then(() => {
-            localStorage.setItem('adminCreated', 'true')
-         })
-      }
-   }, [dispatch])
-
    const onClickAdmin = async () => {
       const login = await dispatch(showModalThunk({ type: 'managerLogin', placeholder: '매니저 로그인 화면입니다!' }))
+
+      if (login.payload === null) {
+         return
+      }
 
       const loginCheck = await dispatch(postAdminLoginThunk(login.payload))
       console.log(loginCheck)

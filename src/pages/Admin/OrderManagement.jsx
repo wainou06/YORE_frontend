@@ -260,7 +260,7 @@ const OrderManagement = () => {
                                  </div>
                                  <div className="mt-1">
                                     {order.features.map((feature, index) => (
-                                       <span key={index} className="badge bg-light text-dark me-1">
+                                       <span key={index} className="admin-color badge bg-light text-dark me-1">
                                           {feature}
                                        </span>
                                     ))}
@@ -321,9 +321,9 @@ const OrderManagement = () => {
             {/* 페이지네이션 */}
             <div className="d-flex justify-content-center mt-4">
                <nav>
-                  <ul className="pagination">
+                  <ul className="admin-color-list pagination">
                      <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                        <button className="page-link" onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}>
+                        <button className="admin-color page-link" onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}>
                            이전
                         </button>
                      </li>
@@ -335,7 +335,7 @@ const OrderManagement = () => {
                         </li>
                      ))}
                      <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                        <button className="page-link" onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}>
+                        <button className="admin-color page-link" onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}>
                            다음
                         </button>
                      </li>
