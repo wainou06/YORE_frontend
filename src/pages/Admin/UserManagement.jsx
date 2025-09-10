@@ -75,17 +75,19 @@ const UserManagement = () => {
    }
 
    return (
-      <div>
-         <div className="container py-5">
+      <div className="admin-main-content">
+         <div className="page-title">
             <h2 className="mb-4">사용자 관리</h2>
+         </div>
 
+         <div className="container py-5">
             {/* 검색 */}
-            <div className="card shadow-sm mb-4">
+            <div className="admin-color card shadow-sm mb-4">
                <div className="card-body">
                   <form onSubmit={handleSearch}>
                      <div className="row g-2">
                         <div className="col-md-6">
-                           <input type="text" className="form-control" placeholder="이름, 이메일, 전화번호로 검색" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+                           <input type="text" className="admin-color-second form-control" placeholder="이름, 이메일, 전화번호로 검색" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
                         </div>
                         <div className="col-md-2">
                            <button type="submit" className="btn btn-primary w-100">
@@ -97,9 +99,9 @@ const UserManagement = () => {
                </div>
             </div>
             {/* 사용자 목록 */}
-            <div className="card shadow-sm">
+            <div className="admin-color card shadow-sm">
                <div className="table-responsive">
-                  <table className="table table-hover mb-0">
+                  <table className="admin-color-table table table-hover mb-0">
                      <thead>
                         <tr>
                            <th>ID</th>

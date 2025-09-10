@@ -47,7 +47,7 @@ api.interceptors.response.use(
             // 리프레시 토큰도 만료된 경우
             localStorage.removeItem('token')
             localStorage.removeItem('refreshToken')
-            window.location.href = '/login'
+            // window.location.href = '/login'
             return Promise.reject(error)
          }
       }
@@ -61,6 +61,11 @@ export const authAPI = {
    register: (userData) => api.post('/auth/register', userData),
    logout: () => api.post('/auth/logout'),
    getCurrentUser: () => api.get('/auth/me'),
+}
+
+export const adminAPI = {
+   registerAdmin: (adminData) => api.post('/api/admin/register', adminData),
+   loginAdmin: (credentials) => api.post('/api/admin/login', credentials),
 }
 
 export const usersAPI = {

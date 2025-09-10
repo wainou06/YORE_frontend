@@ -3,6 +3,7 @@ import authReducer from '@features/auth/authSlice'
 import checkoutReducer from '@features/checkout/checkoutSlice'
 import modalReducer from '@features/modal/modalSlice'
 import plansReducer from '../features/plans/planSlice'
+import adminReducer from '@features/admin/adminSlice'
 
 // 개발 환경에서 사용할 임시 관리자 계정
 const devInitialState = {
@@ -24,6 +25,7 @@ export const store = configureStore({
       auth: authReducer,
       checkout: checkoutReducer,
       modal: modalReducer,
+      admin: adminReducer,
       plans: plansReducer,
    },
    preloadedState: process.env.NODE_ENV === 'development' ? devInitialState : undefined,
