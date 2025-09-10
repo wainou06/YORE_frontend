@@ -23,6 +23,7 @@ export const postAdminLoginThunk = createAsyncThunk('admin/postAdminLogin', asyn
 export const adminSlice = createSlice({
    name: 'admin',
    initialState: {
+      admin: null,
       isAuthenticated: false,
       loading: false,
       error: null,
@@ -49,8 +50,9 @@ export const adminSlice = createSlice({
             state.loading = true
             state.error = null
          })
-         .addCase(postAdminLoginThunk.fulfilled, (state) => {
+         .addCase(postAdminLoginThunk.fulfilled, (state, action) => {
             state.loading = false
+            state.admin = action?.payload?.admin
             state.isAuthenticated = true
          })
          .addCase(postAdminLoginThunk.rejected, (state, action) => {

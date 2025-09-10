@@ -7,12 +7,19 @@ import { AdminSidebar } from '@/pages/Admin/AdminSidebar'
 import { clearAdminError } from '@/features/admin/adminSlice'
 
 const AdminLayout = () => {
-   const { isAuthenticated } = useSelector((state) => state.admin)
+   const admin = useSelector((state) => state.admin)
 
-   if (!isAuthenticated) {
-      console.log('관리자 인증 필요 - AdminLayout')
-      return <Navigate to="/admin/login" replace />
+   console.log(admin)
+
+   if (!admin.admin) {
+      console.log('관리자 정보 없음 - AdminLayout')
+      return <Navigate to="/" replace />
    }
+
+   // if (user.role !== 'admin') {
+   //    console.log('관리자 권한 없음 - AdminLayout')
+   //    return <Navigate to="/" replace />
+   // }
    return (
       <div className="admin-layout">
          <div className="admin-container">

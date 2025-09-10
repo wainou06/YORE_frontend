@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { ModalManagerLogin } from './Modal'
@@ -13,12 +13,22 @@ const Footer = () => {
    const modal = useSelector((state) => state.modal)
    const admin = useSelector((state) => state.admin)
 
-   // dispatch(postAdminThunk({ email: 'a@a.com', password: 'admin' })) //초기 관리자 계정 생성용, 실제 운영시에는 제거 필요
+   useEffect(() => {
+      const isAdminCreated = localStorage.getItem('adminCreated')
+      if (!isAdminCreated) {
+         dispatch(postAdminThunk({ email: 'a@a.com', password: 'admin' })).then(() => {
+            localStorage.setItem('adminCreated', 'true')
+         })
+      }
+   }, [dispatch])
 
    const onClickAdmin = async () => {
       const login = await dispatch(showModalThunk({ type: 'managerLogin', placeholder: '매니저 로그인 화면입니다!' }))
 
       const loginCheck = await dispatch(postAdminLoginThunk(login.payload))
+      console.log(loginCheck)
+      console.log(admin)
+
       if (loginCheck.payload?.success == true) {
          navigate('/admin')
       }
