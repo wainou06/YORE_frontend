@@ -8,8 +8,13 @@ import { showModalThunk } from '@/features/modal/modalSlice'
 const Footer = () => {
    const dispatch = useDispatch()
    const modal = useSelector((state) => state.modal)
-   const onClickAdmin = () => {
-      dispatch(showModalThunk({ type: 'managerLogin', placeholder: '매니저 로그인 화면입니다!' }))
+
+   // dispatch(postAdminThunk({ email: 'a@a.com', password: 'admin' })) //초기 관리자 계정 생성용, 실제 운영시에는 제거 필요
+
+   const onClickAdmin = async () => {
+      const login = await dispatch(showModalThunk({ type: 'managerLogin', placeholder: '매니저 로그인 화면입니다!' }))
+
+      console.log(login.payload)
    }
 
    return (
