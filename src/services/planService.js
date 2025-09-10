@@ -3,6 +3,12 @@ import api, { plansAPI, servicesAPI } from './api'
 export const planService = {
    ...plansAPI,
 
+   // 통신사의 요금제 목록 조회
+   getAgencyPlans: async () => {
+      const response = await api.get('/api/plans/agency')
+      return response.data
+   },
+
    // 이미지가 포함된 요금제 생성을 위한 특수 메서드
    createPlanWithImages: async (planData) => {
       try {

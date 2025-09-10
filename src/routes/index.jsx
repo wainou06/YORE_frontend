@@ -18,6 +18,8 @@ import NotFoundPage from '@pages/Error/NotFoundPage'
 import TermsPage from '@pages/Legal/TermsPage'
 import PrivacyPage from '@pages/Legal/PrivacyPage'
 import KakaoCallback from '@components/common/KakaoCallback'
+import AgencyPlanList from '@pages/Agency/AgencyPlanList'
+import AgencyRoute from './AgencyRoute'
 
 const AppRoutes = () => {
    return (
@@ -31,7 +33,6 @@ const AppRoutes = () => {
 
             <Route path="plans">
                <Route index element={<PlanListPage />} />
-               <Route path="create" element={<PlanCreatePage />} />
                <Route path=":id" element={<PlanDetailPage />} />
             </Route>
             <Route path="carriers" element={<CarrierListPage />} />
@@ -39,6 +40,14 @@ const AppRoutes = () => {
             <Route path="checkout/complete" element={<CheckoutCompletePage />} />
             <Route path="terms" element={<TermsPage />} />
             <Route path="privacy" element={<PrivacyPage />} />
+         </Route>
+
+         {/* 에이전시 라우트 */}
+         <Route path="/agency" element={<AgencyRoute />}>
+            <Route path="plans">
+               <Route index element={<AgencyPlanList />} />
+               <Route path="create" element={<PlanCreatePage />} />
+            </Route>
          </Route>
 
          {/* 관리자 라우트 - 별도의 레이아웃으로 분리 */}

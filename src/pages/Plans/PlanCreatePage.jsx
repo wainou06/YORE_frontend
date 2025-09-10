@@ -25,7 +25,7 @@ const PlanCreatePage = () => {
       }
 
       // 일반 경로인 경우 통신사 권한 체크
-      if (!isAdminRoute && (!user || user.role !== 'carrier')) {
+      if (!isAdminRoute && (!user || user.access !== 'agency')) {
          alert('통신사 회원만 요금제를 등록할 수 있습니다.')
          navigate('/')
          return
@@ -215,7 +215,7 @@ const PlanCreatePage = () => {
          const submitData = {
             ...planData,
             status: admin.admin ? 'approved' : 'pending', // 관리자가 등록하는 경우 자동 승인
-            carrierId: user?.id, // 통신사 ID 추가
+            agencyId: user?.agency?.id, // 통신사 ID 추가
          }
          const response = await planService.createPlanWithImages(submitData)
          if (admin.admin) {
