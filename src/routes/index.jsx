@@ -16,6 +16,7 @@ import OrderManagement from '@pages/Admin/OrderManagement'
 import NotFoundPage from '@pages/Error/NotFoundPage'
 import TermsPage from '@pages/Legal/TermsPage'
 import PrivacyPage from '@pages/Legal/PrivacyPage'
+import KakaoCallback from '@components/common/KakaoCallback'
 
 const AppRoutes = () => {
    return (
@@ -24,6 +25,9 @@ const AppRoutes = () => {
             <Route index element={<LandingPage />} />
             <Route path="signup" element={<SignupPage />} />
             <Route path="auth/callback" element={<OAuthCallback />} />
+
+            <Route path="auth/kakao/callback" element={<KakaoCallback />} />
+
             <Route path="plans" element={<PlanListPage />} />
             <Route path="plans/:id" element={<PlanDetailPage />} />
             <Route path="carriers" element={<CarrierListPage />} />
