@@ -94,6 +94,14 @@ export const statsAPI = {
    getInquiries: (params) => api.get('/inquiries', { params }),
 }
 
+export const servicesAPI = {
+   getServices: () => api.get('/services'),
+   getService: (id) => api.get(`/services/${id}`),
+   createService: (data) => api.post('/services', data),
+   updateService: (id, data) => api.put(`/services/${id}`, data),
+   deleteService: (id) => api.delete(`/services/${id}`),
+}
+
 // 환경변수 설정 확인
 if (!import.meta.env.VITE_APP_API_URL) {
    console.warn('VITE_APP_API_URL이 설정되지 않았습니다.')
