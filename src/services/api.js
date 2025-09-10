@@ -47,7 +47,7 @@ api.interceptors.response.use(
             // 리프레시 토큰도 만료된 경우
             localStorage.removeItem('token')
             localStorage.removeItem('refreshToken')
-            window.location.href = '/login'
+            // window.location.href = '/login'
             return Promise.reject(error)
          }
       }
@@ -61,6 +61,13 @@ export const authAPI = {
    register: (userData) => api.post('/auth/register', userData),
    logout: () => api.post('/auth/logout'),
    getCurrentUser: () => api.get('/auth/me'),
+}
+
+export const adminAPI = {
+   registerAdmin: (adminData) => api.post('/admin/register', adminData),
+   loginAdmin: (credentials) => api.post('/admin/login', credentials),
+   getProfile: () => api.get('/admin/profile'),
+   updateProfile: (data) => api.put('/admin/profile', data),
 }
 
 export const usersAPI = {
@@ -92,6 +99,14 @@ export const statsAPI = {
    getOrderStats: () => api.get('/stats/orders'),
    getRevenueStats: () => api.get('/stats/revenue'),
    getInquiries: (params) => api.get('/inquiries', { params }),
+}
+
+export const servicesAPI = {
+   getServices: () => api.get('/services'),
+   getService: (id) => api.get(`/services/${id}`),
+   createService: (data) => api.post('/services', data),
+   updateService: (id, data) => api.put(`/services/${id}`, data),
+   deleteService: (id) => api.delete(`/services/${id}`),
 }
 
 // 환경변수 설정 확인

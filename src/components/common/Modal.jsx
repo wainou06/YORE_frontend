@@ -167,11 +167,11 @@ export const ModalRating = () => {
 export const ModalManagerLogin = () => {
    const dispatch = useDispatch()
 
-   const [id, setId] = useState('')
+   const [email, setId] = useState('')
    const [password, setPassword] = useState('')
 
    const onClickConfirm = () => {
-      dispatch(getInput({ id, password }))
+      dispatch(getInput({ email, password }))
       dispatch(closeModal())
    }
    const onClickClose = () => {
@@ -179,8 +179,18 @@ export const ModalManagerLogin = () => {
       dispatch(closeModal())
    }
 
+   const onKeydownKey = (e) => {
+      if (e.key === 'Enter') {
+         onClickConfirm()
+         return
+      } else if (e.key === 'Escape') {
+         onClickClose()
+         return
+      }
+   }
+
    return (
-      <div className=" overlay modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog" aria-labelledby="modalTitleId" aria-modal="true">
+      <div className="overlay modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog" aria-labelledby="modalTitleId" aria-modal="true">
          <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
                <div className="modal-header">
@@ -192,10 +202,10 @@ export const ModalManagerLogin = () => {
                <div className="modal-body text-center">
                   <ul className="list-unstyled">
                      <li className="mt-3">
-                        <input onChange={(e) => setId(e.target.value)} value={id} placeholder="아이디를 입력해주세요"></input>
+                        <input onChange={(e) => setId(e.target.value)} value={email} placeholder="이메일을 입력해주세요"></input>
                      </li>
                      <li className="mt-3">
-                        <input onChange={(e) => setPassword(e.target.value)} value={password} placeholder="비밀번호를 입력해주세요"></input>
+                        <input onKeyDown={(e) => onKeydownKey(e)} type="password" onChange={(e) => setPassword(e.target.value)} value={password} placeholder="비밀번호를 입력해주세요"></input>
                      </li>
                   </ul>
                </div>

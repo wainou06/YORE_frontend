@@ -12,6 +12,7 @@ import AdminRoute from './AdminRoute'
 import AdminDashboard from '@pages/Admin/AdminDashboard'
 import UserManagement from '@pages/Admin/UserManagement'
 import PlanManagement from '@pages/Admin/PlanManagement'
+import PlanCreatePage from '@pages/Admin/PlanCreatePage'
 import OrderManagement from '@pages/Admin/OrderManagement'
 import NotFoundPage from '@pages/Error/NotFoundPage'
 import TermsPage from '@pages/Legal/TermsPage'
@@ -42,6 +43,7 @@ const AppRoutes = () => {
             <Route index element={<AdminDashboard />} />
             <Route path="users" element={<UserManagement />} />
             <Route path="plans" element={<PlanManagement />} />
+            <Route path="plans/create" element={<PlanCreatePage />} />
             <Route path="orders" element={<OrderManagement />} />
          </Route>
 

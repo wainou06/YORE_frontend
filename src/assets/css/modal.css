@@ -14,3 +14,6 @@
    position: relative;
    left: 40px;
 }
+.modal-title {
+   color: black;
+}

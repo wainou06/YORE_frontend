@@ -143,21 +143,22 @@ const PlanManagement = () => {
    }
 
    return (
-      <div>
-         <div className="container py-5">
+      <div className="admin-main-content">
+         <div className="page-title">
             <div className="d-flex justify-content-between align-items-center mb-4">
                <h2>요금제 관리</h2>
                <button className="btn btn-primary" onClick={() => navigate('/admin/plans/new')}>
                   새 요금제 등록
                </button>
             </div>
-
+         </div>
+         <div className="container py-5">
             {/* 필터 */}
-            <div className="card shadow-sm mb-4">
+            <div className="admin-color card shadow-sm mb-4">
                <div className="card-body">
                   <div className="row g-2">
                      <div className="col-md-3">
-                        <select className="form-select" value={selectedCarrier} onChange={(e) => setSelectedCarrier(e.target.value)}>
+                        <select className="admin-color-second form-select" value={selectedCarrier} onChange={(e) => setSelectedCarrier(e.target.value)}>
                            <option value="">모든 통신사</option>
                            {carriers.map((carrier) => (
                               <option key={carrier.id} value={carrier.id}>
@@ -171,9 +172,9 @@ const PlanManagement = () => {
             </div>
 
             {/* 요금제 목록 */}
-            <div className="card shadow-sm">
+            <div className="admin-color card shadow-sm">
                <div className="table-responsive">
-                  <table className="table table-hover mb-0">
+                  <table className="admin-color-table table table-hover mb-0">
                      <thead>
                         <tr>
                            <th>ID</th>
