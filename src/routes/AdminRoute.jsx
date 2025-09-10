@@ -11,15 +11,15 @@ const AdminLayout = () => {
 
    console.log(admin)
 
-   if (!user) {
-      console.log('사용자 정보 없음 - AdminLayout')
+   if (!admin.admin) {
+      console.log('관리자 정보 없음 - AdminLayout')
       return <Navigate to="/" replace />
    }
 
-   if (user.role !== 'admin') {
-      console.log('관리자 권한 없음 - AdminLayout')
-      return <Navigate to="/" replace />
-   }
+   // if (user.role !== 'admin') {
+   //    console.log('관리자 권한 없음 - AdminLayout')
+   //    return <Navigate to="/" replace />
+   // }
    return (
       <div className="admin-layout">
          <div className="admin-container">
