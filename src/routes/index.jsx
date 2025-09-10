@@ -12,7 +12,7 @@ import AdminRoute from './AdminRoute'
 import AdminDashboard from '@pages/Admin/AdminDashboard'
 import UserManagement from '@pages/Admin/UserManagement'
 import PlanManagement from '@pages/Admin/PlanManagement'
-import PlanCreatePage from '@pages/Admin/PlanCreatePage'
+import PlanCreatePage from '@pages/Plans/PlanCreatePage'
 import OrderManagement from '@pages/Admin/OrderManagement'
 import NotFoundPage from '@pages/Error/NotFoundPage'
 import TermsPage from '@pages/Legal/TermsPage'
@@ -29,8 +29,11 @@ const AppRoutes = () => {
 
             <Route path="auth/kakao/callback" element={<KakaoCallback />} />
 
-            <Route path="plans" element={<PlanListPage />} />
-            <Route path="plans/:id" element={<PlanDetailPage />} />
+            <Route path="plans">
+               <Route index element={<PlanListPage />} />
+               <Route path="create" element={<PlanCreatePage />} />
+               <Route path=":id" element={<PlanDetailPage />} />
+            </Route>
             <Route path="carriers" element={<CarrierListPage />} />
             <Route path="checkout" element={<CheckoutPage />} />
             <Route path="checkout/complete" element={<CheckoutCompletePage />} />
