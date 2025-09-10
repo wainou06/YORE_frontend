@@ -19,6 +19,8 @@ const Footer = () => {
       const login = await dispatch(showModalThunk({ type: 'managerLogin', placeholder: '매니저 로그인 화면입니다!' }))
 
       const loginCheck = await dispatch(postAdminLoginThunk(login.payload))
+      console.log(loginCheck)
+
       if (loginCheck.payload?.success == true) {
          navigate('/admin')
       }
