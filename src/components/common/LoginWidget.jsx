@@ -18,6 +18,7 @@ const LoginWidget = () => {
    useEffect(() => {
       const token = localStorage.getItem('token')
       const storedUserName = localStorage.getItem('userName')
+      const storedAccess = localStorage.getItem('userAccess')
       if (token && storedUserName) {
          setIsLogin(true)
          setUserName(storedUserName)
