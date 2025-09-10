@@ -64,8 +64,10 @@ export const authAPI = {
 }
 
 export const adminAPI = {
-   registerAdmin: (adminData) => api.post('/api/admin/register', adminData),
-   loginAdmin: (credentials) => api.post('/api/admin/login', credentials),
+   registerAdmin: (adminData) => api.post('/admin/register', adminData),
+   loginAdmin: (credentials) => api.post('/admin/login', credentials),
+   getProfile: () => api.get('/admin/profile'),
+   updateProfile: (data) => api.put('/admin/profile', data),
 }
 
 export const usersAPI = {

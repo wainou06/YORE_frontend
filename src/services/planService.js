@@ -9,14 +9,20 @@ export const planService = {
          const formData = new FormData()
 
          // 이미지 파일 처리
-         planData.images.forEach((image, index) => {
-            formData.append('images', image.file)
-            if (image.isMain) {
-               formData.append('mainImageIndex', index)
-            }
-         })
+         if (planData.images && planData.images.length > 0) {
+            planData.images.forEach((image, index) => {
+               formData.append('images', image.file)
+               formData.append(
+                  `images_metadata`,
+                  JSON.stringify({
+                     index,
+                     isMain: image.isMain || false,
+                  })
+               )
+            })
+         }
 
-         // 나머지 데이터 처리
+         // JSON 데이터 처리
          const { images, ...rest } = planData
          formData.append('data', JSON.stringify(rest))
 
@@ -25,7 +31,6 @@ export const planService = {
                'Content-Type': 'multipart/form-data',
             },
          })
-
          return response.data
       } catch (error) {
          throw error

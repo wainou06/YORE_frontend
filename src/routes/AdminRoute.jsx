@@ -4,18 +4,14 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import '@/assets/css/global.css'
 import '@/assets/css/admin.css'
 import { AdminSidebar } from '@/pages/Admin/AdminSidebar'
+import { clearAdminError } from '@/features/admin/adminSlice'
 
 const AdminLayout = () => {
-   const { user } = useSelector((state) => state.auth)
+   const { isAuthenticated } = useSelector((state) => state.admin)
 
-   if (!user) {
-      console.log('사용자 정보 없음 - AdminLayout')
-      return <Navigate to="/" replace />
-   }
-
-   if (user.role !== 'admin') {
-      console.log('관리자 권한 없음 - AdminLayout')
-      return <Navigate to="/" replace />
+   if (!isAuthenticated) {
+      console.log('관리자 인증 필요 - AdminLayout')
+      return <Navigate to="/admin/login" replace />
    }
    return (
       <div className="admin-layout">
