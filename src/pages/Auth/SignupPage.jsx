@@ -61,6 +61,8 @@ const SignupPage = () => {
       }
    }
 
+   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${import.meta.env.VITE_APP_KAKAO_LOGIN_REST}&redirect_uri=${encodeURIComponent(import.meta.env.VITE_KAKAO_REDIRECT_URI)}&response_type=code&scope=profile_nickname&prompt=login`
+
    return (
       <div className="container py-5">
          <div className="row justify-content-center">
@@ -79,13 +81,12 @@ const SignupPage = () => {
                         </button>
                      </div>
 
-                     {/* 소셜 로그인 */}
                      {userType === 'personal' && (
-                        <div className="d-grid gap-2 mb-4">
-                           <button className="btn btn-warning">
+                        <div className="d-grid gap-3">
+                           <a href={KAKAO_AUTH_URL} className="btn btn-warning w-100">
                               <FontAwesomeIcon icon={faComment} className="me-2" />
                               카카오로 시작하기
-                           </button>
+                           </a>
                         </div>
                      )}
 
