@@ -260,7 +260,7 @@ const OrderManagement = () => {
                                  </div>
                                  <div className="mt-1">
                                     {order.features.map((feature, index) => (
-                                       <span key={index} className="badge bg-light text-dark me-1">
+                                       <span key={index} className="admin-color badge bg-light text-dark me-1">
                                           {feature}
                                        </span>
                                     ))}

@@ -228,7 +228,7 @@ const PlanManagement = () => {
                                  <td>
                                     <div style={{ maxWidth: '200px' }}>
                                        {plan.features.map((feature, index) => (
-                                          <span key={index} className="badge bg-light text-dark me-1 mb-1">
+                                          <span key={index} className="admin-color badge bg-light text-dark me-1 mb-1">
                                              {feature}
                                           </span>
                                        ))}

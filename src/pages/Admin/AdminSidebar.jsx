@@ -11,7 +11,7 @@ export const AdminSidebar = () => {
       <div className="admin-sidebar">
          <div className="sidebar-content">
             <div className="sidebar-header">
-               <Link onClick={() => currentPage(0)} to="/admin" className="logo">
+               <Link to="/admin" onClick={() => currentPage(0)} className="logo">
                   YORE
                </Link>
             </div>

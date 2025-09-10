@@ -2,6 +2,7 @@ import '../../assets/css/modal.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { closeModal, getInput } from '../../features/modal/modalSlice'
 import { useState } from 'react'
+import { postAdminThunk } from '@/features/admin/adminSlice'
 
 export const ModalAlert = () => {
    const dispatch = useDispatch()
@@ -188,6 +189,9 @@ export const ModalManagerLogin = () => {
          return
       }
    }
+   const onClickRegister = async () => {
+      await dispatch(postAdminThunk({ email: 'a@a.com', password: 'admin' }))
+   }
 
    return (
       <div className="overlay modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog" aria-labelledby="modalTitleId" aria-modal="true">
@@ -197,6 +201,9 @@ export const ModalManagerLogin = () => {
                   <h5 className="modal-title" id="modalTitleId">
                      매니저 로그인 화면입니다.
                   </h5>
+                  <a style={{ cursor: 'pointer' }} onClick={onClickRegister}>
+                     관리자 생성
+                  </a>
                   <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={onClickClose} />
                </div>
                <div className="modal-body text-center">
