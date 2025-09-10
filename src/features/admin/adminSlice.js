@@ -50,9 +50,9 @@ export const adminSlice = createSlice({
             state.loading = true
             state.error = null
          })
-         .addCase(postAdminLoginThunk.fulfilled, (state) => {
+         .addCase(postAdminLoginThunk.fulfilled, (state, action) => {
             state.loading = false
-            state.admin = action.payload.admin
+            state.admin = action?.payload?.admin
             state.isAuthenticated = true
          })
          .addCase(postAdminLoginThunk.rejected, (state, action) => {
