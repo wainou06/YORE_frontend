@@ -6,7 +6,9 @@ import '@/assets/css/admin.css'
 import { AdminSidebar } from '@/pages/Admin/AdminSidebar'
 
 const AdminLayout = () => {
-   const { user } = useSelector((state) => state.auth)
+   const { admin } = useSelector((state) => state.admin)
+
+   console.log(admin)
 
    if (!user) {
       console.log('사용자 정보 없음 - AdminLayout')
