@@ -4,9 +4,10 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import '@/assets/css/global.css'
 import '@/assets/css/admin.css'
 import { AdminSidebar } from '@/pages/Admin/AdminSidebar'
+import { clearAdminError } from '@/features/admin/adminSlice'
 
 const AdminLayout = () => {
-   const { admin } = useSelector((state) => state.admin)
+   const admin = useSelector((state) => state.admin)
 
    console.log(admin)
 
