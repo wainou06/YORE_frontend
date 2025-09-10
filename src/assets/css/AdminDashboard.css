@@ -283,6 +283,17 @@
    border: none;
 }
 
+.admin-color-list {
+   background-color: var(--bg-secondary) !important;
+   color: var(--text-primary) !important;
+}
+
+.admin-color-list button {
+   background-color: var(--bg-secondary);
+   color: var(--text-primary) !important;
+   border: var(--text-primary) !important;
+}
+
 /* 다크 모드 변수 */
 :root {
    --bg-primary: #ffffff;

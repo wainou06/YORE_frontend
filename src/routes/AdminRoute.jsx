@@ -16,10 +16,6 @@ const AdminLayout = () => {
       return <Navigate to="/" replace />
    }
 
-   // if (user.role !== 'admin') {
-   //    console.log('관리자 권한 없음 - AdminLayout')
-   //    return <Navigate to="/" replace />
-   // }
    return (
       <div className="admin-layout">
          <div className="admin-container">
