@@ -11,10 +11,18 @@ export const postAdminThunk = createAsyncThunk('admin/postAdmin', async (adminDa
    }
 })
 
+export const postAdminLoginThunk = createAsyncThunk('admin/postAdminLogin', async (credentials, { rejectWithValue }) => {
+   try {
+      const response = await adminAPI.loginAdmin(credentials)
+      return response.data
+   } catch (error) {
+      return rejectWithValue(error.response?.data?.message)
+   }
+})
+
 export const adminSlice = createSlice({
    name: 'admin',
    initialState: {
-      admin: null,
       isAuthenticated: false,
       loading: false,
       error: null,
@@ -34,6 +42,18 @@ export const adminSlice = createSlice({
             state.loading = false
          })
          .addCase(postAdminThunk.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload
+         })
+         .addCase(postAdminLoginThunk.pending, (state) => {
+            state.loading = true
+            state.error = null
+         })
+         .addCase(postAdminLoginThunk.fulfilled, (state) => {
+            state.loading = false
+            state.isAuthenticated = true
+         })
+         .addCase(postAdminLoginThunk.rejected, (state, action) => {
             state.loading = false
             state.error = action.payload
          })
