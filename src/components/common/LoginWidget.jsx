@@ -12,6 +12,7 @@ const LoginWidget = () => {
    const [isLogin, setIsLogin] = useState(false)
    const [userName, setUserName] = useState('')
    const [rememberMe, setRememberMe] = useState(false)
+   const [userAccess, setUserAccess] = useState('') // 'user' or 'agency'
    const navigate = useNavigate()
 
    useEffect(() => {
@@ -20,6 +21,7 @@ const LoginWidget = () => {
       if (token && storedUserName) {
          setIsLogin(true)
          setUserName(storedUserName)
+         setUserAccess(storedAccess) // 사용자 접근 권한 설정
       }
 
       const saveEmail = localStorage.getItem('savedEmail')
@@ -52,8 +54,10 @@ const LoginWidget = () => {
             // 로그인 성공 시
             localStorage.setItem('token', response.data.token) // 토큰 저장
             localStorage.setItem('userName', response.data.user.name) // 사용자 이름 저장
+            localStorage.setItem('userAccess', response.data.user.access) // 사용자 접근 권한 저장
             setIsLogin(true)
             setUserName(response.data.user.name)
+            setUserAccess(response.data.user.access)
             alert('로그인 성공!')
             navigate('/') // 홈으로 이동
          } else {
@@ -77,12 +81,54 @@ const LoginWidget = () => {
    return (
       <div className="card shadow-sm p-4">
          {isLogin ? (
-            <div className="text-center">
-               <h5 className="mb-3">{userName}님 환영합니다 🎉</h5>
-               <button className="btn btn-outline-danger w-100" onClick={handleLogout}>
-                  로그아웃
-               </button>
-            </div>
+            <>
+               {userAccess === 'user' ? (
+                  <>
+                     <div className="text-center">
+                        <h5 className="mb-3">{userName}님 환영합니다 🎉</h5>
+                        <button className="btn btn-outline-danger w-100" onClick={handleLogout}>
+                           로그아웃
+                        </button>
+                     </div>
+                     <div className="isLogin">
+                        <div className="link_btn_group">
+                           <a href="#" className="link_btn">
+                              <FontAwesomeIcon icon={faComment} className="me-2" />
+                              <p>내 정보</p>
+                           </a>
+                           <a href="#" className="link_btn ">
+                              <FontAwesomeIcon icon={faComment} className="me-2" />
+                              <p>내 요금제</p>
+                           </a>
+                           <a href="#" className="link_btn">
+                              <FontAwesomeIcon icon={faComment} className="me-2" />
+                              <p>내 청구서</p>
+                           </a>
+                        </div>
+                     </div>
+                  </>
+               ) : (
+                  <>
+                     <p>기업 회원 로그인</p>
+                     <h5 className="mb-3">{userName}님 환영합니다 🎉</h5>
+                     <div className="isLogin">
+                        <div className="link_btn_group">
+                           <a href="#" className="link_btn">
+                              <FontAwesomeIcon icon={faComment} className="me-2" />
+                              <p>정보 관리</p>
+                           </a>
+                           <a href="#" className="link_btn ">
+                              <FontAwesomeIcon icon={faComment} className="me-2" />
+                              <p>요금제 관리</p>
+                           </a>
+                        </div>
+                     </div>
+                     <button className="btn btn-outline-danger w-100" onClick={handleLogout}>
+                        로그아웃
+                     </button>
+                  </>
+               )}
+            </>
          ) : (
             <>
                <div className="btn-group w-100 mb-4">
