@@ -43,6 +43,15 @@ const SignupPage = () => {
                name: formData.name,
                userid: formData.email.split('@')[0], // userid 자동 생성 (이메일 앞부분 사용)
                phone: formData.phone,
+               access: userType === 'personal' ? 'user' : 'agency',
+               // 기업회원인 경우 추가 정보 전송
+               ...(userType === 'business' && {
+                  agency: {
+                     businessNumber: formData.businessNumber,
+                     agencyName: formData.companyName,
+                     managerName: formData.name,
+                  },
+               }),
             }),
          })
 
