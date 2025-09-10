@@ -20,6 +20,7 @@ const Footer = () => {
 
       const loginCheck = await dispatch(postAdminLoginThunk(login.payload))
       console.log(loginCheck)
+      console.log(admin)
 
       if (loginCheck.payload?.success == true) {
          navigate('/admin')
