@@ -1,8 +1,8 @@
 import '../../assets/css/modal.css'
 import { useDispatch, useSelector } from 'react-redux'
-import { closeModal, getInput } from '../../features/modal/modalSlice'
-import { useState } from 'react'
-import { postAdminThunk } from '@/features/admin/adminSlice'
+import { closeModal, getInput, showModalThunk } from '../../features/modal/modalSlice'
+import { useState, useId } from 'react'
+import { registerAdmin } from '@/features/admin/adminSlice'
 
 export const ModalAlert = () => {
    const dispatch = useDispatch()
@@ -170,9 +170,11 @@ export const ModalManagerLogin = () => {
 
    const [email, setId] = useState('')
    const [password, setPassword] = useState('')
+   const [rememberMe, setRememberMe] = useState(false)
+   const idPrefix = useId()
 
    const onClickConfirm = () => {
-      dispatch(getInput({ email, password }))
+      dispatch(getInput({ email, password, rememberMe }))
       dispatch(closeModal())
    }
    const onClickClose = () => {
@@ -190,7 +192,12 @@ export const ModalManagerLogin = () => {
       }
    }
    const onClickRegister = async () => {
-      await dispatch(postAdminThunk({ email: 'a@a.com', password: 'admin' }))
+      try {
+         await dispatch(registerAdmin({ email: 'a@a.com', password: 'admin' })).unwrap()
+         dispatch(showModalThunk({ type: 'alert', placeholder: '관리자 계정이 생성되었습니다.' }))
+      } catch (error) {
+         dispatch(showModalThunk({ type: 'alert', placeholder: error || '관리자 계정 생성에 실패했습니다.' }))
+      }
    }
 
    return (
@@ -209,10 +216,16 @@ export const ModalManagerLogin = () => {
                <div className="modal-body text-center">
                   <ul className="list-unstyled">
                      <li className="mt-3">
-                        <input onChange={(e) => setId(e.target.value)} value={email} placeholder="이메일을 입력해주세요"></input>
+                        <input id={`${idPrefix}-modalAdminEmail`} onChange={(e) => setId(e.target.value)} value={email} placeholder="이메일을 입력해주세요"></input>
                      </li>
                      <li className="mt-3">
-                        <input onKeyDown={(e) => onKeydownKey(e)} type="password" onChange={(e) => setPassword(e.target.value)} value={password} placeholder="비밀번호를 입력해주세요"></input>
+                        <input id={`${idPrefix}-modalAdminPassword`} onKeyDown={(e) => onKeydownKey(e)} type="password" onChange={(e) => setPassword(e.target.value)} value={password} placeholder="비밀번호를 입력해주세요"></input>
+                     </li>
+                     <li className="mt-3 d-flex align-items-center justify-content-center">
+                        <input type="checkbox" id={`${idPrefix}-modalAdminRememberMeCheckbox`} className="me-2" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
+                        <label htmlFor={`${idPrefix}-modalAdminRememberMeCheckbox`} className="mb-0" style={{ fontSize: '0.95em', cursor: 'pointer' }}>
+                           로그인 유지
+                        </label>
                      </li>
                   </ul>
                </div>

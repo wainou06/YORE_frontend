@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { planService, serviceService } from '@/services/planService'
+import { plansAPI, servicesAPI } from '@/services/api'
 import BasicInfoForm from '@/components/Plans/BasicInfoForm'
 import PlanQuotaForm from '@/components/Plans/PlanQuotaForm'
 import FeatureForm from '@/components/Plans/FeatureForm'
@@ -55,7 +55,7 @@ const PlanCreatePage = () => {
    useEffect(() => {
       const fetchServices = async () => {
          try {
-            const response = await serviceService.getAvailableServices()
+            const response = await servicesAPI.getAllServices()
             setAdditionalServices(response.data)
          } catch (error) {
             console.error('부가 서비스 목록 조회 실패:', error)
@@ -217,7 +217,7 @@ const PlanCreatePage = () => {
             status: admin.admin ? 'approved' : 'pending', // 관리자가 등록하는 경우 자동 승인
             agencyId: user?.agency?.id, // 통신사 ID 추가
          }
-         const response = await planService.createPlanWithImages(submitData)
+         const response = await (admin.admin ? plansAPI.createPlanAsAdmin(submitData) : plansAPI.createPlan(submitData))
          if (admin.admin) {
             alert('요금제가 등록되었습니다.')
             navigate('/admin/plans')

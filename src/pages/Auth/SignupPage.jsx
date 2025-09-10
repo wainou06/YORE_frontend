@@ -1,10 +1,15 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faComment } from '@fortawesome/free-solid-svg-icons'
+import { register, selectAuthError, selectAuthLoading } from '@features/auth/authSlice'
 
 const SignupPage = () => {
    const navigate = useNavigate()
+   const dispatch = useDispatch()
+   const error = useSelector(selectAuthError)
+   const loading = useSelector(selectAuthLoading)
    const [userType, setUserType] = useState('personal')
    const [formData, setFormData] = useState({
       email: '',
@@ -33,42 +38,40 @@ const SignupPage = () => {
          return
       }
 
+      const userData = {
+         email: formData.email,
+         password: formData.password,
+         name: formData.name,
+         userid: formData.email.split('@')[0], // userid 자동 생성 (이메일 앞부분 사용)
+         phone: formData.phone,
+         access: userType === 'personal' ? 'user' : 'agency',
+         // 기업회원인 경우 추가 정보
+         ...(userType === 'business' && {
+            agency: {
+               businessNumber: formData.businessNumber,
+               agencyName: formData.companyName,
+               managerName: formData.name,
+            },
+         }),
+      }
+
       try {
-         const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/api/auth/register`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-               email: formData.email,
-               password: formData.password,
-               name: formData.name,
-               userid: formData.email.split('@')[0], // userid 자동 생성 (이메일 앞부분 사용)
-               phone: formData.phone,
-               access: userType === 'personal' ? 'user' : 'agency',
-               // 기업회원인 경우 추가 정보 전송
-               ...(userType === 'business' && {
-                  agency: {
-                     businessNumber: formData.businessNumber,
-                     agencyName: formData.companyName,
-                     managerName: formData.name,
-                  },
-               }),
-            }),
-         })
-
-         const data = await response.json()
-         console.log('서버 응답:', data)
-
-         if (data.success) {
+         const resultAction = await dispatch(register(userData))
+         if (register.fulfilled.match(resultAction)) {
             alert('회원가입 성공!')
             navigate('/')
-         } else {
-            alert('회원가입 실패: ' + data.message)
          }
-      } catch (error) {
-         console.error('회원가입 에러:', error)
-         alert('서버 오류가 발생했습니다.')
+      } catch (err) {
+         console.error('회원가입 에러:', err)
       }
    }
+
+   // 에러 처리
+   useEffect(() => {
+      if (error) {
+         alert(error)
+      }
+   }, [error])
 
    const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${import.meta.env.VITE_APP_KAKAO_LOGIN_REST}&redirect_uri=${encodeURIComponent(import.meta.env.VITE_KAKAO_REDIRECT_URI)}&response_type=code&scope=profile_nickname&prompt=login`
 
@@ -143,8 +146,8 @@ const SignupPage = () => {
                         )}
 
                         <div className="d-grid gap-2">
-                           <button type="submit" className="btn btn-primary">
-                              회원가입
+                           <button type="submit" className="btn btn-primary" disabled={loading}>
+                              {loading ? '처리중...' : '회원가입'}
                            </button>
                         </div>
                      </form>

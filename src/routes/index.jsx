@@ -2,7 +2,6 @@ import { Routes, Route } from 'react-router-dom'
 import Layout from '@components/common/Layout'
 import LandingPage from '@pages/Landing/LandingPage'
 import SignupPage from '@pages/Auth/SignupPage'
-import OAuthCallback from '@pages/Auth/OAuthCallback'
 import PlanListPage from '@pages/Plans/PlanListPage'
 import CarrierListPage from '@pages/Carriers/CarrierListPage'
 import PlanDetailPage from '@pages/Plans/PlanDetailPage'
@@ -27,8 +26,6 @@ const AppRoutes = () => {
          <Route path="/" element={<Layout />}>
             <Route index element={<LandingPage />} />
             <Route path="signup" element={<SignupPage />} />
-            <Route path="auth/callback" element={<OAuthCallback />} />
-
             <Route path="auth/kakao/callback" element={<KakaoCallback />} />
 
             <Route path="plans">

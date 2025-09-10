@@ -1,18 +1,26 @@
 import { Outlet, Navigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { clearError as clearAdminError } from '@/features/admin/adminSlice'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import '@/assets/css/global.css'
 import '@/assets/css/admin.css'
 import { AdminSidebar } from '@/pages/Admin/AdminSidebar'
-import { clearAdminError } from '@/features/admin/adminSlice'
 
 const AdminLayout = () => {
+   const dispatch = useDispatch()
    const admin = useSelector((state) => state.admin)
 
-   console.log(admin)
+   useEffect(() => {
+      // 컴포넌트가 unmount될 때 에러 상태 초기화
+      return () => {
+         dispatch(clearAdminError())
+      }
+   }, [dispatch])
 
    if (!admin.admin) {
       console.log('관리자 정보 없음 - AdminLayout')
+      dispatch(clearAdminError()) // 관리자 인증 실패 시 에러 초기화
       return <Navigate to="/" replace />
    }
 
