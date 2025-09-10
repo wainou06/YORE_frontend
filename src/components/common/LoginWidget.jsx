@@ -77,12 +77,30 @@ const LoginWidget = () => {
    return (
       <div className="card shadow-sm p-4">
          {isLogin ? (
-            <div className="text-center">
-               <h5 className="mb-3">{userName}님 환영합니다 🎉</h5>
-               <button className="btn btn-outline-danger w-100" onClick={handleLogout}>
-                  로그아웃
-               </button>
-            </div>
+            <>
+               <div className="text-center">
+                  <h5 className="mb-3">{userName}님 환영합니다 🎉</h5>
+                  <button className="btn btn-outline-danger w-100" onClick={handleLogout}>
+                     로그아웃
+                  </button>
+               </div>
+               <div className="isLogin">
+                  <div className="link_btn_group">
+                     <a href="#" className="link_btn">
+                        <FontAwesomeIcon icon={faComment} className="me-2" />
+                        <p>내 정보</p>
+                     </a>
+                     <a href="#" className="link_btn ">
+                        <FontAwesomeIcon icon={faComment} className="me-2" />
+                        <p>내 요금제</p>
+                     </a>
+                     <a href="#" className="link_btn">
+                        <FontAwesomeIcon icon={faComment} className="me-2" />
+                        <p>내 청구서</p>
+                     </a>
+                  </div>
+               </div>
+            </>
          ) : (
             <>
                <div className="btn-group w-100 mb-4">
