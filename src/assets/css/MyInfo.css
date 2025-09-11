@@ -1,4 +1,8 @@
-.myinfo button {
+.content_box {
+   max-width: 980px;
+}
+
+.content_box button {
    width: 11rem;
    border: none;
    padding: 10px 20px;

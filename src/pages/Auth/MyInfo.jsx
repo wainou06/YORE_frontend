@@ -21,7 +21,7 @@ const Myinfo = () => {
    }, [])
 
    return (
-      <div className="container py-5 myinfo">
+      <div className="container py-5 content_box">
          <div className="row justify-content-center">
             <div className="col-md-10">
                <div className="col-12 mb-4">

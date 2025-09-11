@@ -93,15 +93,15 @@ const LoginWidget = () => {
                      </div>
                      <div className="isLogin">
                         <div className="link_btn_group">
-                           <a href="#" className="link_btn">
+                           <a href="/myinfo" className="link_btn">
                               <FontAwesomeIcon icon={faComment} className="me-2" />
                               <p>내 정보</p>
                            </a>
-                           <a href="#" className="link_btn ">
+                           <a href="/myinfo/planSettings" className="link_btn ">
                               <FontAwesomeIcon icon={faComment} className="me-2" />
                               <p>내 요금제</p>
                            </a>
-                           <a href="#" className="link_btn">
+                           <a href="/myinfo/billing" className="link_btn">
                               <FontAwesomeIcon icon={faComment} className="me-2" />
                               <p>내 청구서</p>
                            </a>

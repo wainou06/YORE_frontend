@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import '@assets/css/MySettings.css'
 
 const API_BASE = `${import.meta.env.VITE_APP_API_URL}/api/auth`
 
@@ -117,10 +118,10 @@ const MySettings = () => {
    }
 
    return (
-      <div className="container py-4">
+      <div className="container content_box py-4">
          <div className="row g-4">
             {/* 1. 비밀번호 변경 */}
-            <div className="col-12 col-md-6">
+            <div className="col-12">
                <div className="card p-3 shadow-sm">
                   <h5 className="card-title">비밀번호 변경</h5>
                   <input type="password" placeholder="현재 비밀번호" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} className="form-control mb-2" />
@@ -133,7 +134,7 @@ const MySettings = () => {
             </div>
 
             {/* 2. 이메일 변경 */}
-            <div className="col-12 col-md-6">
+            <div className="col-12">
                <div className="card p-3 shadow-sm">
                   <h5 className="card-title">이메일 변경</h5>
                   <input type="email" placeholder={email || '이메일 입력'} value={newEmail} onChange={(e) => setNewEmail(e.target.value)} className="form-control mb-2" />
@@ -144,7 +145,7 @@ const MySettings = () => {
             </div>
 
             {/* 3. 생일 입력 */}
-            <div className="col-12 col-md-6">
+            <div className="col-12">
                <div className="card p-3 shadow-sm">
                   <h5 className="card-title">생일 입력</h5>
                   <input type="date" value={birth} onChange={(e) => setBirth(e.target.value)} className="form-control mb-2" />
@@ -155,7 +156,7 @@ const MySettings = () => {
             </div>
 
             {/* 4. 더미 섹션 */}
-            <div className="col-12 col-md-6">
+            <div className="col-12">
                <div className="card p-3 shadow-sm">
                   <h5 className="card-title">추가 정보 1</h5>
                   <p className="card-text">더미 데이터</p>
@@ -163,7 +164,7 @@ const MySettings = () => {
             </div>
 
             {/* 5. 더미 섹션 */}
-            <div className="col-12 col-md-6">
+            <div className="col-12">
                <div className="card p-3 shadow-sm">
                   <h5 className="card-title">추가 정보 2</h5>
                   <p className="card-text">더미 데이터</p>
