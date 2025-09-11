@@ -9,7 +9,7 @@ import { AdminSidebar } from '@/pages/Admin/AdminSidebar'
 
 const AdminLayout = () => {
    const dispatch = useDispatch()
-   const admin = useSelector((state) => state.admin)
+   // const admin = useSelector((state) => state.admin)
    // const adminInfo = localStorage.getItem('adminInfo')
 
    // console.log(adminInfo)
