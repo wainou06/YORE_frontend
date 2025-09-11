@@ -18,6 +18,10 @@ import NotFoundPage from '@pages/Error/NotFoundPage'
 import TermsPage from '@pages/Legal/TermsPage'
 import PrivacyPage from '@pages/Legal/PrivacyPage'
 import KakaoCallback from '@components/common/KakaoCallback'
+import MyInfo from '@pages/Auth/MyInfo'
+import MySettings from '@pages/Auth/MySettings'
+import PlanSettings from '@pages/Auth/PlanSettings'
+import Billing from '@pages/Auth/Billing'
 
 const AppRoutes = () => {
    return (
@@ -27,8 +31,12 @@ const AppRoutes = () => {
             <Route path="signup" element={<SignupPage />} />
             <Route path="auth/callback" element={<OAuthCallback />} />
 
-            <Route path="auth/kakao/callback" element={<KakaoCallback />} />
+            <Route path="myinfo" element={<MyInfo />} />
+            <Route path="myinfo/mysettings" element={<MySettings />} />
+            <Route path="myinfo/plansettings" element={<PlanSettings />} />
+            <Route path="myinfo/billing" element={<Billing />} />
 
+            <Route path="auth/kakao/callback" element={<KakaoCallback />} />
             <Route path="plans" element={<PlanListPage />} />
             <Route path="plans/:id" element={<PlanDetailPage />} />
             <Route path="carriers" element={<CarrierListPage />} />

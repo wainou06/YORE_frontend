@@ -1,0 +1,12 @@
+// src/pages/Account/Billing.jsx
+
+const Billing = () => {
+   return (
+      <div className="p-6">
+         <h1 className="text-xl font-bold mb-4">나의 청구서</h1>
+         {/* 여기 청구서 상세 UI 작성 */}
+      </div>
+   )
+}
+
+export default Billing

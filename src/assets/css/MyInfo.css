@@ -1,0 +1,15 @@
+.myinfo button {
+   width: 11rem;
+   border: none;
+   padding: 10px 20px;
+   border-radius: 15px;
+}
+
+.my_data {
+   display: flex;
+   justify-content: space-around;
+}
+
+.my_data p {
+   color: gray;
+}
