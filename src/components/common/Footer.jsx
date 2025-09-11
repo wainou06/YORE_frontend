@@ -1,31 +1,37 @@
-import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { ModalManagerLogin } from './Modal'
 import { useDispatch } from 'react-redux'
 import { showModalThunk } from '@/features/modal/modalSlice'
-import { postAdminLoginThunk, postAdminThunk } from '@/features/admin/adminSlice'
+import { loginAdmin } from '@/features/admin/adminSlice'
 import { useNavigate } from 'react-router-dom'
 
 const Footer = () => {
    const dispatch = useDispatch()
    const navigate = useNavigate()
    const modal = useSelector((state) => state.modal)
-   const admin = useSelector((state) => state.admin)
 
    const onClickAdmin = async () => {
-      const login = await dispatch(showModalThunk({ type: 'managerLogin', placeholder: '매니저 로그인 화면입니다!' }))
+      try {
+         const modalResult = await dispatch(showModalThunk({ type: 'managerLogin', placeholder: '매니저 로그인 화면입니다!' }))
 
-      if (login.payload === null) {
-         return
-      }
+         if (!modalResult.payload) {
+            return
+         }
 
-      const loginCheck = await dispatch(postAdminLoginThunk(login.payload))
-      console.log(loginCheck)
-      console.log(admin)
-
-      if (loginCheck.payload?.success == true) {
-         navigate('/admin')
+         const result = await dispatch(loginAdmin(modalResult.payload)).unwrap()
+         if (result && result.token) {
+            // 기존 user token이 있으면 삭제 (admin 로그인 시 user 세션 강제 종료)
+            localStorage.removeItem('token')
+            if (modalResult.payload.rememberMe) {
+               localStorage.setItem('adminToken', 'admin_' + result.token)
+            } else {
+               localStorage.removeItem('adminToken')
+            }
+            navigate('/admin')
+         }
+      } catch (error) {
+         dispatch(showModalThunk({ type: 'alert', placeholder: error || '관리자 로그인에 실패했습니다.' }))
       }
    }
 
