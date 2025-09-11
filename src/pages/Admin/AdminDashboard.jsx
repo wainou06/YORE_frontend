@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 import { analyticsAPI } from '@/services/api'
 import { showModalThunk } from '@/features/modal/modalSlice'
 import { ModalAlert } from '@/components/common/Modal'
-import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
-import { statsAPI } from '../../services/api'
+// import { statsAPI } from '../../services/api'
 import '../../assets/css/AdminDashboard.css'
 import { getTotalUsersThunk } from '@/features/analytics/analyticsSlice'
 
