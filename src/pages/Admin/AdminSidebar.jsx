@@ -75,7 +75,7 @@ export const AdminSidebar = () => {
                   <FontAwesomeIcon icon={faMoon} />
                   <span>다크 모드</span>
                </div>
-               <div className="menu-item">
+               <div onClick={() => {}} className="menu-item">
                   <FontAwesomeIcon icon={faRightFromBracket} />
                   <span>로그아웃</span>
                </div>

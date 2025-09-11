@@ -1,11 +1,15 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSearch, faBars, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faSearch, faBars, faTimes, faChartLine } from '@fortawesome/free-solid-svg-icons'
 import logo from '@assets/images/logo.png'
 
 const Header = () => {
    const [isMenuOpen, setIsMenuOpen] = useState(false)
+   const user = useSelector((state) => state.auth.user)
+   const isAgency = user?.access === 'agency'
+
    return (
       <header className="bg-white shadow-sm sticky-top">
          <nav className="navbar navbar-expand-lg navbar-light container py-3">
@@ -40,16 +44,34 @@ const Header = () => {
                </form>
 
                <ul className="navbar-nav ml-auto">
-                  <li className="nav-item">
-                     <Link className="nav-link" to="/plans">
-                        요금제
-                     </Link>
-                  </li>
-                  <li className="nav-item">
-                     <Link className="nav-link" to="/carriers">
-                        통신사
-                     </Link>
-                  </li>
+                  {isAgency ? (
+                     <>
+                        <li className="nav-item">
+                           <Link className="nav-link" to="/agency/plans/create">
+                              요금제 등록
+                           </Link>
+                        </li>
+                        <li className="nav-item">
+                           <Link className="nav-link" to="/agency/plans">
+                              <FontAwesomeIcon icon={faChartLine} className="me-1" />
+                              요금제 관리
+                           </Link>
+                        </li>
+                     </>
+                  ) : (
+                     <>
+                        <li className="nav-item">
+                           <Link className="nav-link" to="/plans">
+                              요금제
+                           </Link>
+                        </li>
+                        <li className="nav-item">
+                           <Link className="nav-link" to="/carriers">
+                              통신사
+                           </Link>
+                        </li>
+                     </>
+                  )}
                   <li className="nav-item">
                      <a className="nav-link" href="https://open.kakao.com" target="_blank" rel="noopener noreferrer">
                         고객센터
