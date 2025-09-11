@@ -14,9 +14,9 @@ const PlanManagement = () => {
 
    // 관리자 권한 체크
    useEffect(() => {
-      if (!user || user.role !== 'admin') {
-         navigate('/')
-      }
+      // if (!user || user.role !== 'admin') {
+      //    navigate('/')
+      // }
    }, [user, navigate])
 
    // 통신사 목록 로드

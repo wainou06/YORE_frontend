@@ -4,21 +4,22 @@ import checkoutReducer from '@features/checkout/checkoutSlice'
 import modalReducer from '@features/modal/modalSlice'
 import plansReducer from '../features/plans/planSlice'
 import adminReducer from '@features/admin/adminSlice'
+import analyticsReducer from '@features/analytics/analyticsSlice'
 
 // 개발 환경에서 사용할 임시 관리자 계정
-const devInitialState = {
-   auth: {
-      user: {
-         id: 1,
-         name: '관리자',
-         email: 'admin@example.com',
-         role: 'admin',
-      },
-      isAuthenticated: true,
-      loading: false,
-      error: null,
-   },
-}
+// const devInitialState = {
+//    auth: {
+//       user: {
+//          id: 1,
+//          name: '관리자',
+//          email: 'admin@example.com',
+//          role: 'admin',
+//       },
+//       isAuthenticated: true,
+//       loading: false,
+//       error: null,
+//    },
+// }
 
 export const store = configureStore({
    reducer: {
@@ -27,6 +28,7 @@ export const store = configureStore({
       modal: modalReducer,
       admin: adminReducer,
       plans: plansReducer,
+      analytics: analyticsReducer,
    },
-   preloadedState: process.env.NODE_ENV === 'development' ? devInitialState : undefined,
+   // preloadedState: process.env.NODE_ENV === 'development' ? devInitialState : undefined,
 })

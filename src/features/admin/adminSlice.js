@@ -27,6 +27,7 @@ export const adminSlice = createSlice({
       isAuthenticated: false,
       loading: false,
       error: null,
+      token: null,
    },
    reducers: {
       clearAdminError: (state) => {
@@ -52,8 +53,11 @@ export const adminSlice = createSlice({
          })
          .addCase(postAdminLoginThunk.fulfilled, (state, action) => {
             state.loading = false
-            state.admin = action?.payload?.admin
             state.isAuthenticated = true
+
+            state.admin = action.payload.admin
+            state.token = action.payload.token
+            sessionStorage.setItem('admin', JSON.stringify(action.payload.admin))
          })
          .addCase(postAdminLoginThunk.rejected, (state, action) => {
             state.loading = false

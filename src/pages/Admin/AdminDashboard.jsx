@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
 import { statsAPI } from '../../services/api'
 import '../../assets/css/AdminDashboard.css'
+import { getTotalUsersThunk } from '@/features/analytics/analyticsSlice'
 
 const AdminDashboard = () => {
+   const dispatch = useDispatch()
    const navigate = useNavigate()
-   const { user } = useSelector((state) => state.auth)
    const [darkMode, setDarkMode] = useState(false)
    const [loading, setLoading] = useState(true)
    const [error, setError] = useState(null)
@@ -20,6 +21,8 @@ const AdminDashboard = () => {
       conversionRate: 0,
       recentOrders: [],
    })
+   const totalUsers = useSelector((state) => state.analytics)
+   console.log(totalUsers)
 
    useEffect(() => {
       // 다크 모드 설정 로드
@@ -29,14 +32,9 @@ const AdminDashboard = () => {
          document.documentElement.setAttribute('data-theme', 'dark')
       }
 
-      if (!user || user.role !== 'admin') {
-         console.log('관리자 권한 없음')
-         navigate('/')
-         return
-      }
-
       const fetchStats = async () => {
          try {
+            dispatch(getTotalUsersThunk())
             // API 호출로 데이터 가져오기
             const [statsResponse, inquiriesResponse] = await Promise.all([statsAPI.getDashboardStats(), statsAPI.getInquiries()])
 
@@ -154,7 +152,7 @@ const AdminDashboard = () => {
       }
 
       fetchStats()
-   }, [user, navigate])
+   }, [navigate])
 
    return (
       <div className="admin-main-content">
@@ -247,17 +245,6 @@ const AdminDashboard = () => {
             </div>
          </section>
       </div>
-      // <div className="admin-container">
-      //    <div className="admin-content">
-      //       <div className="admin-layout-container">
-      //          {/* 좌측 사이드바 */}
-      //          {/* <div className="admin-sidebar"></div> */}
-      //          {/* <AdminSidebar /> */}
-      //          {/* 메인 컨텐츠 */}
-
-      //       </div>
-      //    </div>
-      // </div>
    )
 }
 

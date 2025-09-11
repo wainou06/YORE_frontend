@@ -75,10 +75,10 @@ export const AdminSidebar = () => {
                   <FontAwesomeIcon icon={faMoon} />
                   <span>다크 모드</span>
                </div>
-               <Link to="/" className="menu-item">
+               <div className="menu-item">
                   <FontAwesomeIcon icon={faRightFromBracket} />
                   <span>로그아웃</span>
-               </Link>
+               </div>
             </div>
          </div>
       </div>

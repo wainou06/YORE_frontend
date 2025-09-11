@@ -109,6 +109,10 @@ export const servicesAPI = {
    deleteService: (id) => api.delete(`/services/${id}`),
 }
 
+export const analyticsAPI = {
+   getTotalUsers: () => api.get('/api/analytics/getTotalUsers'),
+}
+
 // 환경변수 설정 확인
 if (!import.meta.env.VITE_APP_API_URL) {
    console.warn('VITE_APP_API_URL이 설정되지 않았습니다.')
