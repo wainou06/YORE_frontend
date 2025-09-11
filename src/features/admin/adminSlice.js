@@ -92,6 +92,7 @@ export const adminSlice = createSlice({
       stats: null,
       loading: false,
       error: null,
+      token: null,
    },
    reducers: {
       clearError: (state) => {
@@ -189,6 +190,11 @@ export const adminSlice = createSlice({
          })
          .addCase(exportLogs.fulfilled, (state) => {
             state.loading = false
+            state.isAuthenticated = true
+
+            state.admin = action.payload.admin
+            state.token = action.payload.token
+            sessionStorage.setItem('admin', JSON.stringify(action.payload.admin))
          })
          .addCase(exportLogs.rejected, (state, action) => {
             state.loading = false

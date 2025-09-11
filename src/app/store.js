@@ -7,6 +7,7 @@ import adminReducer from '@features/admin/adminSlice'
 import userPlansReducer from '@features/userPlans/userPlanSlice'
 import agencyReducer from '@features/agency/agencySlice'
 import orderReducer from '@features/order/orderSlice'
+import analyticsReducer from '@features/analytics/analyticsSlice'
 
 // 개발 환경에서 사용할 임시 상태
 const devInitialState = {
@@ -28,6 +29,7 @@ export const store = configureStore({
       userPlans: userPlansReducer,
       agency: agencyReducer,
       order: orderReducer,
+      analytics: analyticsReducer,
    },
-   preloadedState: process.env.NODE_ENV === 'development' ? devInitialState : undefined,
+   // preloadedState: process.env.NODE_ENV === 'development' ? devInitialState : undefined,
 })

@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { AdminSidebar } from './AdminSidebar'
 
 const OrderManagement = () => {
    const navigate = useNavigate()
@@ -20,11 +19,7 @@ const OrderManagement = () => {
          setDarkMode(true)
          document.documentElement.setAttribute('data-theme', 'dark')
       }
-
-      if (!user || user.role !== 'admin') {
-         navigate('/')
-      }
-   }, [user, navigate])
+   }, [navigate])
 
    // 주문 목록 로드
    useEffect(() => {
