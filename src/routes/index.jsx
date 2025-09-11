@@ -17,6 +17,10 @@ import NotFoundPage from '@pages/Error/NotFoundPage'
 import TermsPage from '@pages/Legal/TermsPage'
 import PrivacyPage from '@pages/Legal/PrivacyPage'
 import KakaoCallback from '@components/common/KakaoCallback'
+import MyInfo from '@pages/Auth/MyInfo'
+import MySettings from '@pages/Auth/MySettings'
+import PlanSettings from '@pages/Auth/PlanSettings'
+import Billing from '@pages/Auth/Billing'
 import AgencyPlanList from '@pages/Agency/AgencyPlanList'
 import AgencyRoute from './AgencyRoute'
 
@@ -26,15 +30,29 @@ const AppRoutes = () => {
          <Route path="/" element={<Layout />}>
             <Route index element={<LandingPage />} />
             <Route path="signup" element={<SignupPage />} />
+
+            {/* 내 정보 */}
+            <Route path="myinfo" element={<MyInfo />} />
+            <Route path="myinfo/mysettings" element={<MySettings />} />
+            <Route path="myinfo/plansettings" element={<PlanSettings />} />
+            <Route path="myinfo/billing" element={<Billing />} />
+
+            {/* 인증 */}
             <Route path="auth/kakao/callback" element={<KakaoCallback />} />
 
+            {/* 요금제 */}
             <Route path="plans">
                <Route index element={<PlanListPage />} />
                <Route path=":id" element={<PlanDetailPage />} />
             </Route>
+
             <Route path="carriers" element={<CarrierListPage />} />
+
+            {/* 결제 */}
             <Route path="checkout" element={<CheckoutPage />} />
             <Route path="checkout/complete" element={<CheckoutCompletePage />} />
+
+            {/* 정책 */}
             <Route path="terms" element={<TermsPage />} />
             <Route path="privacy" element={<PrivacyPage />} />
          </Route>
