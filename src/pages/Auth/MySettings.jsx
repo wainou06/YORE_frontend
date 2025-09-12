@@ -1,54 +1,52 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
 import axios from 'axios'
+import { getProfile, selectUser, selectIsAuthenticated } from '@features/auth/authSlice'
 import '@assets/css/MySettings.css'
 
-const API_BASE = `${import.meta.env.VITE_APP_API_URL}/api/auth`
+const API_BASE = `${import.meta.env.VITE_APP_API_URL}/auth`
 
 const MySettings = () => {
    const navigate = useNavigate()
-   const [isLogin, setIsLogin] = useState(false)
+   const dispatch = useDispatch()
 
-   // 사용자 기본 정보
+   // Redux에서 로그인 상태와 사용자 정보 가져오기
+   const user = useSelector(selectUser)
+   const isAuthenticated = useSelector(selectIsAuthenticated)
    const [userName, setUserName] = useState('')
    const [email, setEmail] = useState('')
    const [birth, setBirth] = useState('')
-
-   // 1. 비밀번호 변경
    const [currentPassword, setCurrentPassword] = useState('')
    const [newPassword, setNewPassword] = useState('')
    const [confirmPassword, setConfirmPassword] = useState('')
-
-   // 2. 이메일 변경
    const [newEmail, setNewEmail] = useState('')
 
-   // 로딩 시 localStorage에서 로그인 정보 가져오기
    useEffect(() => {
-      const token = localStorage.getItem('token')
-      const storedUserName = localStorage.getItem('userName')
-      const storedEmail = localStorage.getItem('userEmail') // email이 있다면
-      if (token && storedUserName) {
-         setIsLogin(true)
-         setUserName(storedUserName)
-         setEmail(storedEmail || '')
+      const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+
+      if (isAuthenticated && user) {
+         setUserName(user.name)
+         setEmail(user.email)
+      } else if (token) {
+         dispatch(getProfile())
+            .unwrap()
+            .then((profile) => {
+               setUserName(profile.name)
+               setEmail(profile.email)
+            })
+            .catch((err) => {
+               console.error('프로필 불러오기 실패', err)
+               navigate('/')
+            })
+      } else {
+         navigate('/')
       }
-   }, [])
+   }, [dispatch, isAuthenticated, user, navigate])
 
-   if (!isLogin) {
-      return (
-         <div className="card shadow-sm p-4 text-center">
-            <p>로그인이 필요합니다.</p>
-            <button className="btn btn-primary" onClick={() => navigate('/')}>
-               로그인
-            </button>
-         </div>
-      )
-   }
-
-   const token = localStorage.getItem('token')
+   const token = localStorage.getItem('token') || sessionStorage.getItem('token')
    const headers = { Authorization: `Bearer ${token}` }
 
-   // 1. 비밀번호 변경
    const handleChangePassword = async () => {
       if (!currentPassword || !newPassword || !confirmPassword) {
          alert('모든 비밀번호 필드를 입력해주세요.')
@@ -120,7 +118,6 @@ const MySettings = () => {
    return (
       <div className="container content_box py-4">
          <div className="row g-4">
-            {/* 1. 비밀번호 변경 */}
             <div className="col-12">
                <div className="card p-3 shadow-sm">
                   <h5 className="card-title">비밀번호 변경</h5>
@@ -133,7 +130,6 @@ const MySettings = () => {
                </div>
             </div>
 
-            {/* 2. 이메일 변경 */}
             <div className="col-12">
                <div className="card p-3 shadow-sm">
                   <h5 className="card-title">이메일 변경</h5>
@@ -144,7 +140,6 @@ const MySettings = () => {
                </div>
             </div>
 
-            {/* 3. 생일 입력 */}
             <div className="col-12">
                <div className="card p-3 shadow-sm">
                   <h5 className="card-title">생일 입력</h5>
@@ -155,7 +150,6 @@ const MySettings = () => {
                </div>
             </div>
 
-            {/* 4. 더미 섹션 */}
             <div className="col-12">
                <div className="card p-3 shadow-sm">
                   <h5 className="card-title">추가 정보 1</h5>
@@ -163,7 +157,6 @@ const MySettings = () => {
                </div>
             </div>
 
-            {/* 5. 더미 섹션 */}
             <div className="col-12">
                <div className="card p-3 shadow-sm">
                   <h5 className="card-title">추가 정보 2</h5>
