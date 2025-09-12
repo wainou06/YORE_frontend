@@ -1,11 +1,13 @@
+import { getPlansStatusThunk } from '@/features/analytics/analyticsSlice'
 import { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { AdminSidebar } from './AdminSidebar'
 
 const PlanManagement = () => {
    const navigate = useNavigate()
-   const { user } = useSelector((state) => state.auth)
+   const dispatch = useDispatch()
+   const { isAuthenticated } = useSelector((state) => state.admin)
+   const { loading, plansStatus } = useSelector((state) => state.analytics)
    const [plans, setPlans] = useState([])
    const [carriers, setCarriers] = useState([])
    const [selectedCarrier, setSelectedCarrier] = useState('')
@@ -14,19 +16,25 @@ const PlanManagement = () => {
 
    // 관리자 권한 체크
    useEffect(() => {
-      // if (!user || user.role !== 'admin') {
-      //    navigate('/')
-      // }
-   }, [user, navigate])
+      const savedTheme = localStorage.getItem('theme')
+      if (savedTheme === 'dark') {
+         document.documentElement.setAttribute('data-theme', 'dark')
+      }
+      if (!isAuthenticated) {
+         navigate('/')
+         return
+      }
+      dispatch(getPlansStatusThunk(currentPage))
+   }, [currentPage, dispatch])
 
    // 통신사 목록 로드
    useEffect(() => {
       const fetchCarriers = async () => {
          try {
             const carriersList = [
-               { id: 'SKT', name: 'SKT', color: '#ED1C24' },
-               { id: 'KT', name: 'KT', color: '#1F3870' },
-               { id: 'LGU+', name: 'LG U+', color: '#D13B27' },
+               { id: '3G', name: '3G', color: '#ED1C24' },
+               { id: 'LTE', name: 'LTE', color: '#1F3870' },
+               { id: '5G', name: '5G', color: '#D13B27' },
             ]
             setCarriers(carriersList)
          } catch (error) {
@@ -39,93 +47,12 @@ const PlanManagement = () => {
 
    // 요금제 목록 로드
    useEffect(() => {
-      const fetchPlans = async () => {
-         try {
-            const mockPlans = [
-               {
-                  id: 1,
-                  name: '5G 프리미엄',
-                  carrier: 'SKT',
-                  data: '무제한',
-                  voice: '무제한',
-                  sms: '무제한',
-                  price: 85000,
-                  discountRate: 25,
-                  status: 'active',
-                  features: ['VIP 혜택', '데이터 완전 무제한', '5G 전용'],
-                  createdAt: '2025-09-01',
-               },
-               {
-                  id: 2,
-                  name: '5G 슈퍼플랜',
-                  carrier: 'KT',
-                  data: '200GB',
-                  voice: '무제한',
-                  sms: '무제한',
-                  price: 65000,
-                  discountRate: 20,
-                  status: 'active',
-                  features: ['데이터 로밍', '음악 스트리밍'],
-                  createdAt: '2025-09-02',
-               },
-               {
-                  id: 3,
-                  name: '5G 베이직',
-                  carrier: 'LGU+',
-                  data: '100GB',
-                  voice: '300분',
-                  sms: '300건',
-                  price: 45000,
-                  discountRate: 15,
-                  status: 'inactive',
-                  features: ['기본 데이터'],
-                  createdAt: '2025-09-03',
-               },
-               {
-                  id: 4,
-                  name: '청소년 요금제',
-                  carrier: 'SKT',
-                  data: '50GB',
-                  voice: '200분',
-                  sms: '무제한',
-                  price: 35000,
-                  discountRate: 30,
-                  status: 'active',
-                  features: ['유해 콘텐츠 차단', '위치 알림'],
-                  createdAt: '2025-09-04',
-               },
-               {
-                  id: 5,
-                  name: '실버 요금제',
-                  carrier: 'KT',
-                  data: '30GB',
-                  voice: '무제한',
-                  sms: '무제한',
-                  price: 30000,
-                  discountRate: 35,
-                  status: 'active',
-                  features: ['큰 글씨', '긴급 SOS'],
-                  createdAt: '2025-09-05',
-               },
-            ]
-
-            // 통신사 필터링
-            const filteredPlans = selectedCarrier ? mockPlans.filter((plan) => plan.carrier === selectedCarrier) : mockPlans
-
-            // 페이지네이션
-            const itemsPerPage = 5
-            const start = (currentPage - 1) * itemsPerPage
-            const paginatedPlans = filteredPlans.slice(start, start + itemsPerPage)
-
-            setPlans(paginatedPlans)
-            setTotalPages(Math.ceil(filteredPlans.length / itemsPerPage))
-         } catch (error) {
-            console.error('요금제 목록 로드 실패:', error)
-         }
+      if (!loading) {
+         console.log(plansStatus)
+         setPlans(plansStatus.data)
+         setTotalPages(plansStatus.totalPages)
       }
-
-      fetchPlans()
-   }, [currentPage, selectedCarrier])
+   }, [currentPage, plansStatus])
 
    const handleStatusChange = async (planId, newStatus) => {
       try {
@@ -158,7 +85,7 @@ const PlanManagement = () => {
                <div className="card-body">
                   <div className="row g-2">
                      <div className="col-md-3">
-                        <select className="admin-color-second form-select" value={selectedCarrier} onChange={(e) => setSelectedCarrier(e.target.value)}>
+                        <select className="admin-color-second admin-color-select form-select" value={selectedCarrier} onChange={(e) => setSelectedCarrier(e.target.value)}>
                            <option value="">모든 통신사</option>
                            {carriers.map((carrier) => (
                               <option key={carrier.id} value={carrier.id}>
@@ -192,7 +119,7 @@ const PlanManagement = () => {
                         </tr>
                      </thead>
                      <tbody>
-                        {plans.map((plan) => {
+                        {plans?.map((plan) => {
                            const carrier = carriers.find((c) => c.id === plan.carrier)
                            return (
                               <tr key={plan.id}>
@@ -227,11 +154,11 @@ const PlanManagement = () => {
                                  </td>
                                  <td>
                                     <div style={{ maxWidth: '200px' }}>
-                                       {plan.features.map((feature, index) => (
+                                       {/* {plan.features.map((feature, index) => (
                                           <span key={index} className="admin-color badge bg-light text-dark me-1 mb-1">
                                              {feature}
                                           </span>
-                                       ))}
+                                       ))} */}
                                     </div>
                                  </td>
                                  <td>{plan.createdAt}</td>
@@ -260,7 +187,7 @@ const PlanManagement = () => {
             <div className="d-flex justify-content-center mt-4">
                <nav>
                   <ul className="admin-color-list pagination">
-                     <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                     <li style={{ cursor: 'pointer' }} className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
                         <button className="admin-color page-link" onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}>
                            이전
                         </button>
@@ -272,7 +199,7 @@ const PlanManagement = () => {
                            </button>
                         </li>
                      ))}
-                     <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                     <li style={{ cursor: 'pointer' }} className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
                         <button className="admin-color page-link" onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}>
                            다음
                         </button>

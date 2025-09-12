@@ -263,6 +263,20 @@
    border: none;
 }
 
+.admin-color-select {
+   -webkit-appearance: none;
+   -moz-appearance: none;
+   appearance: none;
+
+   background-image: var(--select-color);
+
+   background-repeat: no-repeat;
+   background-position: right 0.75rem center;
+   background-size: 1.25em 0.75em;
+
+   padding-right: 2.25rem;
+}
+
 .admin-color-second::placeholder {
    background-color: var(--border-color) !important;
    color: var(--text-primary) !important;
@@ -305,6 +319,7 @@
    --primary-color: #007bff;
    --success-color: #28a745;
    --danger-color: #dc3545;
+   --select-color: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
 }
 
 [data-theme='dark'] {
@@ -315,4 +330,5 @@
    --border-color: #404040;
    --hover-color: #353535;
    --primary-color: #0066cc;
+   --select-color: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
 }
