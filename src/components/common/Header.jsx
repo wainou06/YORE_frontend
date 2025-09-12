@@ -47,12 +47,12 @@ const Header = () => {
                   {isAgency ? (
                      <>
                         <li className="nav-item">
-                           <Link className="nav-link" to="/agency/plans/create">
+                           <Link to="/agency/plans/create" className="nav-link">
                               요금제 등록
                            </Link>
                         </li>
                         <li className="nav-item">
-                           <Link className="nav-link" to="/agency/plans">
+                           <Link to="/agency/plans" className="nav-link">
                               <FontAwesomeIcon icon={faChartLine} className="me-1" />
                               요금제 관리
                            </Link>

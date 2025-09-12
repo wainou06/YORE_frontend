@@ -1,11 +1,8 @@
-import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEdit, faTrash, faPlus, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons'
-import { fetchAgencyPlans, deletePlan, approvePlan, selectAgencyPlans, selectPlanLoading, selectPlanError } from '@/features/plans/planSlice'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import PlanFilters from '@/components/shared/PlanFilters'
-import { toast } from 'react-toastify'
 
 const INITIAL_FILTERS = {
    approval: 'all',
@@ -17,83 +14,59 @@ const INITIAL_FILTERS = {
 }
 
 const AgencyPlanList = () => {
-   const dispatch = useDispatch()
-   const plans = useSelector(selectAgencyPlans)
-   const loading = useSelector(selectPlanLoading)
-   const error = useSelector(selectPlanError)
-   const [filters, setFilters] = useState(INITIAL_FILTERS)
+   // 임시 데이터 (slice, redux 사용 안함)
+   const tempPlans = [
+      {
+         id: 1,
+         name: 'YORE 5G 100GB',
+         description: '5G 데이터 100GB, 음성 무제한, 문자 300건',
+         price: '39000',
+         data: '100000',
+         voice: '999999',
+         sms: '300',
+         type: '6',
+         age: '20',
+         dis: '24',
+         status: 'approved',
+         benefits: '["넷플릭스 3개월 무료", "유튜브 프리미엄 1개월"]',
+      },
+      {
+         id: 2,
+         name: 'YORE LTE 청소년',
+         description: 'LTE 데이터 10GB, 음성 200분, 문자 100건',
+         price: '22000',
+         data: '10000',
+         voice: '200',
+         sms: '100',
+         type: '3',
+         age: '18',
+         dis: '0',
+         status: 'pending',
+         benefits: '["카카오페이 5천원 쿠폰"]',
+      },
+   ]
 
-   useEffect(() => {
-      dispatch(fetchAgencyPlans())
-   }, [dispatch])
+   const [filters, setFilters] = useState(INITIAL_FILTERS)
 
    const handleFilterChange = (newFilters) => {
       setFilters(newFilters)
    }
 
-   const handleStatusToggle = async (planId, currentStatus) => {
-      try {
-         await dispatch(
-            approvePlan({
-               id: planId,
-               status: currentStatus === 'approved' ? 'rejected' : 'approved',
-               rejectionReason: currentStatus === 'approved' ? '승인 취소' : '',
-            })
-         ).unwrap()
-         toast.success(`요금제가 ${currentStatus === 'approved' ? '거절' : '승인'}되었습니다.`)
-      } catch (error) {
-         toast.error('요금제 상태 변경에 실패했습니다.')
-      }
-   }
-
-   const handleDelete = async (planId) => {
-      if (window.confirm('정말 이 요금제를 삭제하시겠습니까?')) {
-         try {
-            await dispatch(deletePlan(planId)).unwrap()
-            toast.success('요금제가 삭제되었습니다.')
-         } catch (error) {
-            toast.error('요금제 삭제에 실패했습니다.')
-         }
-      }
-   }
-
-   const filteredPlans = plans.filter((plan) => {
+   // slice 없이 임시 데이터 필터링
+   const filteredPlans = tempPlans.filter((plan) => {
       if (filters.approval !== 'all') {
          if (filters.approval === 'pending' && plan.status !== 'pending') return false
          if (filters.approval === 'approved' && plan.status !== 'approved') return false
          if (filters.approval === 'rejected' && plan.status !== 'rejected') return false
       }
-
       if (filters.type !== 'all' && plan.type !== filters.type) return false
       if (filters.age !== 'all' && plan.age !== filters.age) return false
       if (filters.dis !== 'all' && plan.dis !== filters.dis) return false
-
       const price = parseInt(plan.price)
       if (filters.minPrice && price < parseInt(filters.minPrice)) return false
       if (filters.maxPrice && price > parseInt(filters.maxPrice)) return false
-
       return true
    })
-
-   if (loading) {
-      return (
-         <div className="container py-5 text-center">
-            <div className="spinner-border text-primary" role="status">
-               <span className="visually-hidden">로딩중...</span>
-            </div>
-         </div>
-      )
-   }
-
-   if (error) {
-      return (
-         <div className="container py-5">
-            <div className="alert alert-danger" role="alert">
-               요금제 목록을 불러오는데 실패했습니다: {error}
-            </div>
-         </div>
-      )
-   }
 
    return (
       <div className="container py-5">
@@ -127,18 +100,6 @@ const AgencyPlanList = () => {
                                     <h5 className="card-title mb-0">{plan.name}</h5>
                                     <div>
                                        <span className={`badge me-2 ${plan.status === 'approved' ? 'bg-success' : plan.status === 'rejected' ? 'bg-danger' : 'bg-warning'}`}>{plan.status === 'approved' ? '승인됨' : plan.status === 'rejected' ? '거절됨' : '승인 대기중'}</span>
-                                       {(plan.status === 'pending' || plan.status === 'rejected') && (
-                                          <button className="btn btn-sm btn-outline-success" onClick={() => handleStatusToggle(plan.id, plan.status)}>
-                                             <FontAwesomeIcon icon={faCheck} className="me-1" />
-                                             승인 요청
-                                          </button>
-                                       )}
-                                       {plan.status === 'approved' && (
-                                          <button className="btn btn-sm btn-outline-danger" onClick={() => handleStatusToggle(plan.id, plan.status)}>
-                                             <FontAwesomeIcon icon={faTimes} className="me-1" />
-                                             승인 취소
-                                          </button>
-                                       )}
                                     </div>
                                  </div>
                                  <p className="card-text text-muted small mb-2">{plan.description}</p>
@@ -164,18 +125,23 @@ const AgencyPlanList = () => {
                                     <div className="badge bg-info">{plan.age === '18' ? '청소년' : plan.age === '20' ? '성인' : '실버'}</div>
                                     <div className="badge bg-info">{plan.dis === '0' ? '무약정' : `${plan.dis}개월`}</div>
                                  </div>
-                              </div>
-                              <div className="card-footer bg-white border-top-0">
-                                 <div className="d-flex justify-content-end gap-2">
-                                    <Link to={`/agency/plans/${plan.id}/edit`} className="btn btn-outline-primary btn-sm">
-                                       <FontAwesomeIcon icon={faEdit} className="me-1" />
-                                       수정
-                                    </Link>
-                                    <button onClick={() => handleDelete(plan.id)} className="btn btn-outline-danger btn-sm">
-                                       <FontAwesomeIcon icon={faTrash} className="me-1" />
-                                       삭제
-                                    </button>
-                                 </div>
+
+                                 {/* 혜택 리스트 안전 파싱 및 표시 */}
+                                 {(() => {
+                                    let benefits = []
+                                    try {
+                                       benefits = Array.isArray(plan.benefits) ? plan.benefits : plan.benefits ? JSON.parse(plan.benefits) : []
+                                    } catch {
+                                       benefits = []
+                                    }
+                                    return benefits.length > 0 ? (
+                                       <ul className="mb-2 ps-3 small text-success">
+                                          {benefits.map((b, i) => (
+                                             <li key={i}>{b}</li>
+                                          ))}
+                                       </ul>
+                                    ) : null
+                                 })()}
                               </div>
                            </div>
                         </div>

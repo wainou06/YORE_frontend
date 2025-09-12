@@ -3,21 +3,12 @@ import authReducer from '@features/auth/authSlice'
 import checkoutReducer from '@features/checkout/checkoutSlice'
 import modalReducer from '@features/modal/modalSlice'
 import plansReducer from '../features/plans/planSlice'
+import servicesReducer from '../features/services/serviceSlice'
 import adminReducer from '@features/admin/adminSlice'
 import userPlansReducer from '@features/userPlans/userPlanSlice'
 import agencyReducer from '@features/agency/agencySlice'
 import orderReducer from '@features/order/orderSlice'
 import analyticsReducer from '@features/analytics/analyticsSlice'
-
-// 개발 환경에서 사용할 임시 상태
-const devInitialState = {
-   auth: {
-      user: null,
-      isAuthenticated: false,
-      loading: false,
-      error: null,
-   },
-}
 
 export const store = configureStore({
    reducer: {
@@ -30,6 +21,7 @@ export const store = configureStore({
       agency: agencyReducer,
       order: orderReducer,
       analytics: analyticsReducer,
+      services: servicesReducer,
    },
    // preloadedState: process.env.NODE_ENV === 'development' ? devInitialState : undefined,
 })
