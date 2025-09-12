@@ -32,3 +32,5 @@ export const plansAPI = {
    },
    deletePlanAsAdmin: (id) => api.delete(`/plans/${id}`),
 }
+
+export default plansAPI

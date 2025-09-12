@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { userPlansAPI } from '@/services/api'
+import { userPlansAPI } from '@/api/userPlansApi'
 
 const initialState = {
    items: [], // 사용자의 요금제 목록

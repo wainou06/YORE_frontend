@@ -6,3 +6,5 @@ export const userPlansAPI = {
    getUserPlan: (id) => api.get(`/user-plans/${id}`),
    cancelUserPlan: (id) => api.post(`/user-plans/${id}/cancel`),
 }
+
+export default userPlansAPI

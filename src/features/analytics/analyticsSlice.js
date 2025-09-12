@@ -1,4 +1,4 @@
-import { analyticsAPI } from '@/services/api'
+import { analyticsAPI } from '@/api/analyticsApi'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 export const getHomeStatusThunk = createAsyncThunk('analytics/getHomeStatus', async (_, { rejectWidthValue }) => {

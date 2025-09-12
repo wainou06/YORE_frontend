@@ -4,3 +4,5 @@ export const surveyAPI = {
    submitSurvey: (data) => api.post('/surveys', data),
    getSurveyResults: (id) => api.get(`/surveys/${id}`),
 }
+
+export default surveyAPI
