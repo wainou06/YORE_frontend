@@ -25,7 +25,11 @@ const api = axios.create({
 // 요청 인터셉터
 api.interceptors.request.use(
    (config) => {
+      const adminToken = localStorage.getItem('adminToken') || sessionStorage.getItem('adminToken')
       const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+      if (adminToken) {
+         config.headers.Authorization = `Bearer ${adminToken}`
+      }
       if (token) {
          config.headers.Authorization = `Bearer ${token}`
       }
@@ -44,6 +48,8 @@ api.interceptors.response.use(
       if (error.response && error.response.status === 401 && !originalRequest._retry) {
          originalRequest._retry = true
          // 토큰 만료 시 토큰 삭제 (refreshToken은 더 이상 사용하지 않음)
+         localStorage.removeItem('adminToken')
+         sessionStorage.removeItem('adminToken')
          localStorage.removeItem('token')
          sessionStorage.removeItem('token')
          // window.location.href = '/login' // 필요시 주석 해제
@@ -155,6 +161,10 @@ export const transactionAPI = {
 
 // Analytics API
 export const analyticsAPI = {
+   //홈 통계
+   getHomeStatus: () => api.get('/api/analytics/getHomeStatus'),
+   getUserStatus: () => api.get('/api/analytics/getUserStatus'),
+
    // 전체 통계
    getServiceStats: () => api.get('/api/analytics'),
 

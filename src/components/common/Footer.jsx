@@ -23,10 +23,11 @@ const Footer = () => {
          if (result && result.token) {
             // 기존 user token이 있으면 삭제 (admin 로그인 시 user 세션 강제 종료)
             localStorage.removeItem('token')
+            const adminToken = 'admin_' + result.token
             if (modalResult.payload.rememberMe) {
-               localStorage.setItem('adminToken', 'admin_' + result.token)
+               localStorage.setItem('adminToken', adminToken)
             } else {
-               localStorage.removeItem('adminToken')
+               sessionStorage.setItem('adminToken', adminToken)
             }
             navigate('/admin')
          }

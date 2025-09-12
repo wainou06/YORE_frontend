@@ -1,6 +1,22 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { adminAPI } from '@services/api'
 
+const getInitialState = () => {
+   const sessionAdmin = sessionStorage.getItem('adminToken')
+   const localAdmin = localStorage.getItem('adminToken')
+
+   return {
+      admin: null,
+      isAuthenticated: !!(sessionAdmin || localAdmin),
+      users: [],
+      selectedUser: null,
+      stats: null,
+      loading: false,
+      error: null,
+      token: null,
+   }
+}
+
 // Admin Auth Thunks
 export const loginAdmin = createAsyncThunk('admin/loginAdmin', async (credentials, { rejectWithValue }) => {
    try {
@@ -84,21 +100,20 @@ export const exportLogs = createAsyncThunk('admin/exportLogs', async (_, { rejec
 
 export const adminSlice = createSlice({
    name: 'admin',
-   initialState: {
-      admin: null,
-      isAuthenticated: false,
-      users: [],
-      selectedUser: null,
-      stats: null,
-      loading: false,
-      error: null,
-      token: null,
-   },
+   initialState: getInitialState(),
    reducers: {
       clearError: (state) => {
          state.error = null
       },
       resetAdminState: () => initialState,
+      checkAdminState: (state) => {
+         const sessionAdmin = sessionStorage.getItem('adminToken')
+         const localAdmin = localStorage.getItem('adminToken')
+
+         if (sessionAdmin || localAdmin) {
+            state.isAuthenticated = true
+         }
+      },
    },
    extraReducers: (builder) => {
       builder
@@ -203,7 +218,7 @@ export const adminSlice = createSlice({
    },
 })
 
-export const { clearError, resetAdminState } = adminSlice.actions
+export const { clearError, resetAdminState, checkAdminState } = adminSlice.actions
 
 // Selectors
 export const selectAdmin = (state) => state.admin.admin
