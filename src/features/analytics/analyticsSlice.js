@@ -1,9 +1,18 @@
 import { analyticsAPI } from '@/services/api'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-export const getTotalUsersThunk = createAsyncThunk('analytics/getTotalUsers', async (_, { rejectWidthValue }) => {
+export const getHomeStatusThunk = createAsyncThunk('analytics/getHomeStatus', async (_, { rejectWidthValue }) => {
    try {
-      const response = await analyticsAPI.getTotalUsers()
+      const response = await analyticsAPI.getHomeStatus()
+      return response.data
+   } catch (error) {
+      return rejectWidthValue(error.response?.data?.message)
+   }
+})
+
+export const getUserStatusThunk = createAsyncThunk('analytics/getUserStatus', async (_, { rejectWidthValue }) => {
+   try {
+      const response = await analyticsAPI.getUserStatus()
       return response.data
    } catch (error) {
       return rejectWidthValue(error.response?.data?.message)
@@ -14,8 +23,9 @@ export const analyticsSlice = createSlice({
    name: 'analytics',
    initialState: {
       error: null,
-      loading: false,
-      data: null,
+      loading: true,
+      home: {},
+      userManagement: {},
    },
    reducers: {
       clearAnalyticsError: (state) => {
@@ -24,15 +34,27 @@ export const analyticsSlice = createSlice({
    },
    extraReducers: (builder) => {
       builder
-         .addCase(getTotalUsersThunk.pending, (state) => {
+         .addCase(getHomeStatusThunk.pending, (state) => {
             state.loading = true
             state.error = null
          })
-         .addCase(getTotalUsersThunk.fulfilled, (state, action) => {
+         .addCase(getHomeStatusThunk.fulfilled, (state, action) => {
             state.loading = false
-            state.data = action.payload
+            state.home = action.payload
          })
-         .addCase(getTotalUsersThunk.rejected, (state, action) => {
+         .addCase(getHomeStatusThunk.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload
+         })
+         .addCase(getUserStatusThunk.pending, (state) => {
+            state.loading = true
+            state.error = null
+         })
+         .addCase(getUserStatusThunk.fulfilled, (state, action) => {
+            state.loading = false
+            state.userManagement = action.payload
+         })
+         .addCase(getUserStatusThunk.rejected, (state, action) => {
             state.loading = false
             state.error = action.payload
          })

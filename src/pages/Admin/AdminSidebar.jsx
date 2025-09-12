@@ -11,7 +11,7 @@ export const AdminSidebar = () => {
       <div className="admin-sidebar">
          <div className="sidebar-content">
             <div className="sidebar-header">
-               <Link to="/admin" onClick={() => currentPage(0)} className="logo">
+               <Link to="/admin" onClick={() => setCurrentPage(0)} className="logo">
                   YORE
                </Link>
             </div>
@@ -75,10 +75,18 @@ export const AdminSidebar = () => {
                   <FontAwesomeIcon icon={faMoon} />
                   <span>다크 모드</span>
                </div>
-               <div onClick={() => {}} className="menu-item">
+               <Link
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => {
+                     localStorage.removeItem('adminToken')
+                     sessionStorage.removeItem('adminToken')
+                  }}
+                  className="menu-item"
+                  to={'/'}
+               >
                   <FontAwesomeIcon icon={faRightFromBracket} />
                   <span>로그아웃</span>
-               </div>
+               </Link>
             </div>
          </div>
       </div>
