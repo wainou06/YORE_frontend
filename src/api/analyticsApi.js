@@ -1,12 +1,12 @@
-import api from './axiosApi'
+import api from './adminAxiosApi'
 
 export const analyticsAPI = {
    //홈 통계
-   getHomeStatus: () => api.get('/api/analytics/getHomeStatus'),
-   getUserStatus: () => api.get('/api/analytics/getUserStatus'),
+   getHomeStatus: () => api.get('/analytics/getHomeStatus'),
+   getUserStatus: () => api.get('/analytics/getUserStatus'),
 
    // 전체 통계
-   getServiceStats: () => api.get('/api/analytics'),
+   getServiceStats: () => api.get('/analytics'),
 
    // 서비스별 통계
    getServiceDetailStats: (serviceId) => api.get(`/analytics/services/${serviceId}`),
@@ -21,3 +21,5 @@ export const analyticsAPI = {
    incrementViewCount: (serviceId) => api.post(`/analytics/${serviceId}/view`),
    updatePurchaseStats: (serviceId) => api.post(`/analytics/${serviceId}/purchase`),
 }
+
+export default analyticsAPI

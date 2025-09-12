@@ -38,4 +38,4 @@ if (!import.meta.env.VITE_APP_API_URL) {
    console.warn('VITE_APP_API_URL이 설정되지 않았습니다.')
 }
 
-export default api
+export default adminApi

@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { plansAPI, servicesAPI } from '@/services/api'
+import servicesAPI from '@/api/servicesApi'
+import plansAPI from '@/api/plansApi'
+
 import BasicInfoForm from '@/components/Plans/BasicInfoForm'
 import PlanQuotaForm from '@/components/Plans/PlanQuotaForm'
 import FeatureForm from '@/components/Plans/FeatureForm'

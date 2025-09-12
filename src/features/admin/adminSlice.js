@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { adminAPI } from '@services/api'
+import { adminAPI } from '@/api/adminApi'
 
 const getInitialState = () => {
    const sessionAdmin = sessionStorage.getItem('adminToken')

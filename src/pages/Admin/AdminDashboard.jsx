@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { analyticsAPI } from '@/services/api'
+// import { analyticsAPI } from '@/services/api'
 import { showModalThunk } from '@/features/modal/modalSlice'
 import { ModalAlert } from '@/components/common/Modal'
 import { useNavigate, Link } from 'react-router-dom'

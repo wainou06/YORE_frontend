@@ -6,3 +6,5 @@ export const transactionAPI = {
    createTransaction: (data) => api.post('/transactions', data),
    refundTransaction: (id) => api.post(`/transactions/${id}/refund`),
 }
+
+export default transactionAPI

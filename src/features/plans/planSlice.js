@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { plansAPI } from '@services/api'
+import { plansAPI } from '@/api/plansApi'
 
 // 초기 상태
 const initialState = {

@@ -15,3 +15,5 @@ export const notificationAPI = {
    getServiceNotifications: (serviceId) => api.get(`/notifications/services/${serviceId}`),
    getAgencyNotifications: (agencyId) => api.get(`/notifications/agencies/${agencyId}`),
 }
+
+export default notificationAPI
