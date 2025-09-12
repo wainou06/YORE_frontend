@@ -36,31 +36,8 @@ const UserManagement = () => {
    useEffect(() => {
       if (loading === false) {
          console.log(userManagement)
-         setUsers(userManagement.data)
+         setUsers(userManagement.data.userList)
       }
-      // const fetchUsers = async () => {
-      //    try {
-      //       // TODO: API 연동
-      //       // const response = await fetch(`/api/admin/users?page=${currentPage}&search=${searchTerm}`);
-      //       // const data = await response.json();
-      //       // 임시 데이터
-      //       setUsers([
-      //          {
-      //             id: 1,
-      //             name: '홍길동',
-      //             email: 'hong@example.com',
-      //             phone: '010-1234-5678',
-      //             joinDate: '2025-08-01',
-      //             orderCount: 2,
-      //             status: 'active',
-      //          },
-      //       ])
-      //       setTotalPages(5)
-      //    } catch (error) {
-      //       console.error('사용자 목록 로드 실패:', error)
-      //    }
-      // }
-      // fetchUsers()
    }, [loading, currentPage, searchTerm])
 
    const handleSearch = (e) => {
@@ -71,13 +48,6 @@ const UserManagement = () => {
 
    const handleStatusChange = async (userId, newStatus) => {
       try {
-         // TODO: API 연동
-         // await fetch(`/api/admin/users/${userId}/status`, {
-         //   method: 'PUT',
-         //   body: JSON.stringify({ status: newStatus })
-         // });
-
-         // 임시 상태 업데이트
          setUsers(users.map((user) => (user.id === userId ? { ...user, status: newStatus } : user)))
       } catch (error) {
          console.error('사용자 상태 변경 실패:', error)
