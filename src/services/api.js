@@ -6,13 +6,19 @@ export const adminApi = axios.create({
    headers: { 'Content-Type': 'application/json' },
 })
 
-adminApi.interceptors.request.use((config) => {
-   const adminToken = localStorage.getItem('adminToken')
-   if (adminToken) {
-      config.headers.Authorization = `Bearer ${adminToken}`
+adminApi.interceptors.request.use(
+   (config) => {
+      const adminToken = localStorage.getItem('adminToken') || sessionStorage.getItem('adminToken')
+
+      if (adminToken) {
+         config.headers.Authorization = `Bearer ${adminToken}`
+      }
+      return config
+   },
+   (error) => {
+      return Promise.reject(error)
    }
-   return config
-})
+)
 
 // axios 인스턴스 생성
 const api = axios.create({

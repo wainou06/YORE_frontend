@@ -36,7 +36,7 @@ const UserManagement = () => {
    useEffect(() => {
       if (loading === false) {
          console.log(userManagement)
-         setUsers(userManagement.data?.userList)
+         setUsers(userManagement.data)
       }
       // const fetchUsers = async () => {
       //    try {
@@ -136,7 +136,7 @@ const UserManagement = () => {
                                        <td>{user.name}</td>
                                        <td>{user.email}</td>
                                        <td>{user.phone}</td>
-                                       <td>{user.joinDate}</td>
+                                       <td>{user.createdAt}</td>
                                        <td>{user.orderCount}</td>
                                        <td>
                                           <span className={`badge bg-${user.status === 'active' ? 'success' : user.status === 'inactive' ? 'warning' : 'danger'}`}>{user.status === 'active' ? '활성' : user.status === 'inactive' ? '휴면' : '정지'}</span>
