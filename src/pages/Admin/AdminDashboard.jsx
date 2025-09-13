@@ -103,7 +103,7 @@ const AdminDashboard = () => {
       }
    }, [loading])
 
-   // console.log(home)
+   console.log(home)
 
    return (
       <>
@@ -114,7 +114,7 @@ const AdminDashboard = () => {
             <div className="admin-main-content">
                {error && <div className="text-center my-5 text-danger">{error}</div>}
                <div className="page-title">
-                  <h1>홈</h1>
+                  <h2>홈</h2>
                </div>
                <div className="stats-grid">
                   <div className="stat-card">
@@ -128,7 +128,7 @@ const AdminDashboard = () => {
                      <div className="stat-change positive">+5%</div>
                   </div>
                   <div className="stat-card">
-                     <h3>신규 가입자</h3>
+                     <h3>신규 가입자(하루)</h3>
                      <div className="stat-value">{(stats.newUsers ?? 0).toLocaleString()}</div>
                      <div className="stat-change positive">+15%</div>
                   </div>
