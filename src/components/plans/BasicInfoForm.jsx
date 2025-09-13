@@ -1,6 +1,6 @@
 import React from 'react'
 
-const BasicInfoForm = ({ planData, errors, networkTypes, onInputChange, onPriceChange }) => {
+const BasicInfoForm = ({ planData, errors, networkTypes, ageOptions, disOptions, onInputChange, onPriceChange }) => {
    return (
       <div className="mb-4">
          <h5 className="card-title mb-3">기본 정보</h5>
@@ -26,12 +26,40 @@ const BasicInfoForm = ({ planData, errors, networkTypes, onInputChange, onPriceC
             <select className={`form-select ${errors.networkType ? 'is-invalid' : ''}`} name="networkType" value={planData.networkType} onChange={onInputChange}>
                <option value="">선택하세요</option>
                {networkTypes.map((type) => (
-                  <option key={type} value={type}>
-                     {type}
+                  <option key={type.value} value={type.value}>
+                     {type.label}
                   </option>
                ))}
             </select>
             {errors.networkType && <div className="invalid-feedback">{errors.networkType}</div>}
+         </div>
+
+         <div className="mb-3">
+            <label className="form-label">연령대*</label>
+            <select className={`form-select ${errors.age ? 'is-invalid' : ''}`} name="age" value={planData.age} onChange={onInputChange}>
+               <option value="">선택하세요</option>
+               {ageOptions &&
+                  ageOptions.map((opt) => (
+                     <option key={opt.value} value={opt.value}>
+                        {opt.label}
+                     </option>
+                  ))}
+            </select>
+            {errors.age && <div className="invalid-feedback">{errors.age}</div>}
+         </div>
+
+         <div className="mb-3">
+            <label className="form-label">약정기간*</label>
+            <select className={`form-select ${errors.dis ? 'is-invalid' : ''}`} name="dis" value={planData.dis} onChange={onInputChange}>
+               <option value="">선택하세요</option>
+               {disOptions &&
+                  disOptions.map((opt) => (
+                     <option key={opt.value} value={opt.value}>
+                        {opt.label}
+                     </option>
+                  ))}
+            </select>
+            {errors.dis && <div className="invalid-feedback">{errors.dis}</div>}
          </div>
       </div>
    )

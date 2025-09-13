@@ -1,38 +1,36 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import servicesAPI from '@/api/servicesApi'
-import plansAPI from '@/api/plansApi'
+import { useSelector, useDispatch } from 'react-redux'
+import { createPlan } from '@/features/plans/planSlice'
+import { createService } from '@/features/services/serviceSlice'
+import api from '@/api/axiosApi'
 
-import BasicInfoForm from '@/components/Plans/BasicInfoForm'
 import PlanQuotaForm from '@/components/Plans/PlanQuotaForm'
 import FeatureForm from '@/components/Plans/FeatureForm'
 import ImageUploadForm from '@/components/Plans/ImageUploadForm'
-import AdditionalServicesForm from '@/components/Plans/AdditionalServicesForm'
+import BasicInfoForm from '@/components/Plans/BasicInfoForm'
+import { formatWithComma, stripComma } from '@/utils/priceSet'
 import '@assets/css/PlanDetail.css'
 
+import { showModalThunk } from '@/features/modal/modalSlice'
+
+const networkTypeOptions = [
+   { value: '2', label: '3G' },
+   { value: '3', label: 'LTE' },
+   { value: '6', label: '5G' },
+]
+const ageOptions = [
+   { value: '18', label: '청소년' },
+   { value: '20', label: '성인' },
+   { value: '65', label: '실버' },
+]
+const disOptions = [
+   { value: '0', label: '무약정' },
+   { value: '12', label: '12개월' },
+   { value: '24', label: '24개월' },
+]
+
 const PlanCreatePage = () => {
-   const navigate = useNavigate()
-   const location = useLocation()
-   const admin = useSelector((state) => state.admin)
-   const user = useSelector((state) => state.auth.user)
-   const isAdminRoute = location.pathname.startsWith('/admin')
-
-   useEffect(() => {
-      // 관리자 경로인 경우 관리자 권한 체크
-      if (isAdminRoute && !admin.admin) {
-         alert('관리자만 접근할 수 있습니다.')
-         navigate('/')
-         return
-      }
-
-      // 일반 경로인 경우 통신사 권한 체크
-      if (!isAdminRoute && (!user || user.access !== 'agency')) {
-         alert('통신사 회원만 요금제를 등록할 수 있습니다.')
-         navigate('/')
-         return
-      }
-   }, [admin, user, isAdminRoute, navigate])
    const [planData, setPlanData] = useState({
       name: '',
       description: '',
@@ -42,64 +40,109 @@ const PlanCreatePage = () => {
       voice: '',
       sms: '',
       features: [''],
-      images: [],
       services: [],
       requiredServices: [],
+      age: '',
+      dis: '',
+      basePrice: '',
+      type: '',
    })
-
+   const [images, setImages] = useState([])
    const [errors, setErrors] = useState({})
+   const [newServices, setNewServices] = useState([{ name: '', description: '', price: '' }])
+   const navigate = useNavigate()
+   const location = useLocation()
+   const dispatch = useDispatch()
+   const admin = useSelector((state) => state.admin)
+   const user = useSelector((state) => state.auth.user)
+   const isAdminRoute = location.pathname.startsWith('/admin')
+   const planLoading = useSelector((state) => state.plans.loading)
+   const serviceLoading = useSelector((state) => state.services.loading)
 
-   // 기본 요금제 네트워크 타입 옵션
-   const networkTypes = ['LTE', '5G']
-
-   const [additionalServices, setAdditionalServices] = useState([])
-
-   useEffect(() => {
-      const fetchServices = async () => {
-         try {
-            const response = await servicesAPI.getAllServices()
-            setAdditionalServices(response.data)
-         } catch (error) {
-            console.error('부가 서비스 목록 조회 실패:', error)
-            alert('부가 서비스 목록을 불러오는데 실패했습니다.')
-         }
+   // 통신사 정보 fetch
+   const [agencyInfo, setAgencyInfo] = useState(null)
+   const fetchAgencyInfo = useCallback(async () => {
+      if (!user?.id) return
+      try {
+         const res = await api.get(`/agencies/by-user/${user.id}`)
+         setAgencyInfo(res.data)
+      } catch (err) {
+         setAgencyInfo(null)
       }
+   }, [user?.id])
+   useEffect(() => {
+      if (!isAdminRoute && user?.id) fetchAgencyInfo()
+   }, [isAdminRoute, user?.id, fetchAgencyInfo])
 
-      fetchServices()
-   }, [])
+   // 이미지 핸들러
+   const handleImageUpload = (e) => {
+      const files = Array.from(e.target.files)
+      const newImages = files.map((file, i) => ({
+         file,
+         preview: URL.createObjectURL(file),
+         isMain: images.length === 0 && i === 0,
+      }))
+      setImages((prev) => {
+         if (!prev.some((img) => img.isMain) && newImages.length > 0) newImages[0].isMain = true
+         return [...prev, ...newImages]
+      })
+   }
+   const removeImage = (idx) => {
+      setImages((prev) => {
+         const removed = prev.filter((_, i) => i !== idx)
+         if (prev[idx]?.isMain && removed.length > 0) removed[0].isMain = true
+         return removed
+      })
+   }
+   const onSetMainImage = (idx) => {
+      setImages((prev) => prev.map((img, i) => ({ ...img, isMain: i === idx })))
+   }
 
+   // 부가서비스 핸들러
+   const handleNewServiceChange = (idx, field, value) => {
+      setNewServices((prev) =>
+         prev.map((s, i) => {
+            if (i !== idx) return s
+            if (field === 'price') {
+               const onlyNum = value.replace(/[^0-9]/g, '')
+               return { ...s, price: onlyNum ? formatWithComma(onlyNum) : '' }
+            }
+            return { ...s, [field]: value }
+         })
+      )
+   }
+   const addNewServiceField = () => {
+      setNewServices((prev) => [...prev, { name: '', description: '', price: '' }])
+   }
+   const removeNewServiceField = (idx) => {
+      setNewServices((prev) => prev.filter((_, i) => i !== idx))
+   }
+
+   // 입력 핸들러
    const handleInputChange = (e) => {
       const { name, value } = e.target
-      setPlanData((prev) => ({
-         ...prev,
-         [name]: value,
-      }))
+      if (name === 'networkType') {
+         setPlanData((prev) => ({ ...prev, networkType: value, type: value }))
+      } else {
+         setPlanData((prev) => ({ ...prev, [name]: value }))
+      }
    }
-
    const handlePriceChange = (e) => {
-      const value = e.target.value.replace(/[^0-9]/g, '')
-      setPlanData((prev) => ({
-         ...prev,
-         price: value,
-      }))
+      const { name, value } = e.target
+      let onlyNum = value.replace(/[^0-9]/g, '')
+      if (!onlyNum) onlyNum = ''
+      setPlanData((prev) => ({ ...prev, [name]: onlyNum ? formatWithComma(onlyNum) : '' }))
    }
-
    const handleFeatureChange = (index, value) => {
       const newFeatures = [...planData.features]
       newFeatures[index] = value
-      setPlanData((prev) => ({
-         ...prev,
-         features: newFeatures,
-      }))
+      setPlanData((prev) => ({ ...prev, features: newFeatures }))
    }
 
+   // features 추가/삭제 함수
    const addFeature = () => {
-      setPlanData((prev) => ({
-         ...prev,
-         features: [...prev.features, ''],
-      }))
+      setPlanData((prev) => ({ ...prev, features: [...prev.features, ''] }))
    }
-
    const removeFeature = (index) => {
       setPlanData((prev) => ({
          ...prev,
@@ -107,129 +150,83 @@ const PlanCreatePage = () => {
       }))
    }
 
-   const handleImageUpload = async (e) => {
-      const files = Array.from(e.target.files)
-      const imagePromises = files.map((file) => {
-         return new Promise((resolve) => {
-            const reader = new FileReader()
-            reader.onload = (e) => {
-               resolve({
-                  file,
-                  preview: e.target.result,
-                  isMain: false,
-               })
-            }
-            reader.readAsDataURL(file)
-         })
-      })
-
-      const images = await Promise.all(imagePromises)
-      setPlanData((prev) => ({
-         ...prev,
-         images: [...prev.images, ...images],
-      }))
-   }
-
-   const removeImage = (index) => {
-      setPlanData((prev) => ({
-         ...prev,
-         images: prev.images.filter((_, i) => i !== index),
-      }))
-   }
-
-   const setMainImage = (index) => {
-      setPlanData((prev) => ({
-         ...prev,
-         images: prev.images.map((img, i) => ({
-            ...img,
-            isMain: i === index,
-         })),
-      }))
-   }
-
-   const handleServiceToggle = (service) => {
-      setPlanData((prev) => {
-         const services = [...prev.services]
-         const index = services.indexOf(service.id)
-
-         if (index === -1) {
-            services.push(service.id)
-         } else {
-            services.splice(index, 1)
-            // 필수 서비스에서도 제거
-            const reqIndex = prev.requiredServices.indexOf(service.id)
-            if (reqIndex !== -1) {
-               prev.requiredServices.splice(reqIndex, 1)
-            }
-         }
-
-         return {
-            ...prev,
-            services,
-         }
-      })
-   }
-
-   const handleRequiredServiceToggle = (serviceId) => {
-      setPlanData((prev) => {
-         const requiredServices = [...prev.requiredServices]
-         const index = requiredServices.indexOf(serviceId)
-
-         if (index === -1) {
-            // 서비스가 선택되어 있을 때만 필수 서비스로 지정 가능
-            if (prev.services.includes(serviceId)) {
-               requiredServices.push(serviceId)
-            }
-         } else {
-            requiredServices.splice(index, 1)
-         }
-
-         return {
-            ...prev,
-            requiredServices,
-         }
-      })
-   }
-
+   // 유효성 검사
    const validateForm = () => {
       const newErrors = {}
-
       if (!planData.name) newErrors.name = '요금제 이름을 입력해주세요.'
       if (!planData.description) newErrors.description = '요금제 설명을 입력해주세요.'
       if (!planData.price) newErrors.price = '가격을 입력해주세요.'
       if (!planData.networkType) newErrors.networkType = '네트워크 타입을 선택해주세요.'
+      if (!planData.type) newErrors.type = '요금제 타입을 선택해주세요.'
       if (!planData.data) newErrors.data = '데이터 제공량을 입력해주세요.'
       if (!planData.voice) newErrors.voice = '통화 제공량을 입력해주세요.'
       if (!planData.sms) newErrors.sms = 'SMS 제공량을 입력해주세요.'
+      if (!planData.age) newErrors.age = '연령대를 선택해주세요.'
+      if (!planData.dis) newErrors.dis = '약정기간을 선택해주세요.'
       if (planData.features.some((f) => !f)) newErrors.features = '모든 혜택을 입력해주세요.'
-      if (planData.images.length === 0) newErrors.images = '최소 1개의 이미지를 업로드해주세요.'
-
+      if (images.length === 0) newErrors.images = '최소 1개의 이미지를 업로드해주세요.'
       setErrors(newErrors)
       return Object.keys(newErrors).length === 0
    }
 
+   // 제출
    const handleSubmit = async (e) => {
       e.preventDefault()
-
       if (!validateForm()) return
-
-      try {
-         const submitData = {
-            ...planData,
-            status: admin.admin ? 'approved' : 'pending', // 관리자가 등록하는 경우 자동 승인
-            agencyId: user?.agency?.id, // 통신사 ID 추가
-         }
-         const response = await (admin.admin ? plansAPI.createPlanAsAdmin(submitData) : plansAPI.createPlan(submitData))
-         if (admin.admin) {
-            alert('요금제가 등록되었습니다.')
-            navigate('/admin/plans')
-         } else {
-            alert('요금제가 등록되었습니다. 관리자 승인 후 공개될 예정입니다.')
-            navigate('/plans')
-         }
-      } catch (error) {
-         console.error('요금제 등록 실패:', error)
-         alert(error.response?.data?.message || '요금제 등록에 실패했습니다.')
+      if (!admin.admin && !agencyInfo?.id) {
+         dispatch(showModalThunk({ type: 'alert', placeholder: '통신사 정보가 없습니다. 다시 로그인하거나 관리자에게 문의하세요.' }))
+         return
+      }
+      let agencyId = admin.admin ? agencyInfo?.id || planData.agencyId : agencyInfo.id
+      const basePriceNum = Number(stripComma(planData.basePrice || planData.price)) || 0
+      const disNum = Number(stripComma(planData.dis)) || 0
+      const finalPriceNum = basePriceNum - disNum
+      const planPayload = {
+         ...planData,
+         price: stripComma(planData.price),
+         status: admin.admin ? 'active' : 'inactive',
+         agencyId,
+         // ENUM 컬럼은 항상 문자열로 보장
+         type: planData.type ? String(planData.type) : '',
+         age: planData.age ? String(planData.age) : '',
+         dis: planData.dis ? String(planData.dis) : '',
+         basePrice: stripComma(planData.basePrice || planData.price),
+         finalPrice: finalPriceNum,
+         // 빈 값('')이 아닌 혜택만 benefits에 저장 (string)
+         benefits: JSON.stringify((planData.features || []).filter((f) => f && f.trim() !== '')),
+         data: String(planData.data).replace(/[^0-9]/g, ''),
+         voice: String(planData.voice).replace(/[^0-9]/g, ''),
+         sms: String(planData.sms).replace(/[^0-9]/g, ''),
+      }
+      const formData = new FormData()
+      formData.append('planData', JSON.stringify(planPayload))
+      images.forEach((img) => formData.append('images', img.file))
+      const planResult = await dispatch(createPlan(formData))
+      const planId = planResult?.payload?.id || planResult?.payload?.plan?.id
+      if (!planId) {
+         dispatch(showModalThunk({ type: 'alert', placeholder: '요금제 생성에 실패했습니다.' }))
+         return
+      }
+      const servicePromises = newServices
+         .filter((svc) => svc.name && svc.description && svc.price)
+         .map((svc) =>
+            dispatch(
+               createService({
+                  name: svc.name,
+                  description: svc.description,
+                  provider: admin.admin ? 'YORE' : agencyInfo?.agencyName,
+                  planId,
+                  fee: stripComma(svc.price),
+               })
+            )
+         )
+      await Promise.all(servicePromises)
+      if (admin.admin) {
+         dispatch(showModalThunk({ type: 'alert', placeholder: '요금제 및 부가서비스가 등록되었습니다.' }))
+         navigate('/admin/plans')
+      } else {
+         dispatch(showModalThunk({ type: 'alert', placeholder: '요금제 및 부가서비스가 등록되었습니다. 관리자 승인 후 공개될 예정입니다.' }))
+         navigate('/plans')
       }
    }
 
@@ -239,25 +236,37 @@ const PlanCreatePage = () => {
          <form onSubmit={handleSubmit}>
             <div className="card shadow-sm mb-4">
                <div className="card-body">
-                  <BasicInfoForm planData={planData} errors={errors} networkTypes={networkTypes} onInputChange={handleInputChange} onPriceChange={handlePriceChange} />
-
+                  <BasicInfoForm planData={planData} errors={errors} networkTypes={networkTypeOptions} ageOptions={ageOptions} disOptions={disOptions} onInputChange={handleInputChange} onPriceChange={handlePriceChange} />
                   <PlanQuotaForm planData={planData} errors={errors} onInputChange={handleInputChange} />
-
                   <FeatureForm features={planData.features} errors={errors} onFeatureChange={handleFeatureChange} onAddFeature={addFeature} onRemoveFeature={removeFeature} />
-
-                  <ImageUploadForm images={planData.images} errors={errors} onImageUpload={handleImageUpload} onRemoveImage={removeImage} onSetMainImage={setMainImage} />
-
-                  <AdditionalServicesForm services={additionalServices} planServices={planData.services} requiredServices={planData.requiredServices} onServiceToggle={handleServiceToggle} onRequiredServiceToggle={handleRequiredServiceToggle} />
+                  <ImageUploadForm images={images} onImageUpload={handleImageUpload} onRemoveImage={removeImage} onSetMainImage={onSetMainImage} errors={errors} />
+                  {/* 부가서비스 직접 입력 UI */}
+                  <div className="mb-3">
+                     <label className="form-label">부가서비스 직접 추가</label>
+                     {newServices.map((svc, idx) => (
+                        <div key={idx} className="d-flex gap-2 mb-2 align-items-center">
+                           <input type="text" className="form-control" placeholder="부가서비스명" value={svc.name} onChange={(e) => handleNewServiceChange(idx, 'name', e.target.value)} style={{ maxWidth: 180 }} />
+                           <input type="text" className="form-control" placeholder="설명" value={svc.description} onChange={(e) => handleNewServiceChange(idx, 'description', e.target.value)} style={{ maxWidth: 300 }} />
+                           <input type="text" className="form-control" placeholder="가격" value={svc.price} onChange={(e) => handleNewServiceChange(idx, 'price', e.target.value)} style={{ maxWidth: 120 }} />
+                           <button type="button" className="btn btn-outline-danger btn-sm" onClick={() => removeNewServiceField(idx)} disabled={newServices.length === 1}>
+                              -
+                           </button>
+                           {idx === newServices.length - 1 && (
+                              <button type="button" className="btn btn-outline-primary btn-sm" onClick={addNewServiceField}>
+                                 +
+                              </button>
+                           )}
+                        </div>
+                     ))}
+                  </div>
                </div>
             </div>
-
-            {/* 제출 버튼 */}
             <div className="d-flex justify-content-end gap-2">
                <button type="button" className="btn btn-secondary" onClick={() => navigate(isAdminRoute ? '/admin/plans' : '/plans')}>
                   취소
                </button>
-               <button type="submit" className="btn btn-primary">
-                  요금제 등록
+               <button type="submit" className="btn btn-primary" disabled={planLoading || serviceLoading}>
+                  {planLoading || serviceLoading ? '등록 중...' : '요금제 등록'}
                </button>
             </div>
          </form>

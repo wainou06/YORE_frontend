@@ -8,12 +8,12 @@ const AgencyRoute = () => {
    const navigate = useNavigate()
 
    useEffect(() => {
-      if (!user || user.role !== 'agency') {
+      if (!user || user.access !== 'agency') {
          navigate('/', { replace: true })
       }
    }, [user, navigate])
 
-   if (!user || user.role !== 'agency') return null
+   if (!user || user.access !== 'agency') return null
 
    return (
       <Layout>
