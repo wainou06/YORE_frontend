@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { getProfile, selectUser, selectIsAuthenticated } from '@features/auth/authSlice'
 import '@assets/css/PlanSettings.css'
 
-const API_BASE = `${import.meta.env.VITE_APP_API_URL}/api/auth`
+const API_BASE = `${import.meta.env.VITE_APP_API_URL}/auth`
 
 const PlanSettings = () => {
    const navigate = useNavigate()
