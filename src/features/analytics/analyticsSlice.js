@@ -10,9 +10,18 @@ export const getHomeStatusThunk = createAsyncThunk('analytics/getHomeStatus', as
    }
 })
 
-export const getUserStatusThunk = createAsyncThunk('analytics/getUserStatus', async (_, { rejectWidthValue }) => {
+export const getUserStatusThunk = createAsyncThunk('analytics/getUserStatus', async (page, { rejectWidthValue }) => {
    try {
-      const response = await analyticsAPI.getUserStatus()
+      const response = await analyticsAPI.getUserStatus(page)
+      return response.data
+   } catch (error) {
+      return rejectWidthValue(error.response?.data?.message)
+   }
+})
+
+export const getPlansStatusThunk = createAsyncThunk('analytics/getPlansStatus', async (page, { rejectWidthValue }) => {
+   try {
+      const response = await analyticsAPI.getPlansStatus(page)
       return response.data
    } catch (error) {
       return rejectWidthValue(error.response?.data?.message)
@@ -26,6 +35,7 @@ export const analyticsSlice = createSlice({
       loading: true,
       home: {},
       userManagement: {},
+      plansStatus: {},
    },
    reducers: {
       clearAnalyticsError: (state) => {
@@ -55,6 +65,18 @@ export const analyticsSlice = createSlice({
             state.userManagement = action.payload
          })
          .addCase(getUserStatusThunk.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload
+         })
+         .addCase(getPlansStatusThunk.pending, (state) => {
+            state.loading = true
+            state.error = null
+         })
+         .addCase(getPlansStatusThunk.fulfilled, (state, action) => {
+            state.loading = false
+            state.plansStatus = action.payload
+         })
+         .addCase(getPlansStatusThunk.rejected, (state, action) => {
             state.loading = false
             state.error = action.payload
          })

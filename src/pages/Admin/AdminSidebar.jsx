@@ -4,8 +4,29 @@ import { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export const AdminSidebar = () => {
-   const [darkMode, setDarkMode] = useState(false)
+   const localdark = localStorage.getItem('theme')
+   if (!localdark) localdark = 'light'
+   const [darkMode, setDarkMode] = useState(localdark)
    const [currentPage, setCurrentPage] = useState(0)
+
+   useEffect(() => {
+      const pathname = window.location.pathname
+
+      switch (pathname) {
+         case '/admin':
+            setCurrentPage(0)
+            break
+         case '/admin/users':
+            setCurrentPage(1)
+            break
+         case '/admin/plans':
+            setCurrentPage(2)
+            break
+         case '/admin/orders':
+            setCurrentPage(3)
+            break
+      }
+   }, [])
 
    return (
       <div className="admin-sidebar">

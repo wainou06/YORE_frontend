@@ -17,3 +17,5 @@ export const adminAPI = {
    // 로그
    exportLogs: () => adminApi.get('/admin/logs/export'),
 }
+
+export default adminAPI
