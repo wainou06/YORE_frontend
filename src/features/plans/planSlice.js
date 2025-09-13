@@ -4,7 +4,17 @@ import { plansAPI } from '@/api/plansApi'
 const initialState = {
    loading: false,
    error: null,
+   plans: [],
 }
+// 요금제 목록 조회 thunk
+export const getPlans = createAsyncThunk('plans/getPlans', async (_, { rejectWithValue }) => {
+   try {
+      const response = await plansAPI.getPlans()
+      return response.data
+   } catch (error) {
+      return rejectWithValue(error.response?.data?.message || '요금제 목록 조회에 실패했습니다.')
+   }
+})
 
 export const createPlan = createAsyncThunk('plans/createPlan', async (formData, { rejectWithValue }) => {
    try {
@@ -21,6 +31,7 @@ const planSlice = createSlice({
    reducers: {},
    extraReducers: (builder) => {
       builder
+         // createPlan
          .addCase(createPlan.pending, (state) => {
             state.loading = true
             state.error = null
@@ -29,6 +40,19 @@ const planSlice = createSlice({
             state.loading = false
          })
          .addCase(createPlan.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload
+         })
+         // getPlans
+         .addCase(getPlans.pending, (state) => {
+            state.loading = true
+            state.error = null
+         })
+         .addCase(getPlans.fulfilled, (state, action) => {
+            state.loading = false
+            state.plans = action.payload
+         })
+         .addCase(getPlans.rejected, (state, action) => {
             state.loading = false
             state.error = action.payload
          })

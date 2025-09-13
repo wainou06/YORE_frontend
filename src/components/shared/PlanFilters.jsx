@@ -37,7 +37,7 @@ const PlanFilters = ({ filters, onFilterChange }) => {
                   <option value="all">전체</option>
                   <option value="2">3G</option>
                   <option value="3">LTE</option>
-                  <option value="4">5G</option>
+                  <option value="6">5G</option>
                </Form.Select>
             </Form.Group>
 
@@ -58,7 +58,6 @@ const PlanFilters = ({ filters, onFilterChange }) => {
                   <option value="0">무약정</option>
                   <option value="12">12개월</option>
                   <option value="24">24개월</option>
-                  <option value="36">36개월</option>
                </Form.Select>
             </Form.Group>
 
