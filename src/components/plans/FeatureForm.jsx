@@ -13,7 +13,7 @@ const FeatureForm = ({ features, errors, onFeatureChange, onAddFeature, onRemove
          </h5>
          {features.map((feature, index) => (
             <div key={index} className="mb-2 d-flex align-items-center">
-               <input type="text" className={`form-control ${errors.features ? 'is-invalid' : ''}`} value={feature} onChange={(e) => onFeatureChange(index, e.target.value)} placeholder="혜택을 입력하세요" />
+               <input type="text" className={`form-control ${errors.features ? 'is-invalid' : ''}`} value={feature} onChange={(e) => onFeatureChange(index, e.target.value)} placeholder="혜택을 입력하세요" id={`feature-${index}`} aria-label="혜택" title="혜택" />
                {index > 0 && (
                   <button type="button" className="btn btn-outline-danger ms-2" onClick={() => onRemoveFeature(index)}>
                      <FontAwesomeIcon icon={faTrash} />
