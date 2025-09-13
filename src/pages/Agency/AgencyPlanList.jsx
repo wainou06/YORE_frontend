@@ -1,8 +1,10 @@
-import { useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import PlanFilters from '@/components/shared/PlanFilters'
+import { getPlans } from '@/features/plans/planSlice'
 
 const INITIAL_FILTERS = {
    approval: 'all',
@@ -14,59 +16,57 @@ const INITIAL_FILTERS = {
 }
 
 const AgencyPlanList = () => {
-   // 임시 데이터 (slice, redux 사용 안함)
-   const tempPlans = [
-      {
-         id: 1,
-         name: 'YORE 5G 100GB',
-         description: '5G 데이터 100GB, 음성 무제한, 문자 300건',
-         price: '39000',
-         data: '100000',
-         voice: '999999',
-         sms: '300',
-         type: '6',
-         age: '20',
-         dis: '24',
-         status: 'approved',
-         benefits: '["넷플릭스 3개월 무료", "유튜브 프리미엄 1개월"]',
-      },
-      {
-         id: 2,
-         name: 'YORE LTE 청소년',
-         description: 'LTE 데이터 10GB, 음성 200분, 문자 100건',
-         price: '22000',
-         data: '10000',
-         voice: '200',
-         sms: '100',
-         type: '3',
-         age: '18',
-         dis: '0',
-         status: 'pending',
-         benefits: '["카카오페이 5천원 쿠폰"]',
-      },
-   ]
-
+   const dispatch = useDispatch()
+   const { plans = [], loading, error } = useSelector((state) => state.plans)
    const [filters, setFilters] = useState(INITIAL_FILTERS)
 
-   const handleFilterChange = (newFilters) => {
-      setFilters(newFilters)
+   useEffect(() => {
+      dispatch(getPlans())
+   }, [dispatch])
+
+   const handleFilterChange = (newFilters) => setFilters(newFilters)
+
+   console.log('요금제 목록:', plans)
+
+   // 필터링 useMemo로 최적화
+   const filteredPlans = useMemo(() => {
+      return (plans || []).filter((plan) => {
+         // status(승인) 필드: null/undefined 방어 및 정책 반영
+         const status = plan.status || plan.approvalStatus || 'pending'
+         if (filters.approval !== 'all') {
+            if (filters.approval === 'pending' && status !== 'pending') return false
+            if (filters.approval === 'approved' && status !== 'approved' && status !== 'active') return false
+            if (filters.approval === 'rejected' && status !== 'rejected' && status !== 'inactive') return false
+         }
+         if (filters.type !== 'all' && plan.type !== filters.type) return false
+         if (filters.age !== 'all' && plan.age !== filters.age) return false
+         if (filters.dis !== 'all' && plan.dis !== filters.dis) return false
+         const price = parseInt(plan.price || plan.finalPrice || plan.basePrice || 0)
+         if (filters.minPrice && price < parseInt(filters.minPrice)) return false
+         if (filters.maxPrice && price > parseInt(filters.maxPrice)) return false
+         return true
+      })
+   }, [plans, filters])
+
+   if (loading) {
+      return (
+         <div className="container py-5 text-center">
+            <div className="spinner-border text-primary" role="status">
+               <span className="visually-hidden">로딩중...</span>
+            </div>
+         </div>
+      )
    }
 
-   // slice 없이 임시 데이터 필터링
-   const filteredPlans = tempPlans.filter((plan) => {
-      if (filters.approval !== 'all') {
-         if (filters.approval === 'pending' && plan.status !== 'pending') return false
-         if (filters.approval === 'approved' && plan.status !== 'approved') return false
-         if (filters.approval === 'rejected' && plan.status !== 'rejected') return false
-      }
-      if (filters.type !== 'all' && plan.type !== filters.type) return false
-      if (filters.age !== 'all' && plan.age !== filters.age) return false
-      if (filters.dis !== 'all' && plan.dis !== filters.dis) return false
-      const price = parseInt(plan.price)
-      if (filters.minPrice && price < parseInt(filters.minPrice)) return false
-      if (filters.maxPrice && price > parseInt(filters.maxPrice)) return false
-      return true
-   })
+   if (error) {
+      return (
+         <div className="container py-5">
+            <div className="alert alert-danger" role="alert">
+               요금제 목록을 불러오는데 실패했습니다: {error}
+            </div>
+         </div>
+      )
+   }
 
    return (
       <div className="container py-5">
@@ -99,16 +99,34 @@ const AgencyPlanList = () => {
                                  <div className="d-flex justify-content-between align-items-start mb-3">
                                     <h5 className="card-title mb-0">{plan.name}</h5>
                                     <div>
-                                       <span className={`badge me-2 ${plan.status === 'approved' ? 'bg-success' : plan.status === 'rejected' ? 'bg-danger' : 'bg-warning'}`}>{plan.status === 'approved' ? '승인됨' : plan.status === 'rejected' ? '거절됨' : '승인 대기중'}</span>
+                                       {(() => {
+                                          // status(승인) 필드: null/undefined 방어 및 정책 반영
+                                          const status = plan.status || plan.approvalStatus || 'pending'
+                                          let badgeClass = 'bg-warning',
+                                             label = '승인 대기중'
+                                          if (status === 'approved' || status === 'active') {
+                                             badgeClass = 'bg-success'
+                                             label = '승인됨'
+                                          } else if (status === 'rejected' || status === 'inactive') {
+                                             badgeClass = 'bg-danger'
+                                             label = '거절됨'
+                                          }
+                                          return <span className={`badge me-2 ${badgeClass}`}>{label}</span>
+                                       })()}
                                     </div>
                                  </div>
                                  <p className="card-text text-muted small mb-2">{plan.description}</p>
-                                 <div className="text-primary mb-3">{parseInt(plan.price).toLocaleString()}원</div>
+                                 <div className="text-primary mb-3">
+                                    {(() => {
+                                       const price = parseInt(plan.basePrice)
+                                       return isNaN(price) ? '-' : price.toLocaleString() + '원'
+                                    })()}
+                                 </div>
 
                                  <div className="d-flex gap-2 mb-3">
                                     <div className="p-2 bg-light rounded flex-grow-1">
                                        <small className="d-block text-muted">데이터</small>
-                                       <strong>{plan.data === '999999' ? '무제한' : `${plan.data}MB`}</strong>
+                                       <strong>{plan.data === '999999' ? '무제한' : `${plan.data}GB`}</strong>
                                     </div>
                                     <div className="p-2 bg-light rounded flex-grow-1">
                                        <small className="d-block text-muted">통화</small>
@@ -121,7 +139,14 @@ const AgencyPlanList = () => {
                                  </div>
 
                                  <div className="d-flex gap-2 mb-3">
-                                    <div className="badge bg-info">{plan.type === '2' ? '3G' : plan.type === '3' ? 'LTE' : '5G'}</div>
+                                    <div className="badge bg-info">
+                                       {(() => {
+                                          if (plan.type === '2') return '3G'
+                                          if (plan.type === '3') return 'LTE'
+                                          if (plan.type === '6') return '5G'
+                                          return plan.type || '-'
+                                       })()}
+                                    </div>
                                     <div className="badge bg-info">{plan.age === '18' ? '청소년' : plan.age === '20' ? '성인' : '실버'}</div>
                                     <div className="badge bg-info">{plan.dis === '0' ? '무약정' : `${plan.dis}개월`}</div>
                                  </div>
