@@ -12,6 +12,8 @@ import BasicInfoForm from '@/components/Plans/BasicInfoForm'
 import { formatWithComma, stripComma } from '@/utils/priceSet'
 import '@assets/css/PlanDetail.css'
 
+import { showModalThunk } from '@/features/modal/modalSlice'
+
 const networkTypeOptions = [
    { value: '2', label: '3G' },
    { value: '3', label: 'LTE' },
@@ -172,7 +174,7 @@ const PlanCreatePage = () => {
       e.preventDefault()
       if (!validateForm()) return
       if (!admin.admin && !agencyInfo?.id) {
-         alert('통신사 정보가 없습니다. 다시 로그인하거나 관리자에게 문의하세요.')
+         dispatch(showModalThunk({ type: 'alert', placeholder: '통신사 정보가 없습니다. 다시 로그인하거나 관리자에게 문의하세요.' }))
          return
       }
       let agencyId = admin.admin ? agencyInfo?.id || planData.agencyId : agencyInfo.id
@@ -202,7 +204,7 @@ const PlanCreatePage = () => {
       const planResult = await dispatch(createPlan(formData))
       const planId = planResult?.payload?.id || planResult?.payload?.plan?.id
       if (!planId) {
-         alert('요금제 생성에 실패했습니다.')
+         dispatch(showModalThunk({ type: 'alert', placeholder: '요금제 생성에 실패했습니다.' }))
          return
       }
       const servicePromises = newServices
@@ -220,10 +222,10 @@ const PlanCreatePage = () => {
          )
       await Promise.all(servicePromises)
       if (admin.admin) {
-         alert('요금제 및 부가서비스가 등록되었습니다.')
+         dispatch(showModalThunk({ type: 'alert', placeholder: '요금제 및 부가서비스가 등록되었습니다.' }))
          navigate('/admin/plans')
       } else {
-         alert('요금제 및 부가서비스가 등록되었습니다. 관리자 승인 후 공개될 예정입니다.')
+         dispatch(showModalThunk({ type: 'alert', placeholder: '요금제 및 부가서비스가 등록되었습니다. 관리자 승인 후 공개될 예정입니다.' }))
          navigate('/plans')
       }
    }
