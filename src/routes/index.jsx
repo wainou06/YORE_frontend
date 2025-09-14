@@ -1,4 +1,8 @@
 import { Routes, Route } from 'react-router-dom'
+
+import AdminRoute from './AdminRoute'
+import AgencyRoute from './AgencyRoute'
+
 import Layout from '@components/common/Layout'
 import LandingPage from '@pages/Landing/LandingPage'
 import SignupPage from '@pages/Auth/SignupPage'
@@ -7,7 +11,6 @@ import CarrierListPage from '@pages/Carriers/CarrierListPage'
 import PlanDetailPage from '@pages/Plans/PlanDetailPage'
 import CheckoutPage from '@pages/Checkout/CheckoutPage'
 import CheckoutCompletePage from '@pages/Checkout/CheckoutCompletePage'
-import AdminRoute from './AdminRoute'
 import AdminDashboard from '@pages/Admin/AdminDashboard'
 import UserManagement from '@pages/Admin/UserManagement'
 import PlanManagement from '@pages/Admin/PlanManagement'
@@ -22,9 +25,13 @@ import MySettings from '@pages/Auth/MySettings'
 import PlanSettings from '@pages/Auth/PlanSettings'
 import Billing from '@pages/Auth/Billing'
 import AgencyPlanList from '@pages/Agency/AgencyPlanList'
+<<<<<<< HEAD
 import AgencyRoute from './AgencyRoute'
 import AgencySettings from '@/pages/Agency/AgencySettings'
 import AgencyPlanSettings from '@/pages/Agency/AgencyPlanSettings'
+=======
+import PlanEditPage from '@pages/Plans/PlanEditPage'
+>>>>>>> 4738ee0dc54150e1e385ea408ff53f3753304711
 
 const AppRoutes = () => {
    return (
@@ -64,6 +71,7 @@ const AppRoutes = () => {
             <Route path="plans">
                <Route index element={<AgencyPlanList />} />
                <Route path="create" element={<PlanCreatePage />} />
+               <Route path=":id/edit" element={<PlanEditPage />} />
             </Route>
             <Route path="agencySettings" element={<AgencySettings />} />
             <Route path="agencyPlanSettings" element={<AgencyPlanSettings />} />
@@ -75,6 +83,7 @@ const AppRoutes = () => {
             <Route path="users" element={<UserManagement />} />
             <Route path="plans" element={<PlanManagement />} />
             <Route path="plans/create" element={<PlanCreatePage />} />
+            <Route path="plans/:id/edit" element={<PlanEditPage />} />
             <Route path="orders" element={<OrderManagement />} />
          </Route>
 

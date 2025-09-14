@@ -6,26 +6,26 @@ const PlanCard = ({ plan }) => {
    return (
       <div className="card h-100">
          <div className="card-body">
-            <div className={`badge ${plan.carrier === 'SKT' ? 'bg-danger' : plan.carrier === 'KT' ? 'bg-primary' : 'bg-danger'} mb-3`}>{plan.carrier}</div>
+            <div className={`badge bg-primary mb-3`}>{plan.agency?.agencyName || plan.agencyName || plan.carrier || '통신사'}</div>
             <h5 className="card-title">{plan.name}</h5>
 
             <div className="my-3">
                <div className="d-flex align-items-center mb-2">
                   <FontAwesomeIcon icon={faWifi} className="text-primary me-2" />
-                  <span>데이터 {plan.data}</span>
+                  <span>데이터 {plan.data || plan.dataAmount || '-'}</span>
                </div>
                <div className="d-flex align-items-center mb-2">
                   <FontAwesomeIcon icon={faMobileAlt} className="text-primary me-2" />
-                  <span>통화 {plan.voice}</span>
+                  <span>통화 {plan.voice || plan.voiceAmount || '-'}</span>
                </div>
                <div className="d-flex align-items-center">
                   <FontAwesomeIcon icon={faEnvelope} className="text-primary me-2" />
-                  <span>문자 {plan.sms}</span>
+                  <span>문자 {plan.sms || plan.smsAmount || '-'}</span>
                </div>
             </div>
 
             <div className="text-end mt-4">
-               <h4 className="text-primary mb-0">{plan.price.toLocaleString()}원</h4>
+               <h4 className="text-primary mb-0">{(plan.basePrice || plan.finalPrice || 0).toLocaleString()}원</h4>
                <small className="text-muted">월</small>
             </div>
          </div>
