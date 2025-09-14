@@ -95,6 +95,10 @@ h6 {
    background-color: var(--bg-sub);
 }
 
+.bg-disabled {
+   background-color: lightgray;
+}
+
 .text-primary {
    color: var(--primary) !important;
 }
