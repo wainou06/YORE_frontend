@@ -2,12 +2,23 @@ import { useRef, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import { useDispatch } from 'react-redux'
-import { deleteNotification } from '@features/notification/notificationSlice'
+import { deleteNotification, markNotificationAsRead } from '@features/notification/notificationSlice'
 import { faBell } from '@fortawesome/free-solid-svg-icons'
 
 const NotificationDropdown = ({ show, onClose, notifications, unreadCount, onToggle }) => {
    const bellRef = useRef(null)
    const dispatch = useDispatch()
+
+   // 드롭다운 열릴 때 모든 안 읽은 알림 읽음 처리
+   useEffect(() => {
+      if (show) {
+         notifications
+            .filter((n) => !n.isRead)
+            .forEach((n) => {
+               dispatch(markNotificationAsRead(n.id))
+            })
+      }
+   }, [show, notifications, dispatch])
 
    // 외부 클릭 시 드롭다운 닫기
    useEffect(() => {
@@ -42,9 +53,9 @@ const NotificationDropdown = ({ show, onClose, notifications, unreadCount, onTog
                   <div className="fw-bold mb-2">알림</div>
                   {notifications.length === 0 && <div className="text-muted small">알림이 없습니다.</div>}
                   {notifications.slice(0, 7).map((n) => (
-                     <div key={n.id} className={`d-flex align-items-start mb-2 ${!n.isRead ? 'bg-light' : ''}`} style={{ borderRadius: 6, padding: '6px 8px' }}>
+                     <div key={n.id} className={`d-flex align-items-start mb-2 ${n.isRead ? 'bg-white' : 'bg-warning bg-opacity-25'}`} style={{ borderRadius: 6, padding: '6px 8px', transition: 'background 0.2s' }}>
                         <span className="me-2 mt-1">
-                           <FontAwesomeIcon icon={faBell} size="sm" className={n.isRead ? 'text-secondary' : 'text-primary'} />
+                           <FontAwesomeIcon icon={faBell} size="sm" className={n.isRead ? 'text-secondary' : 'text-warning'} />
                         </span>
                         <div style={{ flex: 1 }}>
                            <div className="small fw-semibold text-truncate" title={n.title}>
