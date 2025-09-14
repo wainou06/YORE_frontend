@@ -1,9 +1,7 @@
 import { Provider, useSelector } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
-import { QueryClientProvider } from '@tanstack/react-query'
 import { ToastContainer } from 'react-toastify'
 import { store } from '@/app/store'
-import { queryClient } from '@/app/queryClient'
 import AppRoutes from '@/routes'
 import '@/assets/css/global.css'
 import '@/assets/css/slider.css'
@@ -29,13 +27,11 @@ function ModalRoot() {
 function App() {
    return (
       <Provider store={store}>
-         <QueryClientProvider client={queryClient}>
-            <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-               <AppRoutes />
-               <ToastContainer position="bottom-right" autoClose={3000} />
-               <ModalRoot />
-            </BrowserRouter>
-         </QueryClientProvider>
+         <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+            <AppRoutes />
+            <ToastContainer position="bottom-right" autoClose={3000} />
+            <ModalRoot />
+         </BrowserRouter>
       </Provider>
    )
 }

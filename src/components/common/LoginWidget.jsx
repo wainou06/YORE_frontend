@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faComment } from '@fortawesome/free-solid-svg-icons'
+import NotificationDropdown from './NotificationDropdown'
 import { login, logout, getProfile, selectUser, selectIsAuthenticated, selectAuthLoading, selectAuthError, selectUserType } from '@features/auth/authSlice'
+import { fetchNotifications } from '@features/notification/notificationSlice'
 import '../../assets/css/LoginWidget.css'
 
 const LoginWidget = () => {
@@ -14,6 +16,15 @@ const LoginWidget = () => {
    const loading = useSelector(selectAuthLoading)
    const error = useSelector(selectAuthError)
    const userType = useSelector(selectUserType)
+
+   // 알림 상태
+   const notifications = useSelector((state) => state.notification.notifications)
+   const unreadCount = notifications.filter((n) => !n.isRead).length
+
+   // 알림 드롭다운 상태
+   const [showDropdown, setShowDropdown] = useState(false)
+
+   // (자동 알림 목록 불러오기 useEffect 제거)
 
    // 토큰이 있을 때만 getProfile 호출 (최초 마운트/로그인 직후)
    useEffect(() => {
@@ -72,17 +83,19 @@ const LoginWidget = () => {
                userType: loginType,
             })
          ).unwrap()
-         // rememberMe 체크에 따라 token만 저장, refreshToken 관련 코드 삭제
-         if (rememberMe && result && result.token) {
-            localStorage.setItem('token', result.token)
-            sessionStorage.removeItem('token')
+         // 로그인 성공 시 토큰 저장 (rememberMe 체크)
+         if (result && result.token) {
+            if (rememberMe) {
+               localStorage.setItem('token', result.token)
+               sessionStorage.removeItem('token')
+            } else {
+               sessionStorage.setItem('token', result.token)
+               localStorage.removeItem('token')
+            }
          }
-         if (!rememberMe && result && result.token) {
-            sessionStorage.setItem('token', result.token)
-            localStorage.removeItem('token')
-         }
-         // 로그인 성공 후 상태 동기화
-         dispatch(getProfile())
+         // 프로필 동기화 후 알림 불러오기
+         await dispatch(getProfile()).unwrap()
+         await dispatch(fetchNotifications())
       } catch (error) {
          console.error('로그인 실패:', error)
       }
@@ -129,10 +142,14 @@ const LoginWidget = () => {
       <div className="card shadow-sm p-4">
          {isAuthenticated && user ? (
             <>
+               {/* 환영 메시지와 알림 아이콘을 같은 줄에 배치 */}
+               <div className="d-flex align-items-center justify-content-between mb-3">
+                  <h5 className="mb-0">{user.name}님 환영합니다 🎉</h5>
+                  <NotificationDropdown show={showDropdown} onClose={() => setShowDropdown(false)} onToggle={() => setShowDropdown((prev) => !prev)} notifications={notifications} unreadCount={unreadCount} />
+               </div>
                {user.access === 'user' ? (
                   <>
                      <div className="text-center">
-                        <h5 className="mb-3">{user.name}님 환영합니다 🎉</h5>
                         <button className="btn btn-outline-danger w-100" onClick={handleLogout}>
                            로그아웃
                         </button>
