@@ -9,7 +9,7 @@ const PlanQuotaForm = ({ planData, errors, onInputChange }) => {
                <label className="form-label" htmlFor="plan-data">
                   데이터*
                </label>
-               <input type="text" className={`form-control ${errors.data ? 'is-invalid' : ''}`} name="data" id="plan-data" aria-label="데이터" title="데이터" value={planData.data} onChange={onInputChange} placeholder="예: 5GB, 무제한" />
+               <input type="text" className={`form-control ${errors.data ? 'is-invalid' : ''}`} name="data" id="plan-data" aria-label="데이터" title="데이터" value={planData.data} onChange={onInputChange} placeholder="예: 10, 20, 50, 100, 무제한" />
                {errors.data && <div className="invalid-feedback">{errors.data}</div>}
             </div>
             <div className="col-md-4 mb-3">

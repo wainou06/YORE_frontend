@@ -123,6 +123,13 @@ const PlanCreatePage = () => {
       const { name, value } = e.target
       if (name === 'networkType') {
          setPlanData((prev) => ({ ...prev, networkType: value, type: value }))
+      } else if (name === 'data') {
+         // '무제한' 입력 시 999999로 변환
+         if (value.trim() === '무제한') {
+            setPlanData((prev) => ({ ...prev, data: '999999' }))
+         } else {
+            setPlanData((prev) => ({ ...prev, data: value }))
+         }
       } else {
          setPlanData((prev) => ({ ...prev, [name]: value }))
       }
@@ -179,25 +186,29 @@ const PlanCreatePage = () => {
       }
       let agencyId = admin.admin ? agencyInfo?.id || planData.agencyId : agencyInfo.id
       const basePriceNum = Number(stripComma(planData.basePrice || planData.price)) || 0
-      const disNum = Number(stripComma(planData.dis)) || 0
-      const finalPriceNum = basePriceNum - disNum
+      const disNum = Number(planData.dis) || 0
+      // 약정 할인 적용 (24개월: 15%, 12개월: 10%)
+      const contractDiscount = disNum === 24 ? 0.85 : disNum === 12 ? 0.9 : 1
+      const finalPriceNum = Math.round(basePriceNum * contractDiscount)
+      // DB 모델에 없는 필드 제거
+      const { features, networkType, requiredServices, price, ...rest } = planData
       const planPayload = {
-         ...planData,
-         price: stripComma(planData.price),
-         status: admin.admin ? 'active' : 'inactive',
+         ...rest,
+         basePrice: basePriceNum,
+         finalPrice: finalPriceNum,
+         status: admin.admin ? planData.status || 'active' : 'pending',
          agencyId,
          // ENUM 컬럼은 항상 문자열로 보장
          type: planData.type ? String(planData.type) : '',
          age: planData.age ? String(planData.age) : '',
          dis: planData.dis ? String(planData.dis) : '',
-         basePrice: stripComma(planData.basePrice || planData.price),
-         finalPrice: finalPriceNum,
          // 빈 값('')이 아닌 혜택만 benefits에 저장 (string)
-         benefits: JSON.stringify((planData.features || []).filter((f) => f && f.trim() !== '')),
+         benefits: JSON.stringify((features || []).filter((f) => f && f.trim() !== '')),
          data: String(planData.data).replace(/[^0-9]/g, ''),
          voice: String(planData.voice).replace(/[^0-9]/g, ''),
          sms: String(planData.sms).replace(/[^0-9]/g, ''),
       }
+      console.log('Submitting plan payload:', planPayload)
       const formData = new FormData()
       formData.append('planData', JSON.stringify(planPayload))
       images.forEach((img) => formData.append('images', img.file))
@@ -274,6 +285,16 @@ const PlanCreatePage = () => {
                </div>
             </div>
             <div className="d-flex justify-content-end gap-2">
+               {admin.admin && (
+                  <>
+                     <button type="button" className={`btn btn-outline-success${planData.status === 'active' ? ' active' : ''}`} onClick={() => setPlanData((prev) => ({ ...prev, status: 'active' }))}>
+                        승인
+                     </button>
+                     <button type="button" className={`btn btn-outline-danger${planData.status === 'inactive' ? ' active' : ''}`} onClick={() => setPlanData((prev) => ({ ...prev, status: 'inactive' }))}>
+                        거부
+                     </button>
+                  </>
+               )}
                <button type="button" className="btn btn-secondary" onClick={() => navigate(isAdminRoute ? '/admin/plans' : '/plans')}>
                   취소
                </button>
