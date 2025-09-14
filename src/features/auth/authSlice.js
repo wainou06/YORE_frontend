@@ -68,16 +68,29 @@ export const updateProfile = createAsyncThunk('auth/updateProfile', async (profi
 export const changePassword = createAsyncThunk('auth/changePassword', async (passwordData, { rejectWithValue }) => {
    try {
       const response = await authAPI.changePassword(passwordData)
+      if (!response.data.success) {
+         return rejectWithValue(response.data.message || '비밀번호 변경 실패')
+      }
       return response.data
    } catch (error) {
       return rejectWithValue(error.response?.data?.message || '비밀번호 변경 실패')
    }
 })
 
-// Agency Profile Thunks
-export const updateAgencyProfile = createAsyncThunk('auth/updateAgencyProfile', async (agencyData, { rejectWithValue }) => {
+// Profile Thunks
+export const changeBirth = createAsyncThunk('auth/changeBirth', async ({ birth }, { rejectWithValue }) => {
    try {
-      const response = await authAPI.updateAgencyProfile(agencyData)
+      const response = await authAPI.changeBirth({ birth }) // post('/auth/change-birth')
+      return response.data
+   } catch (error) {
+      return rejectWithValue(error.response?.data?.message || '생일 변경 실패')
+   }
+})
+
+// Agency Profile Thunks
+export const updateAgencyProfile = createAsyncThunk('auth/updateAgencyProfile', async ({ agencyName, businessNumber }, { rejectWithValue }) => {
+   try {
+      const response = await authAPI.updateAgencyProfile({ agencyName, businessNumber })
       return response.data
    } catch (error) {
       return rejectWithValue(error.response?.data?.message || '기업 정보 수정 실패')
@@ -182,6 +195,21 @@ const authSlice = createSlice({
             state.error = null
          })
          .addCase(changePassword.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload
+         })
+
+         // 생일 업데이트
+         .addCase(changeBirth.pending, (state) => {
+            state.loading = true
+            state.error = null
+         })
+         .addCase(changeBirth.fulfilled, (state, action) => {
+            state.loading = false
+            state.user = { ...state.user, birth: action.payload.user.birth }
+            state.error = null
+         })
+         .addCase(changeBirth.rejected, (state, action) => {
             state.loading = false
             state.error = action.payload
          })

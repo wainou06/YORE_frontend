@@ -23,6 +23,8 @@ import PlanSettings from '@pages/Auth/PlanSettings'
 import Billing from '@pages/Auth/Billing'
 import AgencyPlanList from '@pages/Agency/AgencyPlanList'
 import AgencyRoute from './AgencyRoute'
+import AgencySettings from '@/pages/Agency/AgencySettings'
+import AgencyPlanSettings from '@/pages/Agency/AgencyPlanSettings'
 
 const AppRoutes = () => {
    return (
@@ -63,6 +65,8 @@ const AppRoutes = () => {
                <Route index element={<AgencyPlanList />} />
                <Route path="create" element={<PlanCreatePage />} />
             </Route>
+            <Route path="agencySettings" element={<AgencySettings />} />
+            <Route path="agencyPlanSettings" element={<AgencyPlanSettings />} />
          </Route>
 
          {/* 관리자 라우트 - 별도의 레이아웃으로 분리 */}

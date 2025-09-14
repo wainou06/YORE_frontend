@@ -139,18 +139,18 @@ const LoginWidget = () => {
                      </div>
                      <div className="isLogin">
                         <div className="link_btn_group">
-                           <a href="/myinfo" className="link_btn">
+                           <Link to="/myinfo" className="link_btn">
                               <FontAwesomeIcon icon={faComment} className="me-2" />
                               <p>내 정보</p>
-                           </a>
-                           <a href="/myinfo/planSettings" className="link_btn ">
+                           </Link>
+                           <Link to="/myinfo/planSettings" className="link_btn ">
                               <FontAwesomeIcon icon={faComment} className="me-2" />
                               <p>내 요금제</p>
-                           </a>
-                           <a href="/myinfo/billing" className="link_btn">
+                           </Link>
+                           <Link to="/myinfo/billing" className="link_btn">
                               <FontAwesomeIcon icon={faComment} className="me-2" />
                               <p>내 청구서</p>
-                           </a>
+                           </Link>
                         </div>
                      </div>
                   </>
@@ -160,14 +160,14 @@ const LoginWidget = () => {
                      <h5 className="mb-3">{user.name}님 환영합니다 🎉</h5>
                      <div className="isLogin">
                         <div className="link_btn_group">
-                           <a href="#" className="link_btn">
+                           <Link to="/agency/agencySettings" className="link_btn">
                               <FontAwesomeIcon icon={faComment} className="me-2" />
                               <p>정보 관리</p>
-                           </a>
-                           <a href="#" className="link_btn ">
+                           </Link>
+                           <Link to="/agency/agencyPlanSettings" className="link_btn ">
                               <FontAwesomeIcon icon={faComment} className="me-2" />
                               <p>요금제 관리</p>
-                           </a>
+                           </Link>
                         </div>
                      </div>
                      <button className="btn btn-outline-danger w-100" onClick={handleLogout}>
