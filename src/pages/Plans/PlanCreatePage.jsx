@@ -187,8 +187,22 @@ const PlanCreatePage = () => {
       let agencyId = admin.admin ? agencyInfo?.id || planData.agencyId : agencyInfo.id
       const basePriceNum = Number(stripComma(planData.basePrice || planData.price)) || 0
       const disNum = Number(planData.dis) || 0
-      const finalPriceNum = Math.round(basePriceNum * disNum)
+      let finalPriceNum
+      if (disNum === 0) {
+         finalPriceNum = basePriceNum
+      } else {
+         finalPriceNum = Math.round(basePriceNum * disNum)
+      }
       const { features, networkType, requiredServices, price, ...rest } = planData
+      // 부가서비스 값이 모두 채워진 항목만 추출 및 provider, fee 필드 추가
+      const filledServices = newServices
+         .filter((svc) => svc.name && svc.description && svc.price)
+         .map((svc) => ({
+            name: svc.name,
+            description: svc.description,
+            provider: admin.admin ? 'YORE' : agencyInfo?.agencyName,
+            fee: Number(stripComma(svc.price)),
+         }))
       const planPayload = {
          ...rest,
          basePrice: basePriceNum,
@@ -204,6 +218,12 @@ const PlanCreatePage = () => {
          data: String(planData.data).replace(/[^0-9]/g, ''),
          voice: String(planData.voice).replace(/[^0-9]/g, ''),
          sms: String(planData.sms).replace(/[^0-9]/g, ''),
+      }
+      // 부가서비스가 있으면 services 필드 추가, 없으면 삭제
+      if (filledServices.length > 0) {
+         planPayload.services = filledServices
+      } else {
+         delete planPayload.services
       }
       console.log('Submitting plan payload:', planPayload)
       const formData = new FormData()
