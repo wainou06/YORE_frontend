@@ -3,11 +3,14 @@ import { useState } from 'react'
 import { createTransaction } from '@/features/transactions/transactionSlice'
 import { createUserPlan } from '@/features/userPlans/userPlanSlice'
 
+import { useRef, useEffect } from 'react'
+
 const PriceSummary = ({ plan: propPlan, options }) => {
    const dispatch = useDispatch()
    // plan을 전역에서 가져오되, props(plan)가 있으면 우선 사용
    const planFromStore = useSelector((state) => state.plans.plan)
    const plan = propPlan || planFromStore
+   const user = useSelector((state) => state.auth.user)
    const [processing, setProcessing] = useState(false)
    const [success, setSuccess] = useState(false)
    const [errorMsg, setErrorMsg] = useState('')
@@ -15,6 +18,16 @@ const PriceSummary = ({ plan: propPlan, options }) => {
    const [paymentMethod, setPaymentMethod] = useState('card')
    const [installment, setInstallment] = useState(false)
    const [installmentMonths, setInstallmentMonths] = useState(3)
+
+   // 최신 userId, planId를 항상 참조하기 위한 ref
+   const userIdRef = useRef(user?.id)
+   const planIdRef = useRef(plan?.id)
+   useEffect(() => {
+      userIdRef.current = user?.id
+   }, [user?.id])
+   useEffect(() => {
+      planIdRef.current = plan?.id
+   }, [plan?.id])
 
    // 가격 계산
    const finalPrice = plan.finalPrice ?? 0
@@ -28,7 +41,6 @@ const PriceSummary = ({ plan: propPlan, options }) => {
    else if (options.contract === 24) points = 1000
 
    // 가입/결제 처리
-   const user = useSelector((state) => state.auth.user)
    const handleJoin = async () => {
       setProcessing(true)
       setErrorMsg('')
@@ -40,11 +52,11 @@ const PriceSummary = ({ plan: propPlan, options }) => {
          if (options.contract === 12 || options.contract === 24) {
             monthly_fee = Math.ceil(total_fee / Number(options.contract))
          }
-         // 1. userPlan 생성
+         // 1. userPlan 생성 (항상 최신 userId, planId 사용)
          const userPlanRes = await dispatch(
             createUserPlan({
-               userId: user?.id,
-               planId: plan.id,
+               userId: userIdRef.current,
+               planId: planIdRef.current,
                total_fee,
                monthly_fee,
             })
@@ -52,7 +64,7 @@ const PriceSummary = ({ plan: propPlan, options }) => {
          const userPlanId = userPlanRes.data?.id || userPlanRes.id
          // 2. 결제 생성
          const transactionPayload = {
-            userId: user?.id,
+            userId: userIdRef.current,
             userPlanId,
             amount: totalPrice,
             paymentMethod,
