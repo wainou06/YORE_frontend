@@ -187,10 +187,7 @@ const PlanCreatePage = () => {
       let agencyId = admin.admin ? agencyInfo?.id || planData.agencyId : agencyInfo.id
       const basePriceNum = Number(stripComma(planData.basePrice || planData.price)) || 0
       const disNum = Number(planData.dis) || 0
-      // 약정 할인 적용 (24개월: 15%, 12개월: 10%)
-      const contractDiscount = disNum === 24 ? 0.85 : disNum === 12 ? 0.9 : 1
-      const finalPriceNum = Math.round(basePriceNum * contractDiscount)
-      // DB 모델에 없는 필드 제거
+      const finalPriceNum = Math.round(basePriceNum * disNum)
       const { features, networkType, requiredServices, price, ...rest } = planData
       const planPayload = {
          ...rest,
