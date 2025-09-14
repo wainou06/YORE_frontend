@@ -1,19 +1,17 @@
 import api from './axiosApi'
 
 export const notificationAPI = {
-   // 알림 생성/조회
-   createNotification: (data) => api.post('/notifications', data),
-   getNotifications: (params) => api.get('/notifications', { params }),
+   // 알림 생성
+   create: (data) => api.post('/notifications', data),
 
-   // 알림 상태 관리
-   getUnreadCount: () => api.get('/notifications/unread-count'),
+   // 알림 목록 조회
+   list: () => api.get('/notifications'),
+
+   // 알림 읽음 처리
    markAsRead: (id) => api.patch(`/notifications/${id}/read`),
-   markAllAsRead: () => api.patch('/notifications/read-all'),
 
-   // 필터링된 알림 조회
-   getNotificationsByType: (type) => api.get(`/notifications/type/${type}`),
-   getServiceNotifications: (serviceId) => api.get(`/notifications/services/${serviceId}`),
-   getAgencyNotifications: (agencyId) => api.get(`/notifications/agencies/${agencyId}`),
+   // 알림 삭제
+   delete: (id) => api.delete(`/notifications/${id}`),
 }
 
 export default notificationAPI

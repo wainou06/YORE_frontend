@@ -7,5 +7,6 @@ export const formatWithComma = (value) => {
 
 // 가격 콤마 제거
 export const stripComma = (value) => {
+   if (typeof value !== 'string') value = value?.toString?.() ?? ''
    return value.replace(/,/g, '')
 }

@@ -1,6 +1,8 @@
 import { useState } from 'react'
 
-const PlanFilters = ({ onFilterChange }) => {
+const DEFAULT_CARRIERS = ['SKT', 'KT', 'LG U+', '기타']
+
+const PlanFilters = ({ onFilterChange, carrierOptions }) => {
    const [filters, setFilters] = useState({
       carrier: 'all',
       priceRange: 'all',
@@ -16,6 +18,8 @@ const PlanFilters = ({ onFilterChange }) => {
       onFilterChange(newFilters)
    }
 
+   const carriers = carrierOptions && carrierOptions.length > 0 ? carrierOptions : DEFAULT_CARRIERS
+
    return (
       <div className="bg-light p-4 rounded mb-4">
          <div className="row">
@@ -23,9 +27,11 @@ const PlanFilters = ({ onFilterChange }) => {
                <label className="form-label">통신사</label>
                <select className="form-select" value={filters.carrier} onChange={(e) => handleFilterChange('carrier', e.target.value)}>
                   <option value="all">전체</option>
-                  <option value="SKT">SKT</option>
-                  <option value="KT">KT</option>
-                  <option value="LG U+">LG U+</option>
+                  {carriers.map((c) => (
+                     <option key={c} value={c}>
+                        {c}
+                     </option>
+                  ))}
                </select>
             </div>
 
