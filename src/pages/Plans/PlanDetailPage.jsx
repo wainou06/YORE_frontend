@@ -14,6 +14,8 @@ const PlanDetailPage = () => {
    const { id } = useParams()
    const navigate = useNavigate()
 
+   // 옵션 상태: age, contract(dis), services(부가서비스)
+   const [options, setOptions] = useState({ age: null, contract: null, services: [] })
    const dispatch = useDispatch()
 
    const { plan, plans, loading, error, agencies } = useSelector((state) => state.plans)
@@ -27,6 +29,9 @@ const PlanDetailPage = () => {
 
    // .env의 VITE_APP_API_URL 사용
    const BASE_URL = import.meta.env.VITE_APP_API_URL || ''
+
+   // displayPlan 선언을 useEffect 등에서 참조하기 전에 올림
+   const displayPlan = planOptions.find((p) => p.id === selectedPlanId) || plan
 
    function getFullImgUrl(imgURL) {
       if (!imgURL) return ''
@@ -43,6 +48,16 @@ const PlanDetailPage = () => {
       }
       return images
    }, [])
+   // displayPlan이 바뀔 때 options도 동기화(최초 진입/통신사 변경 등)
+   useEffect(() => {
+      if (displayPlan) {
+         setOptions((prev) => ({
+            ...prev,
+            age: displayPlan.age ?? null,
+            contract: displayPlan.dis ? Number(displayPlan.dis) : null,
+         }))
+      }
+   }, [displayPlan])
 
    // 통신사 목록 DB에서 불러오기
    useEffect(() => {
@@ -79,14 +94,10 @@ const PlanDetailPage = () => {
       }
    }, [selectedCarrier, dispatch, selectedPlanId])
 
-   // 선택된 planId가 바뀌면 planOptions에서 해당 plan 객체로 대체 렌더링
-   const displayPlan = planOptions.find((p) => p.id === selectedPlanId) || plan
-
    // displayPlan 변경 시 대표 이미지(mainImg) 갱신
    useEffect(() => {
-      if (!displayPlan) return
       const images = getImages(displayPlan)
-      setMainImg(images[0]?.imgURL || displayPlan.planImgUrl || displayPlan.planImg || '')
+      setMainImg(images[0]?.imgURL || (displayPlan ? displayPlan.planImgUrl || displayPlan.planImg : '') || '')
    }, [displayPlan, getImages])
 
    // 통신사 변경 핸들러
@@ -95,9 +106,17 @@ const PlanDetailPage = () => {
    }, [])
 
    // 요금제 옵션 변경 핸들러
-   const handlePlanOptionChange = useCallback((planId) => {
-      setSelectedPlanId(planId)
-   }, [])
+   const handlePlanOptionChange = useCallback(
+      (planId) => {
+         setSelectedPlanId(planId)
+         // 선택된 plan의 age, dis(약정) 정보를 options에 반영
+         const selected = planOptions.find((p) => p.id === planId)
+         if (selected) {
+            setOptions((prev) => ({ ...prev, age: selected.age ?? null, contract: selected.dis ?? null }))
+         }
+      },
+      [planOptions]
+   )
 
    // 수정 버튼 클릭 핸들러
    const handleEdit = useCallback(() => {
@@ -208,7 +227,8 @@ const PlanDetailPage = () => {
                            <select className="form-select" value={selectedPlanId || ''} onChange={(e) => handlePlanOptionChange(Number(e.target.value))}>
                               {planOptions.map((p) => (
                                  <option key={p.id} value={p.id}>
-                                    {p.name} ({p.data}/{p.voice}/{p.sms}) - {p.basePrice.toLocaleString()}원
+                                    {p.name} ({p.data}/{p.voice}/{p.sms}) - {p.basePrice.toLocaleString()}원{p.age ? ` / 연령:${p.age}` : ''}
+                                    {p.dis ? ` / 약정:${p.dis}개월` : ''}
                                  </option>
                               ))}
                            </select>
@@ -251,32 +271,22 @@ const PlanDetailPage = () => {
                         <h5 className="mb-3">주요 혜택</h5>
                         <ul className="list-unstyled">
                            {(() => {
+                              // benefits를 항상 배열로 파싱
+                              let arr = []
                               if (!displayPlan.benefits) return null
-                              // 배열인데 요소가 1개이고, 그 값이 문자열 배열 포맷이면 파싱
                               if (Array.isArray(displayPlan.benefits)) {
-                                 if (displayPlan.benefits.length === 1 && typeof displayPlan.benefits[0] === 'string' && displayPlan.benefits[0].startsWith('[')) {
-                                    try {
-                                       const arr = JSON.parse(displayPlan.benefits[0])
-                                       if (Array.isArray(arr)) {
-                                          return arr.map((feature, idx) => (
-                                             <li key={idx} className="mb-2">
-                                                <FontAwesomeIcon icon={faCheckCircle} className="text-primary me-2" />
-                                                {feature}
-                                             </li>
-                                          ))
-                                       }
-                                    } catch (e) {}
+                                 arr = displayPlan.benefits
+                              } else if (typeof displayPlan.benefits === 'string') {
+                                 try {
+                                    // stringified array
+                                    const parsed = JSON.parse(displayPlan.benefits)
+                                    if (Array.isArray(parsed)) arr = parsed
+                                    else arr = displayPlan.benefits.split('\n')
+                                 } catch {
+                                    arr = displayPlan.benefits.split('\n')
                                  }
-                                 // 일반 배열
-                                 return displayPlan.benefits.map((feature, idx) => (
-                                    <li key={idx} className="mb-2">
-                                       <FontAwesomeIcon icon={faCheckCircle} className="text-primary me-2" />
-                                       {feature}
-                                    </li>
-                                 ))
                               }
-                              // 문자열이면 줄바꿈 분리
-                              return displayPlan.benefits.split('\n').map((feature, idx) => (
+                              return arr.map((feature, idx) => (
                                  <li key={idx} className="mb-2">
                                     <FontAwesomeIcon icon={faCheckCircle} className="text-primary me-2" />
                                     {feature}
@@ -285,7 +295,7 @@ const PlanDetailPage = () => {
                            })()}
                         </ul>
                      </div>
-                     {/* 부가서비스 */}
+                     {/* 부가서비스 (선택 UI) */}
                      {(() => {
                         let additionalServices = displayPlan.additionalServices
                         if (!additionalServices || additionalServices.length === 0) {
@@ -299,14 +309,30 @@ const PlanDetailPage = () => {
                            }
                         }
                         if (additionalServices && additionalServices.length > 0) {
+                           // 부가서비스 선택 핸들러
+                           const handleServiceToggle = (svc) => {
+                              setOptions((prev) => {
+                                 const exists = prev.services?.some((s) => s.id === svc.id)
+                                 if (exists) {
+                                    return { ...prev, services: prev.services.filter((s) => s.id !== svc.id) }
+                                 } else {
+                                    return { ...prev, services: [...(prev.services || []), svc] }
+                                 }
+                              })
+                           }
                            return (
                               <div className="mb-4">
                                  <div className="card card-body">
-                                    <h5 className="mb-3">부가 서비스</h5>
+                                    <h5 className="mb-3">
+                                       부가 서비스 <span className="small text-muted">(선택 시 요금에 합산)</span>
+                                    </h5>
                                     <ul className="list-unstyled mb-0">
                                        {additionalServices.map((svc) => (
-                                          <li key={svc.id} className="mb-2">
-                                             <span className="fw-bold">{svc.name}</span> ({svc.provider}) - {typeof svc.fee === 'number' ? svc.fee.toLocaleString() : ''}원{svc.description && <span className="text-muted ms-2">{svc.description}</span>}
+                                          <li key={svc.id} className="mb-2 d-flex align-items-center">
+                                             <input type="checkbox" className="form-check-input me-2" checked={options.services?.some((s) => s.id === svc.id) || false} onChange={() => handleServiceToggle(svc)} id={`svc-${svc.id}`} />
+                                             <label htmlFor={`svc-${svc.id}`} className="form-check-label w-100">
+                                                <span className="fw-bold">{svc.name}</span> ({svc.provider}) - {typeof svc.fee === 'number' ? svc.fee.toLocaleString() : ''}원{svc.description && <span className="text-muted ms-2">{svc.description}</span>}
+                                             </label>
                                           </li>
                                        ))}
                                     </ul>
@@ -320,9 +346,9 @@ const PlanDetailPage = () => {
                </div>
             </div>
             <div className="col-lg-4">
-               <div className="sticky-top" style={{ top: '20px' }}>
+               <div className="sticky-top" style={{ top: '90px' }}>
                   {/* 옵션/결제 등은 별도 구현 필요 */}
-                  {/* <PriceSummary plan={displayPlan} options={options} onCheckout={handleCheckout} /> */}
+                  <PriceSummary plan={displayPlan} options={options} />
                </div>
             </div>
          </div>
