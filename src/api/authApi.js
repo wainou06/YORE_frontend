@@ -20,6 +20,9 @@ export const authAPI = {
 
    // 기업 정보 수정
    updateAgencyProfile: ({ agencyName, businessNumber }) => api.put('/auth/profile/agency', { agencyName, businessNumber }),
+
+   // 비밀번호 찾기
+   findPassword: ({ method, value }) => api.post('/auth/find-password', { method, value }),
 }
 
 export default authAPI
