@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faComment } from '@fortawesome/free-solid-svg-icons'
 import { register, selectAuthError, selectAuthLoading } from '@features/auth/authSlice'
+import { showModalThunk } from '../../features/modal/modalSlice'
 
 const SignupPage = () => {
    const navigate = useNavigate()
@@ -34,7 +35,7 @@ const SignupPage = () => {
 
       // 비밀번호 확인
       if (formData.password !== formData.confirmPassword) {
-         alert('비밀번호가 일치하지 않습니다.')
+         dispatch(showModalThunk({ type: 'alert', placeholder: '비밀번호가 일치하지 않습니다.' }))
          return
       }
 
@@ -58,7 +59,7 @@ const SignupPage = () => {
       try {
          const resultAction = await dispatch(register(userData))
          if (register.fulfilled.match(resultAction)) {
-            alert('회원가입 성공!')
+            dispatch(showModalThunk({ type: 'alert', placeholder: '회원가입에 성공하였습니다.' }))
             navigate('/')
          }
       } catch (err) {
@@ -69,7 +70,7 @@ const SignupPage = () => {
    // 에러 처리
    useEffect(() => {
       if (error) {
-         alert(error)
+         dispatch(showModalThunk({ type: 'alert', placeholder: `${error}` }))
       }
    }, [error])
 

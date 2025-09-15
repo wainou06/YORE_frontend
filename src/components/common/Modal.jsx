@@ -1,5 +1,6 @@
 import { ModalAlertComponent, ModalConfirmComponent, ModalPromptComponent } from './modals/MordalNormal'
 import { ModalManagerLoginComponent, ModalAdminUserDetailComponent } from './modals/ModalManager'
+import { ModalForgetPassword } from './modals/ModalPw'
 
 /*
 모달 사용법✨✨
@@ -73,4 +74,9 @@ export const ModalManagerLogin = () => {
 
 export const ModalAdminUserDetail = () => {
    return <ModalAdminUserDetailComponent />
+}
+
+// 비밀번호 찾기 관련 모달 컴포넌트 입니다
+export const ModalPw = () => {
+   return <ModalForgetPassword />
 }

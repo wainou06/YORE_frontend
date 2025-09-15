@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { getProfile, selectUser, selectIsAuthenticated, changePassword, updateProfile, changeBirth } from '@features/auth/authSlice'
+import { showModalThunk } from '../../features/modal/modalSlice'
 import '@assets/css/MySettings.css'
 
 const MySettings = () => {
@@ -39,11 +40,11 @@ const MySettings = () => {
    // 비밀번호 변경
    const handleChangePassword = () => {
       if (!currentPassword || !newPassword || !confirmPassword) {
-         alert('모든 비밀번호 필드를 입력해주세요.')
+         dispatch(showModalThunk({ type: 'alert', placeholder: '모든 필드를 입력해주세요.' }))
          return
       }
       if (newPassword !== confirmPassword) {
-         alert('새 비밀번호와 확인이 일치하지 않습니다.')
+         dispatch(showModalThunk({ type: 'alert', placeholder: '새 비밀번호와 비밀번호 확인이 일치하지 않습니다.' }))
          return
       }
 
@@ -51,12 +52,12 @@ const MySettings = () => {
          .unwrap()
          .then((res) => {
             if (res.success) {
-               alert('비밀번호가 변경되었습니다.')
+               dispatch(showModalThunk({ type: 'alert', placeholder: '비밀번호가 변경되었습니다.' }))
                setCurrentPassword('')
                setNewPassword('')
                setConfirmPassword('')
             } else {
-               alert(res.message || '비밀번호 변경 실패')
+               dispatch(showModalThunk({ type: 'alert', placeholder: '비밀번호 변경에 실패했습니다.' }))
             }
          })
          .catch((err) => alert(err))
@@ -65,7 +66,7 @@ const MySettings = () => {
    // 이메일 변경
    const handleChangeEmail = () => {
       if (!newEmail) {
-         alert('이메일을 입력해주세요.')
+         dispatch(showModalThunk({ type: 'alert', placeholder: '이메일을 입력해주세요.' }))
          return
       }
 
@@ -73,11 +74,11 @@ const MySettings = () => {
          .unwrap()
          .then((res) => {
             if (res.success) {
-               alert('이메일이 변경되었습니다.')
+               dispatch(showModalThunk({ type: 'alert', placeholder: '이메일이 변경되었습니다.' }))
                setEmail(newEmail)
                setNewEmail('')
             } else {
-               alert(res.message || '이메일 변경 실패')
+               dispatch(showModalThunk({ type: 'alert', placeholder: '이메일 변경에 실패했습니다.' }))
             }
          })
          .catch((err) => alert(err))
@@ -86,7 +87,7 @@ const MySettings = () => {
    // 생일 변경
    const handleChangeBirth = () => {
       if (!birth) {
-         alert('생일을 입력해주세요.')
+         dispatch(showModalThunk({ type: 'alert', placeholder: '생일을 입력해주세요.' }))
          return
       }
 
@@ -94,9 +95,9 @@ const MySettings = () => {
          .unwrap()
          .then((res) => {
             if (res.success) {
-               alert('생일이 업데이트되었습니다.')
+               dispatch(showModalThunk({ type: 'alert', placeholder: '생일이 업데이트 되었습니다.' }))
             } else {
-               alert(res.message || '업데이트 실패')
+               dispatch(showModalThunk({ type: 'alert', placeholder: '생일 업데이트에 실패했습니다.' }))
             }
          })
          .catch((err) => alert(err))
