@@ -27,7 +27,6 @@ const PlanManagement = () => {
       dispatch(getPlansStatusThunk(currentPage))
    }, [currentPage, dispatch])
 
-   // 통신사 목록 로드
    useEffect(() => {
       const fetchCarriers = async () => {
          try {
@@ -38,7 +37,7 @@ const PlanManagement = () => {
             ]
             setCarriers(carriersList)
          } catch (error) {
-            console.error('통신사 목록 로드 실패:', error)
+            console.error('목록 로드 실패:', error)
          }
       }
 
@@ -86,7 +85,7 @@ const PlanManagement = () => {
                   <div className="row g-2">
                      <div className="col-md-3">
                         <select className="admin-color-second admin-color-select form-select" value={selectedCarrier} onChange={(e) => setSelectedCarrier(e.target.value)}>
-                           <option value="">모든 통신사</option>
+                           <option value="">모든 서비스</option>
                            {carriers.map((carrier) => (
                               <option key={carrier.id} value={carrier.id}>
                                  {carrier.name}
@@ -106,7 +105,7 @@ const PlanManagement = () => {
                         <tr>
                            <th>ID</th>
                            <th>요금제명</th>
-                           <th>통신사</th>
+                           <th>서비스</th>
                            <th>데이터</th>
                            <th>음성</th>
                            <th>문자</th>
@@ -154,16 +153,16 @@ const PlanManagement = () => {
                                  </td>
                                  <td>
                                     <div style={{ maxWidth: '200px' }}>
-                                       {/* {plan.features.map((feature, index) => (
+                                       {plan.features.map((feature, index) => (
                                           <span key={index} className="admin-color badge bg-light text-dark me-1 mb-1">
                                              {feature}
                                           </span>
-                                       ))} */}
+                                       ))}
                                     </div>
                                  </td>
                                  <td>{plan.createdAt}</td>
                                  <td>
-                                    <span className={`badge bg-${plan.status === 'active' ? 'success' : 'danger'}`}>{plan.status === 'active' ? '판매중' : '판매중지'}</span>
+                                    <span className={`badge bg-${plan.status === 'active' ? 'success' : 'danger'}`}>{plan.status === 'active' ? '판매중' : '대기중'}</span>
                                  </td>
                                  <td>
                                     <div className="btn-group">

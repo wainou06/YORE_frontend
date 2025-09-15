@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { getUserStatusThunk } from '@/features/analytics/analyticsSlice'
-import { useSelector } from 'react-redux'
-import Modal from '../../components/common/Modal'
+// import Modal from '../../components/common/Modal'
 import { showModalThunk } from '@/features/modal/modalSlice'
 import { ModalAdminUserDetailComponent } from '@/components/common/modals/ModalManager'
 
@@ -57,7 +56,7 @@ const UserManagement = () => {
    }
 
    const onClickDetailModal = async (userId) => {
-      await dispatch(showModalThunk({type:''}))
+      await dispatch(showModalThunk({ type: '' }))
    }
 
    return (
@@ -171,7 +170,7 @@ const UserManagement = () => {
                </div>
             </div>
          </>
-         {modal.type==='detail'&&<ModalAdminUserDetailComponent}
+         {modal.type === 'detail' && <ModalAdminUserDetailComponent />}
       </>
    )
 }

@@ -24,7 +24,7 @@
    color: white;
 }
 
-.status-badge.completed {
+.status-badge.success {
    background-color: var(--success-color);
 }
 
@@ -32,7 +32,7 @@
    background-color: var(--primary-color);
 }
 
-.status-badge.cancelled {
+.status-badge.failed {
    background-color: var(--danger-color);
 }
 

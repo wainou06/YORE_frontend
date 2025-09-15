@@ -12,7 +12,7 @@ const OrderManagement = () => {
    const [statusFilter, setStatusFilter] = useState('')
    const [currentPage, setCurrentPage] = useState(1)
    const [totalPages, setTotalPages] = useState(1)
-   const { admin, isAuthenticated } = useSelector((state) => state.admin)
+   const { isAuthenticated } = useSelector((state) => state.admin)
    const { loading, ordersStatus } = useSelector((state) => state.analytics)
 
    // 관리자 권한 체크
@@ -44,118 +44,112 @@ const OrderManagement = () => {
             //   `/api/admin/orders?page=${currentPage}&search=${searchTerm}&status=${statusFilter}`
             // );
             // const data = await response.json();
-
             // 테스트용 주문 데이터
-            const mockOrders = [
-               {
-                  id: 1,
-                  customerName: '홍길동',
-                  customerEmail: 'hong@example.com',
-                  customerPhone: '010-1234-5678',
-                  planName: 'SKT 5G 프리미엄',
-                  planCarrier: 'SKT',
-                  originalPrice: 85000,
-                  amount: 63750,
-                  discountRate: 25,
-                  paymentMethod: 'card',
-                  cardCompany: '삼성카드',
-                  cardNumber: '5412-****-****-1234',
-                  status: 'completed',
-                  orderDate: '2025-09-05 14:30:00',
-                  completedDate: '2025-09-05 14:31:23',
-                  usePoint: 0,
-                  earnedPoint: 1275,
-                  contract: '24개월',
-                  features: ['VIP 혜택', '데이터 완전 무제한'],
-               },
-               {
-                  id: 2,
-                  customerName: '김철수',
-                  customerEmail: 'kim@example.com',
-                  customerPhone: '010-9876-5432',
-                  planName: 'KT 5G 슈퍼플랜',
-                  planCarrier: 'KT',
-                  originalPrice: 65000,
-                  amount: 52000,
-                  discountRate: 20,
-                  paymentMethod: 'card',
-                  cardCompany: '현대카드',
-                  cardNumber: '4321-****-****-5678',
-                  status: 'pending',
-                  orderDate: '2025-09-05 13:45:00',
-                  usePoint: 1000,
-                  earnedPoint: 1020,
-                  contract: '12개월',
-                  features: ['데이터 로밍', '음악 스트리밍'],
-               },
-               {
-                  id: 3,
-                  customerName: '이영희',
-                  customerEmail: 'lee@example.com',
-                  customerPhone: '010-2222-3333',
-                  planName: 'LG U+ 5G 베이직',
-                  planCarrier: 'LGU+',
-                  originalPrice: 45000,
-                  amount: 38250,
-                  discountRate: 15,
-                  paymentMethod: 'bank',
-                  bankName: '신한은행',
-                  accountNumber: '110-***-******',
-                  status: 'completed',
-                  orderDate: '2025-09-04 10:15:00',
-                  completedDate: '2025-09-04 10:17:42',
-                  usePoint: 500,
-                  earnedPoint: 757,
-                  contract: '무약정',
-                  features: ['기본 데이터'],
-               },
-               {
-                  id: 4,
-                  customerName: '박지성',
-                  customerEmail: 'park@example.com',
-                  customerPhone: '010-7777-8888',
-                  planName: '청소년 요금제',
-                  planCarrier: 'SKT',
-                  originalPrice: 35000,
-                  amount: 24500,
-                  discountRate: 30,
-                  paymentMethod: 'card',
-                  cardCompany: '국민카드',
-                  cardNumber: '9876-****-****-4321',
-                  status: 'failed',
-                  orderDate: '2025-09-04 09:30:00',
-                  failReason: '한도초과',
-                  features: ['유해 콘텐츠 차단', '위치 알림'],
-               },
-            ]
-
-            // 검색어 필터링
-            let filteredOrders = mockOrders
-            if (searchTerm) {
-               const searchLower = searchTerm.toLowerCase()
-               filteredOrders = mockOrders.filter((order) => order.customerName.toLowerCase().includes(searchLower) || order.customerEmail.toLowerCase().includes(searchLower) || order.planName.toLowerCase().includes(searchLower))
-            }
-
-            // 상태 필터링
-            if (statusFilter) {
-               filteredOrders = filteredOrders.filter((order) => order.status === statusFilter)
-            }
-
-            // 페이지네이션
-            const itemsPerPage = 5
-            const start = (currentPage - 1) * itemsPerPage
-            const paginatedOrders = filteredOrders.slice(start, start + itemsPerPage)
-
-            setOrders(paginatedOrders)
-            setTotalPages(Math.ceil(filteredOrders.length / itemsPerPage))
-            setTotalPages(5)
+            // const mockOrders = [
+            //    {
+            //       id: 1,
+            //       customerName: '홍길동',
+            //       customerEmail: 'hong@example.com',
+            //       customerPhone: '010-1234-5678',
+            //       planName: 'SKT 5G 프리미엄',
+            //       planCarrier: 'SKT',
+            //       originalPrice: 85000,
+            //       amount: 63750,
+            //       discountRate: 25,
+            //       paymentMethod: 'card',
+            //       cardCompany: '삼성카드',
+            //       cardNumber: '5412-****-****-1234',
+            //       status: 'completed',
+            //       orderDate: '2025-09-05 14:30:00',
+            //       completedDate: '2025-09-05 14:31:23',
+            //       usePoint: 0,
+            //       earnedPoint: 1275,
+            //       contract: '24개월',
+            //       features: ['VIP 혜택', '데이터 완전 무제한'],
+            //    },
+            //    {
+            //       id: 2,
+            //       customerName: '김철수',
+            //       customerEmail: 'kim@example.com',
+            //       customerPhone: '010-9876-5432',
+            //       planName: 'KT 5G 슈퍼플랜',
+            //       planCarrier: 'KT',
+            //       originalPrice: 65000,
+            //       amount: 52000,
+            //       discountRate: 20,
+            //       paymentMethod: 'card',
+            //       cardCompany: '현대카드',
+            //       cardNumber: '4321-****-****-5678',
+            //       status: 'pending',
+            //       orderDate: '2025-09-05 13:45:00',
+            //       usePoint: 1000,
+            //       earnedPoint: 1020,
+            //       contract: '12개월',
+            //       features: ['데이터 로밍', '음악 스트리밍'],
+            //    },
+            //    {
+            //       id: 3,
+            //       customerName: '이영희',
+            //       customerEmail: 'lee@example.com',
+            //       customerPhone: '010-2222-3333',
+            //       planName: 'LG U+ 5G 베이직',
+            //       planCarrier: 'LGU+',
+            //       originalPrice: 45000,
+            //       amount: 38250,
+            //       discountRate: 15,
+            //       paymentMethod: 'bank',
+            //       bankName: '신한은행',
+            //       accountNumber: '110-***-******',
+            //       status: 'completed',
+            //       orderDate: '2025-09-04 10:15:00',
+            //       completedDate: '2025-09-04 10:17:42',
+            //       usePoint: 500,
+            //       earnedPoint: 757,
+            //       contract: '무약정',
+            //       features: ['기본 데이터'],
+            //    },
+            //    {
+            //       id: 4,
+            //       customerName: '박지성',
+            //       customerEmail: 'park@example.com',
+            //       customerPhone: '010-7777-8888',
+            //       planName: '청소년 요금제',
+            //       planCarrier: 'SKT',
+            //       originalPrice: 35000,
+            //       amount: 24500,
+            //       discountRate: 30,
+            //       paymentMethod: 'card',
+            //       cardCompany: '국민카드',
+            //       cardNumber: '9876-****-****-4321',
+            //       status: 'failed',
+            //       orderDate: '2025-09-04 09:30:00',
+            //       failReason: '한도초과',
+            //       features: ['유해 콘텐츠 차단', '위치 알림'],
+            //    },
+            // ]
+            // // 검색어 필터링
+            // let filteredOrders = mockOrders
+            // if (searchTerm) {
+            //    const searchLower = searchTerm.toLowerCase()
+            //    filteredOrders = mockOrders.filter((order) => order.customerName.toLowerCase().includes(searchLower) || order.customerEmail.toLowerCase().includes(searchLower) || order.planName.toLowerCase().includes(searchLower))
+            // }
+            // // 상태 필터링
+            // if (statusFilter) {
+            //    filteredOrders = filteredOrders.filter((order) => order.status === statusFilter)
+            // }
+            // // 페이지네이션
+            // const itemsPerPage = 5
+            // const start = (currentPage - 1) * itemsPerPage
+            // const paginatedOrders = filteredOrders.slice(start, start + itemsPerPage)
+            // setOrders(paginatedOrders)
+            // setTotalPages(Math.ceil(filteredOrders.length / itemsPerPage))
          } catch (error) {
             console.error('주문 목록 로드 실패:', error)
          }
       }
 
       fetchOrders()
-   }, [currentPage, searchTerm, statusFilter])
+   }, [currentPage, searchTerm, statusFilter, loading])
 
    const handleSearch = (e) => {
       e.preventDefault()
@@ -230,7 +224,7 @@ const OrderManagement = () => {
                         </tr>
                      </thead>
                      <tbody>
-                        {orders.map((order) => (
+                        {orders?.map((order) => (
                            <tr key={order.id} className="align-middle">
                               <td>
                                  <div className="fw-bold">#{order.id}</div>
@@ -280,8 +274,8 @@ const OrderManagement = () => {
                               </td>
                               <td>
                                  <div>
-                                    <span className={`badge bg-${order.status === 'completed' ? 'success' : order.status === 'pending' ? 'warning' : order.status === 'failed' ? 'danger' : 'secondary'}`}>
-                                       {order.status === 'completed' ? '결제완료' : order.status === 'pending' ? '결제대기' : order.status === 'failed' ? '결제실패' : '환불완료'}
+                                    <span className={`badge bg-${order.status === 'success' ? 'success' : order.status === 'pending' ? 'warning' : order.status === 'failed' ? 'danger' : 'secondary'}`}>
+                                       {order.status === 'success' ? '결제완료' : order.status === 'pending' ? '결제대기' : order.status === 'failed' ? '결제실패' : '환불완료'}
                                     </span>
                                  </div>
                                  {order.completedDate && <div className="admin-color-text small text-muted mt-1">완료: {new Date(order.completedDate).toLocaleTimeString()}</div>}
