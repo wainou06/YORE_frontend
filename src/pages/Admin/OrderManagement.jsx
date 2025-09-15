@@ -1,28 +1,42 @@
+import { getOrdersStatusThunk } from '@/features/analytics/analyticsSlice'
+import { faL } from '@fortawesome/free-solid-svg-icons'
 import { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 const OrderManagement = () => {
    const navigate = useNavigate()
-   const { user } = useSelector((state) => state.auth)
+   const dispatch = useDispatch()
    const [orders, setOrders] = useState([])
    const [searchTerm, setSearchTerm] = useState('')
    const [statusFilter, setStatusFilter] = useState('')
    const [currentPage, setCurrentPage] = useState(1)
    const [totalPages, setTotalPages] = useState(1)
-   const [darkMode, setDarkMode] = useState(false)
+   const { admin, isAuthenticated } = useSelector((state) => state.admin)
+   const { loading, ordersStatus } = useSelector((state) => state.analytics)
 
    // 관리자 권한 체크
    useEffect(() => {
       const savedTheme = localStorage.getItem('theme')
       if (savedTheme === 'dark') {
-         setDarkMode(true)
          document.documentElement.setAttribute('data-theme', 'dark')
       }
-   }, [navigate])
+
+      if (!isAuthenticated) {
+         navigate('/')
+         return
+      }
+
+      dispatch(getOrdersStatusThunk(currentPage))
+   }, [currentPage, dispatch])
 
    // 주문 목록 로드
    useEffect(() => {
+      if (!loading) {
+         console.log(ordersStatus)
+         setOrders(ordersStatus.data)
+         setTotalPages(ordersStatus.totalPages)
+      }
       const fetchOrders = async () => {
          try {
             // TODO: API 연동
@@ -112,26 +126,6 @@ const OrderManagement = () => {
                   orderDate: '2025-09-04 09:30:00',
                   failReason: '한도초과',
                   features: ['유해 콘텐츠 차단', '위치 알림'],
-               },
-               {
-                  id: 5,
-                  customerName: '최민수',
-                  customerEmail: 'choi@example.com',
-                  customerPhone: '010-5555-6666',
-                  planName: '실버 요금제',
-                  planCarrier: 'KT',
-                  originalPrice: 30000,
-                  amount: 19500,
-                  discountRate: 35,
-                  paymentMethod: 'bank',
-                  bankName: '국민은행',
-                  accountNumber: '123-***-******',
-                  status: 'refunded',
-                  orderDate: '2025-09-03 15:20:00',
-                  completedDate: '2025-09-03 15:22:11',
-                  refundedDate: '2025-09-04 10:00:00',
-                  refundReason: '고객 변심',
-                  features: ['큰 글씨', '긴급 SOS'],
                },
             ]
 

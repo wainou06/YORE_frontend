@@ -5,6 +5,7 @@ export const analyticsAPI = {
    getHomeStatus: () => api.get('/analytics/getHomeStatus'),
    getUserStatus: (page) => api.get(`/analytics/getUserStatus?page=${page}`),
    getPlansStatus: (page) => api.get(`/analytics/getPlansStatus?page=${page}`),
+   getOrdersStatus: (page) => api.get(`/analytics/getOrdersStatus?page=${page}`),
 
    // 전체 통계
    getServiceStats: () => api.get('/analytics'),

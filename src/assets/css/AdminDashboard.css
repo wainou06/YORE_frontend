@@ -308,6 +308,10 @@
    border: var(--text-primary) !important;
 }
 
+.admin-table-pointer td {
+   cursor: pointer;
+}
+
 /* 다크 모드 변수 */
 :root {
    --bg-primary: #ffffff;

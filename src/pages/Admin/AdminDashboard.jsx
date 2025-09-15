@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-// import { analyticsAPI } from '@/services/api'
 import { showModalThunk } from '@/features/modal/modalSlice'
 import { ModalAlert } from '@/components/common/Modal'
 import { useNavigate, Link } from 'react-router-dom'
@@ -14,7 +13,6 @@ const AdminDashboard = () => {
    const modal = useSelector((state) => state.modal)
    const [darkMode, setDarkMode] = useState(false)
    const [error, setError] = useState(null)
-   const [inquiries, setInquiries] = useState([])
    const [stats, setStats] = useState({
       totalUsers: 0,
       totalRevenue: 0,
@@ -35,7 +33,7 @@ const AdminDashboard = () => {
       }
 
       if (!isAuthenticated) {
-         dispatch(showModalThunk({ type: 'alert', placeholder: '관리자 권한이 없습니다.' }))
+         navigate('/')
          return
       }
 

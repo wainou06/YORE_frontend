@@ -2,6 +2,10 @@ import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { getUserStatusThunk } from '@/features/analytics/analyticsSlice'
+import { useSelector } from 'react-redux'
+import Modal from '../../components/common/Modal'
+import { showModalThunk } from '@/features/modal/modalSlice'
+import { ModalAdminUserDetailComponent } from '@/components/common/modals/ModalManager'
 
 const UserManagement = () => {
    const navigate = useNavigate()
@@ -12,6 +16,7 @@ const UserManagement = () => {
    const [searchTerm, setSearchTerm] = useState('')
    const [currentPage, setCurrentPage] = useState(1)
    const [totalPages, setTotalPages] = useState(1)
+   const modal = useSelector((state) => state.modal)
 
    // 관리자 권한 체크
    useEffect(() => {
@@ -30,7 +35,7 @@ const UserManagement = () => {
 
    // 사용자 목록 로드
    useEffect(() => {
-      if (loading === false) {
+      if (!loading) {
          console.log(userManagement)
          setTotalPages(userManagement.totalPages)
          setUsers(userManagement.data)
@@ -49,6 +54,10 @@ const UserManagement = () => {
       } catch (error) {
          console.error('사용자 상태 변경 실패:', error)
       }
+   }
+
+   const onClickDetailModal = async (userId) => {
+      await dispatch(showModalThunk({type:''}))
    }
 
    return (
@@ -95,14 +104,14 @@ const UserManagement = () => {
                            </thead>
                            <tbody>
                               {users?.map((user) => (
-                                 <tr key={user.id}>
+                                 <tr className="admin-table-pointer" key={user.id}>
                                     <td>{user.id}</td>
-                                    <td>{user.name}</td>
-                                    <td>{user.email}</td>
-                                    <td>{user.phone}</td>
-                                    <td>{user.createdAt}</td>
-                                    <td>{user.orderCount}</td>
-                                    <td>
+                                    <td onClick={() => onClickDetail(user.id)}>{user.name}</td>
+                                    <td onClick={() => onClickDetail(user.id)}>{user.email}</td>
+                                    <td onClick={() => onClickDetail(user.id)}>{user.phone}</td>
+                                    <td onClick={() => onClickDetail(user.id)}>{user.createdAt}</td>
+                                    <td onClick={() => onClickDetail(user.id)}>{user.orderCount}</td>
+                                    <td onClick={() => onClickDetail(user.id)}>
                                        <span className={`badge bg-${user.status === 'active' ? 'success' : user.status === 'inactive' ? 'warning' : 'danger'}`}>{user.status === 'active' ? '활성' : user.status === 'inactive' ? '휴면' : '정지'}</span>
                                     </td>
                                     <td>
@@ -162,6 +171,7 @@ const UserManagement = () => {
                </div>
             </div>
          </>
+         {modal.type==='detail'&&<ModalAdminUserDetailComponent}
       </>
    )
 }
