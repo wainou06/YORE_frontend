@@ -16,7 +16,6 @@ const LoginWidget = () => {
    const isAuthenticated = useSelector(selectIsAuthenticated)
    const loading = useSelector(selectAuthLoading)
    const error = useSelector(selectAuthError)
-   const userType = useSelector(selectUserType)
 
    const notifications = useSelector((state) => state.notification.notifications)
    const unreadCount = notifications.filter((n) => !n.isRead).length
@@ -27,6 +26,7 @@ const LoginWidget = () => {
    const [password, setPassword] = useState('')
    const [rememberMe, setRememberMe] = useState(false)
 
+   // 아이디 저장 초기화
    useEffect(() => {
       const savedEmail = localStorage.getItem('savedEmail')
       if (savedEmail) {
@@ -35,11 +35,13 @@ const LoginWidget = () => {
       }
    }, [])
 
+   // 토큰 있으면 프로필 조회
    useEffect(() => {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token')
       if (token && token.trim() !== '') dispatch(getProfile())
    }, [dispatch])
 
+   // 토큰 없는데 유저가 남아있으면 초기화
    useEffect(() => {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token')
       if ((!token || token.trim() === '') && (user || isAuthenticated)) {
@@ -187,28 +189,35 @@ const LoginWidget = () => {
                </div>
 
                <div className="text-group mb-4">
-                  <input type="email" name="email" required placeholder="아이디" value={email} onChange={(e) => setEmail(e.target.value)} className="login-textfield col-12 mb-4" />
-                  <input type="password" name="password" required placeholder="비밀번호" value={password} onChange={(e) => setPassword(e.target.value)} className="login-textfield col-12 " />
-               </div>
+                  <form
+                     onSubmit={(e) => {
+                        e.preventDefault()
+                        handleLogin()
+                     }}
+                  >
+                     <input type="email" name="email" required placeholder="아이디" value={email} onChange={(e) => setEmail(e.target.value)} className="login-textfield col-12 mb-4" />
+                     <input type="password" name="password" required placeholder="비밀번호" value={password} onChange={(e) => setPassword(e.target.value)} className="login-textfield col-12" />
 
-               <div className="sub-func mb-4 justify-content-between align-items-center d-flex">
-                  <div className="sub-func-content">
-                     <input type="checkbox" id="rememberMe" className="me-2" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
-                     <label htmlFor="rememberMe" className="me-3">
-                        아이디 저장
-                     </label>
-                  </div>
-                  <div className="sub-func-content">
-                     <button className="btn btn-link p-0 m-0 align-baseline" onClick={handleForgotPassword}>
-                        비밀번호 찾기
-                     </button>
-                  </div>
-               </div>
+                     <div className="sub-func mb-4 justify-content-between align-items-center d-flex">
+                        <div className="sub-func-content">
+                           <input type="checkbox" id="rememberMe" className="me-2" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
+                           <label htmlFor="rememberMe" className="me-3">
+                              아이디 저장
+                           </label>
+                        </div>
+                        <div className="sub-func-content">
+                           <button className="btn btn-link p-0 m-0 align-baseline" type="button" onClick={handleForgotPassword}>
+                              비밀번호 찾기
+                           </button>
+                        </div>
+                     </div>
 
-               <div className="login-btn">
-                  <button className="btn btn-primary w-100" onClick={handleLogin} disabled={loading}>
-                     {loading ? '로그인 중...' : '로그인'}
-                  </button>
+                     <div className="login-btn">
+                        <button className="btn btn-primary w-100" type="submit" disabled={loading}>
+                           {loading ? '로그인 중...' : '로그인'}
+                        </button>
+                     </div>
+                  </form>
                </div>
 
                {error && error !== '프로필 조회 실패' && (
