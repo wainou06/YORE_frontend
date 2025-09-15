@@ -139,11 +139,11 @@ const LoginWidget = () => {
                               <FontAwesomeIcon icon={faUser} className="me-2" />
                               <p>내 정보</p>
                            </Link>
-                           <Link to="myinfo/plansettings" className="link_btn ">
+                           <Link to="myinfo/plansettings" className="link_btn">
                               <FontAwesomeIcon icon={faMobileScreenButton} className="me-2" />
                               <p>내 요금제</p>
                            </Link>
-                           <Link to="myinfo/billing" className="link_btn ">
+                           <Link to="myinfo/billing" className="link_btn">
                               <FontAwesomeIcon icon={faCalculator} className="me-2" />
                               <p>내 청구서</p>
                            </Link>
@@ -188,7 +188,7 @@ const LoginWidget = () => {
                   </button>
                </div>
 
-               <div className="text-group mb-4">
+               <div className="text-group">
                   <form
                      onSubmit={(e) => {
                         e.preventDefault()
