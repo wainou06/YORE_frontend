@@ -24,7 +24,7 @@
    color: white;
 }
 
-.status-badge.completed {
+.status-badge.success {
    background-color: var(--success-color);
 }
 
@@ -32,7 +32,7 @@
    background-color: var(--primary-color);
 }
 
-.status-badge.cancelled {
+.status-badge.failed {
    background-color: var(--danger-color);
 }
 
@@ -306,6 +306,10 @@
    background-color: var(--bg-secondary);
    color: var(--text-primary) !important;
    border: var(--text-primary) !important;
+}
+
+.admin-table-pointer td {
+   cursor: pointer;
 }
 
 /* 다크 모드 변수 */

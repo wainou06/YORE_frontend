@@ -28,6 +28,15 @@ export const getPlansStatusThunk = createAsyncThunk('analytics/getPlansStatus', 
    }
 })
 
+export const getOrdersStatusThunk = createAsyncThunk('analytics/getOrdersStatus', async (page, { rejectWidthValue }) => {
+   try {
+      const response = await analyticsAPI.getOrdersStatus(page)
+      return response.data
+   } catch (error) {
+      return rejectWidthValue(error.response?.data?.message)
+   }
+})
+
 export const analyticsSlice = createSlice({
    name: 'analytics',
    initialState: {
@@ -36,6 +45,7 @@ export const analyticsSlice = createSlice({
       home: {},
       userManagement: {},
       plansStatus: {},
+      ordersStatus: {},
    },
    reducers: {
       clearAnalyticsError: (state) => {
@@ -77,6 +87,18 @@ export const analyticsSlice = createSlice({
             state.plansStatus = action.payload
          })
          .addCase(getPlansStatusThunk.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload
+         })
+         .addCase(getOrdersStatusThunk.pending, (state) => {
+            state.loading = true
+            state.error = null
+         })
+         .addCase(getOrdersStatusThunk.fulfilled, (state, action) => {
+            state.loading = false
+            state.ordersStatus = action.payload
+         })
+         .addCase(getOrdersStatusThunk.rejected, (state, action) => {
             state.loading = false
             state.error = action.payload
          })

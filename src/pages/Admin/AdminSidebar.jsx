@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export const AdminSidebar = () => {
-   const localdark = localStorage.getItem('theme')
+   let localdark = localStorage.getItem('theme')
    if (!localdark) localdark = 'light'
    const [darkMode, setDarkMode] = useState(localdark)
    const [currentPage, setCurrentPage] = useState(0)

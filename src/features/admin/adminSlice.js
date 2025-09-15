@@ -110,7 +110,7 @@ export const adminSlice = createSlice({
          const sessionAdmin = sessionStorage.getItem('adminToken')
          const localAdmin = localStorage.getItem('adminToken')
 
-         if (sessionAdmin || localAdmin) {
+         if (!sessionAdmin === '' || !localAdmin === '') {
             state.isAuthenticated = true
          }
       },
