@@ -100,10 +100,10 @@ const PriceSummary = ({ plan: propPlan, options }) => {
                </div>
             )}
 
-            {options.contract && (
+            {typeof options.contract !== 'undefined' && (
                <div className="d-flex justify-content-between mb-2">
                   <span>약정 할인</span>
-                  <span className="text-primary">{options.contract === 24 ? '15%' : options.contract === 12 ? '10%' : '0%'} 할인</span>
+                  <span className="text-primary">{options.contract === 24 ? '15% 할인' : options.contract === 12 ? '10% 할인' : options.contract === 0 ? '약정 할인 없음' : '0% 할인'}</span>
                </div>
             )}
 

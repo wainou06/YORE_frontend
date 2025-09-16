@@ -172,7 +172,7 @@ const PlanDetailPage = () => {
 
    return (
       <div className="container py-5">
-         <div className="row">
+         <div className="row plan-detail">
             <div className="col-lg-8 mb-4 mb-lg-0">
                <div className="card shadow-sm mb-4">
                   {/* 요금제 이미지 갤러리 */}
@@ -345,8 +345,8 @@ const PlanDetailPage = () => {
                   </div>
                </div>
             </div>
-            <div className="col-lg-4">
-               <div className="sticky-top" style={{ top: '90px' }}>
+            <div className="col-lg-4 ">
+               <div className="plan-summary">
                   {/* 옵션/결제 등은 별도 구현 필요 */}
                   <PriceSummary plan={displayPlan} options={options} />
                </div>

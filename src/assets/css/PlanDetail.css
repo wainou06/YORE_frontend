@@ -1,3 +1,8 @@
+.plan-summary {
+   position: sticky;
+   top: 90px;
+}
+
 .carrier-selection {
    display: flex;
    gap: 20px;
