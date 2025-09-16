@@ -58,7 +58,7 @@ const Footer = () => {
                         </Link>
                      </li>
                      <li>
-                        <a href="https://open.kakao.com" className="text-muted" target="_blank" rel="noopener noreferrer">
+                        <a href="https://pf.kakao.com/_tFPkn/chat" className="text-muted" target="_blank" rel="noopener noreferrer">
                            고객센터
                         </a>
                      </li>
