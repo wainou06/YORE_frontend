@@ -154,7 +154,7 @@ const LandingPage = () => {
                <h2 className="text-center mb-5">요금제</h2>
                <div className="row justify-content-center g-4">
                   {defaultPlans.map((plan) => (
-                     <div key={plan.id} className="col-md-3">
+                     <div key={plan.id} className="col-lg-3 col-md-6 col-12">
                         <div className="plan-card" onClick={() => navigate(`/plans/${plan.id}`)}>
                            <div className="plan-card-container">
                               <div className="plan-content">
@@ -166,10 +166,13 @@ const LandingPage = () => {
                                  <div className="plan-feature">✅ 통화 {plan.voice}</div>
                                  <div className="plan-feature">✅ 문자 {plan.sms}</div>
                               </div>
-                              <div className="price-container"></div>
-                              <div className="price-original">￦{(plan.price + 1000).toLocaleString()}</div>
-                              <div className="price-current">￦{plan.price.toLocaleString()}</div>
-                              <div className="price-unit">/월</div>
+                              <div className="price-container">
+                                 <div className="price-original">￦{(plan.price + 1000).toLocaleString()}</div>
+                                 <div className='d-flex align-items-end gap-2'>
+                                    <div className="price-current">￦{plan.price.toLocaleString()}</div>
+                                    <div className="price-unit">/월</div>
+                                 </div>
+                              </div>
                            </div>
                         </div>
                      </div>
@@ -188,7 +191,7 @@ const LandingPage = () => {
                      { name: 'KT', logo: carrierKT },
                      { name: 'LG U+', logo: carrierLGU },
                   ].map((carrier, index) => (
-                     <div key={index} className="col-md-4 text-center">
+                     <div key={index} className="col-md-4 col-12 text-center g-4">
                         <div className="rounded-circle bg-sub d-inline-flex align-items-center justify-content-center" style={{ width: '200px', height: '200px' }}>
                            <div>
                               <img src={carrier.logo} alt={carrier.name} style={{ width: '120px', height: 'auto', marginBottom: '10px' }} />

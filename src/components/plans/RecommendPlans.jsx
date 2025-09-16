@@ -11,7 +11,7 @@ const RecommendPlans = ({ plans, onLike }) => {
          <h2 className="text-center mb-5">추천 요금제</h2>
          <div className="row g-4">
             {plans.map((plan) => (
-               <div key={plan.id} className="col-md-3">
+               <div key={plan.id} className="col-lg-3 col-md-6 col-12">
                   <div className="recommend-card">
                      <img className="recommend-card-image" src={`${BASE_URL}${plan.plan?.images?.[0]?.imgURL}` || `https://placehold.co/255x200`} alt={plan.plan?.name || ''} onClick={() => navigate(`/plans/${plan.plan?.id}`)} />
                      <div className="recommend-card-content">

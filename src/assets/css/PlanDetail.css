@@ -2,3 +2,16 @@
    position: sticky;
    top: 90px;
 }
+
+.badge-lg {
+   background-color: #e6007e;
+}
+.badge-skt {
+   background-color: #e3383b;
+}
+.badge-kt {
+   background-color: #1c89ed;
+}
+.badge-default {
+   background-color: #6c757d;
+}
