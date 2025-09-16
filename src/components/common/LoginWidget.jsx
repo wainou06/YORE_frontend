@@ -129,22 +129,22 @@ const LoginWidget = () => {
             <>
                {user.access === 'user' ? (
                   <>
-                     <div className="d-flex align-items-center justify-content-between mb-3">
+                     <div className="d-flex align-items-center justify-content-between mb-4">
                         <h5 className="mb-0">{user.name}님 환영합니다 🎉</h5>
                         <NotificationDropdown show={showDropdown} onClose={() => setShowDropdown(false)} onToggle={() => setShowDropdown((prev) => !prev)} notifications={notifications} unreadCount={unreadCount} />
                      </div>
-                     <div className="isLogin">
+                     <div className="isLogin mb-4">
                         <div className="link_btn_group">
-                           <Link to="myinfo/mysettings" className="link_btn">
-                              <FontAwesomeIcon icon={faUser} className="me-2" />
+                           <Link to="myinfo/" className="link_btn">
+                              <FontAwesomeIcon icon={faUser} />
                               <p>내 정보</p>
                            </Link>
                            <Link to="myinfo/plansettings" className="link_btn">
-                              <FontAwesomeIcon icon={faMobileScreenButton} className="me-2" />
+                              <FontAwesomeIcon icon={faMobileScreenButton} />
                               <p>내 요금제</p>
                            </Link>
                            <Link to="myinfo/billing" className="link_btn">
-                              <FontAwesomeIcon icon={faCalculator} className="me-2" />
+                              <FontAwesomeIcon icon={faCalculator} />
                               <p>내 청구서</p>
                            </Link>
                         </div>
@@ -158,15 +158,15 @@ const LoginWidget = () => {
                ) : (
                   <>
                      <p>기업 회원 로그인</p>
-                     <h5 className="mb-3">{user.name}님 환영합니다 🎉</h5>
-                     <div className="isLogin">
+                     <h5 className="mb-4">{user.name}님 환영합니다 🎉</h5>
+                     <div className="isLogin mb-4">
                         <div className="link_btn_group">
                            <Link to="/agency/agencySettings" className="link_btn">
-                              <FontAwesomeIcon icon={faUser} className="me-2" />
+                              <FontAwesomeIcon icon={faUser} />
                               <p>정보 관리</p>
                            </Link>
                            <Link to="/agency/agencyPlanSettings" className="link_btn ">
-                              <FontAwesomeIcon icon={faMobileScreenButton} className="me-2" />
+                              <FontAwesomeIcon icon={faMobileScreenButton} />
                               <p>요금제 관리</p>
                            </Link>
                         </div>
@@ -196,7 +196,7 @@ const LoginWidget = () => {
                      }}
                   >
                      <input type="email" name="email" required placeholder="아이디" value={email} onChange={(e) => setEmail(e.target.value)} className="login-textfield col-12 mb-4" />
-                     <input type="password" name="password" required placeholder="비밀번호" value={password} onChange={(e) => setPassword(e.target.value)} className="login-textfield col-12" />
+                     <input type="password" name="password" required placeholder="비밀번호" value={password} onChange={(e) => setPassword(e.target.value)} className="login-textfield col-12 mb-4" />
 
                      <div className="sub-func mb-4 justify-content-between align-items-center d-flex">
                         <div className="sub-func-content">
