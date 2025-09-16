@@ -1,7 +1,13 @@
 .login-textfield {
-   padding: 10px 10px;
-   border-radius: 5px;
+   padding: 6px 12px;
+   border: 1px solid #0d6efd;
+   border-radius: 6px;
+   outline: none;
    font-size: 1rem;
+}
+
+.login-textfield:focus {
+   box-shadow: 0 0 0 3px rgba(81, 168, 255, 0.2);
 }
 
 .link_btn_group {
@@ -16,18 +22,25 @@
 .link_btn {
    display: flex;
    flex-direction: column;
-   align-items: center; /* 가로 중앙 정렬 */
+   align-items: center;
    text-decoration: none;
    color: inherit;
 }
 
 .link_btn svg {
-   display: block; /* 블록으로 만들어 가운데 정렬 가능 */
-   margin-bottom: 0.25rem; /* 아이콘과 텍스트 간 간격 */
+   display: block;
+   margin-bottom: 0.25rem;
 }
 
 .link_btn p {
-   margin: 0; /* 기본 p 마진 제거 */
-   text-align: center; /* 텍스트 중앙 정렬 */
-   font-size: 0.875rem; /* 필요에 따라 조정 */
+   margin: 0;
+   text-align: center;
+   font-size: 0.875rem;
+}
+
+.link_btn:hover {
+   text-decoration: none;
+   color: #137fec;
+   transform: translateY(-2px);
+   transition: transform 0.8s, color 0.4s;
 }
