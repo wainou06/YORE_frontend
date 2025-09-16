@@ -1,10 +1,9 @@
-import { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 import Slider from 'react-slick'
-import LoginWidget from '@components/common/LoginWidget'
-import '@assets/css/PlanCard.css'
-import '@assets/css/RecommendCard.css'
+import { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { fetchSurveys } from '@/features/survey/surveySlice'
+
 import carrierSKT from '@assets/images/carrier/SK.png'
 import carrierKT from '@assets/images/carrier/kt.png'
 import carrierLGU from '@assets/images/carrier/LGU.png'
@@ -12,6 +11,11 @@ import banner1 from '@assets/images/banner/banner1.svg'
 import banner2 from '@assets/images/banner/banner2.svg'
 import banner3 from '@assets/images/banner/banner3.svg'
 import banner4 from '@assets/images/banner/banner4.svg'
+
+import '@assets/css/PlanCard.css'
+
+import LoginWidget from '@components/common/LoginWidget'
+import RecommendPlans from '@components/plans/RecommendPlans'
 
 // 기본 요금제 데이터
 const defaultPlans = [
@@ -67,17 +71,26 @@ const defaultPlans = [
 
 const LandingPage = () => {
    const { isAuthenticated } = useSelector((state) => state.auth)
+   const dispatch = useDispatch()
    const navigate = useNavigate()
    const [recommendedPlans, setRecommendedPlans] = useState([])
+   const surveys = useSelector((state) => state.survey)
 
    useEffect(() => {
-      // 좋아요 순으로 정렬된 요금제 목록 가져오기
-      const sortedPlans = [...defaultPlans]
-         .map((plan) => ({ ...plan, likes: parseInt(localStorage.getItem(`plan-likes-${plan.id}`) || '0') }))
-         .sort((a, b) => b.likes - a.likes)
-         .slice(0, 2)
-      setRecommendedPlans(sortedPlans)
-   }, [])
+      // 설문 리스트 불러오기 (최초 1회)
+      dispatch(fetchSurveys())
+   }, [dispatch])
+
+   useEffect(() => {
+      // surveys.surveys 배열에서 좋아요 순 정렬 및 추천 요금제 추출
+      if (Array.isArray(surveys.surveys) && surveys.surveys.length > 0) {
+         const sortedPlans = [...surveys.surveys]
+            .map((plan) => ({ ...plan, likes: parseInt(localStorage.getItem(`plan-likes-${plan.id}`) || '0') }))
+            .sort((a, b) => b.likes - a.likes)
+            .slice(0, 4)
+         setRecommendedPlans(sortedPlans)
+      }
+   }, [surveys.surveys])
 
    const handleLike = (planId) => {
       const currentLikes = parseInt(localStorage.getItem(`plan-likes-${planId}`) || '0')
@@ -131,32 +144,7 @@ const LandingPage = () => {
          {/* 섹션 2: 추천 요금제 (로그인 시에만 표시) */}
          {isAuthenticated && (
             <section className="common-padding">
-               <div className="container">
-                  <h2 className="text-center mb-5">추천 요금제</h2>
-                  <div className="row g-4">
-                     {recommendedPlans.map((plan) => (
-                        <div key={plan.id} className="col-md-3">
-                           <div className="recommend-card">
-                              <img className="recommend-card-image" src={`https://placehold.co/255x200`} alt={plan.name} onClick={() => navigate(`/plans/${plan.id}`)} />
-                              <div className="recommend-card-content">
-                                 <div className="recommend-card-title">{plan.name}</div>
-                                 <div className="recommend-card-description">{plan.description}</div>
-                                 <div className="recommend-card-price">￦{plan.price.toLocaleString()}</div>
-                                 <div
-                                    className="recommend-card-likes"
-                                    onClick={(e) => {
-                                       e.stopPropagation()
-                                       handleLike(plan.id)
-                                    }}
-                                 >
-                                    ♡ {plan.likes >= 1000 ? `${(plan.likes / 1000).toFixed(1)}k` : plan.likes}
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     ))}
-                  </div>
-               </div>
+               <RecommendPlans plans={recommendedPlans} onLike={handleLike} />
             </section>
          )}
 
