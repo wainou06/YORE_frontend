@@ -16,6 +16,7 @@ const UserManagement = () => {
    const [currentPage, setCurrentPage] = useState(1)
    const [totalPages, setTotalPages] = useState(1)
    const modal = useSelector((state) => state.modal)
+   const [filter, setFilter] = useState('')
 
    // 관리자 권한 체크
    useEffect(() => {
@@ -29,8 +30,8 @@ const UserManagement = () => {
          return
       }
 
-      dispatch(getUserStatusThunk(currentPage))
-   }, [currentPage, dispatch])
+      dispatch(getUserStatusThunk({ currentPage, filter }))
+   }, [currentPage, dispatch, filter])
 
    // 사용자 목록 로드
    useEffect(() => {
@@ -39,12 +40,12 @@ const UserManagement = () => {
          setTotalPages(userManagement.totalPages)
          setUsers(userManagement.data)
       }
-   }, [loading, currentPage, searchTerm])
+   }, [loading])
 
    const handleSearch = (e) => {
       e.preventDefault()
       setCurrentPage(1)
-      // fetchUsers()가 useEffect에 의해 자동으로 호출됨
+      setFilter(searchTerm)
    }
 
    const handleStatusChange = async (userId, newStatus) => {
@@ -55,8 +56,15 @@ const UserManagement = () => {
       }
    }
 
-   const onClickDetailModal = async (userId) => {
-      await dispatch(showModalThunk({ type: '' }))
+   const onClickDetailModal = async (user) => {
+      await dispatch(showModalThunk({ type: 'detail', placeholder: user }))
+   }
+
+   const onKeydownKey = (e) => {
+      if (e.key === 'Enter') {
+         handleSearch()
+         return
+      }
    }
 
    return (
@@ -74,7 +82,7 @@ const UserManagement = () => {
                         <form onSubmit={handleSearch}>
                            <div className="row g-2">
                               <div className="col-md-6">
-                                 <input type="text" className="admin-color-second form-control" placeholder="이름, 이메일, 전화번호로 검색" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+                                 <input type="text" className="admin-color-second form-control" placeholder="이름, 이메일, 전화번호로 검색" value={searchTerm} onKeyDown={onKeydownKey} onChange={(e) => setSearchTerm(e.target.value)} />
                               </div>
                               <div className="col-md-2">
                                  <button type="submit" className="btn btn-primary w-100">
@@ -105,12 +113,12 @@ const UserManagement = () => {
                               {users?.map((user) => (
                                  <tr className="admin-table-pointer" key={user.id}>
                                     <td>{user.id}</td>
-                                    <td onClick={() => onClickDetail(user.id)}>{user.name}</td>
-                                    <td onClick={() => onClickDetail(user.id)}>{user.email}</td>
-                                    <td onClick={() => onClickDetail(user.id)}>{user.phone}</td>
-                                    <td onClick={() => onClickDetail(user.id)}>{user.createdAt}</td>
-                                    <td onClick={() => onClickDetail(user.id)}>{user.orderCount}</td>
-                                    <td onClick={() => onClickDetail(user.id)}>
+                                    <td onClick={() => onClickDetailModal(user)}>{user.name}</td>
+                                    <td onClick={() => onClickDetailModal(user)}>{user.email}</td>
+                                    <td onClick={() => onClickDetailModal(user)}>{user.phone}</td>
+                                    <td onClick={() => onClickDetailModal(user)}>{user.createdAt}</td>
+                                    <td onClick={() => onClickDetailModal(user)}>{user.orderCount}</td>
+                                    <td onClick={() => onClickDetailModal(user)}>
                                        <span className={`badge bg-${user.status === 'active' ? 'success' : user.status === 'inactive' ? 'warning' : 'danger'}`}>{user.status === 'active' ? '활성' : user.status === 'inactive' ? '휴면' : '정지'}</span>
                                     </td>
                                     <td>

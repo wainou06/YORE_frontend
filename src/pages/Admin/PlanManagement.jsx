@@ -13,6 +13,7 @@ const PlanManagement = () => {
    const [selectedCarrier, setSelectedCarrier] = useState('')
    const [currentPage, setCurrentPage] = useState(1)
    const [totalPages, setTotalPages] = useState(1)
+   const [filter, setFilter] = useState('')
 
    // 관리자 권한 체크
    useEffect(() => {
@@ -24,8 +25,9 @@ const PlanManagement = () => {
          navigate('/')
          return
       }
-      dispatch(getPlansStatusThunk(currentPage))
-   }, [currentPage, dispatch])
+
+      dispatch(getPlansStatusThunk({ currentPage, filter }))
+   }, [currentPage, dispatch, filter])
 
    useEffect(() => {
       const fetchCarriers = async () => {
@@ -51,20 +53,32 @@ const PlanManagement = () => {
          setPlans(plansStatus.data)
          setTotalPages(plansStatus.totalPages)
       }
-   }, [currentPage, plansStatus])
+   }, [loading])
 
    const handleStatusChange = async (planId, newStatus) => {
       try {
-         // TODO: API 연동
-         // await fetch(`/api/admin/plans/${planId}/status`, {
-         //   method: 'PUT',
-         //   body: JSON.stringify({ status: newStatus })
-         // });
-
-         // 임시 상태 업데이트
          setPlans(plans.map((plan) => (plan.id === planId ? { ...plan, status: newStatus } : plan)))
       } catch (error) {
          console.error('요금제 상태 변경 실패:', error)
+      }
+   }
+
+   const handleSearch = (e) => {
+      setSelectedCarrier(e)
+      setCurrentPage(1)
+
+      if (!e) setFilter('')
+
+      switch (e) {
+         case '3G':
+            setFilter(2)
+            break
+         case 'LTE':
+            setFilter(3)
+            break
+         case '5G':
+            setFilter(6)
+            break
       }
    }
 
@@ -84,7 +98,7 @@ const PlanManagement = () => {
                <div className="card-body">
                   <div className="row g-2">
                      <div className="col-md-3">
-                        <select className="admin-color-second admin-color-select form-select" value={selectedCarrier} onChange={(e) => setSelectedCarrier(e.target.value)}>
+                        <select className="admin-color-second admin-color-select form-select" value={selectedCarrier} onChange={(e) => handleSearch(e.target.value)}>
                            <option value="">모든 서비스</option>
                            {carriers.map((carrier) => (
                               <option key={carrier.id} value={carrier.id}>
