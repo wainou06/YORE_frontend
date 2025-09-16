@@ -19,6 +19,7 @@ const LoginWidget = () => {
 
    const notifications = useSelector((state) => state.notification.notifications)
    const unreadCount = notifications.filter((n) => !n.isRead).length
+   console.log('notifications:', notifications)
 
    const [showDropdown, setShowDropdown] = useState(false)
    const [loginType, setLoginType] = useState('personal')
@@ -158,8 +159,13 @@ const LoginWidget = () => {
                ) : (
                   <>
                      <p>기업 회원 로그인</p>
-                     <h5 className="mb-4">{user.name}님 환영합니다 🎉</h5>
+                     <div className="d-flex align-items-center justify-content-between mb-3">
+                        <h5 className="mb-0">{user.name}님 환영합니다 🎉</h5>
+                        <NotificationDropdown show={showDropdown} onClose={() => setShowDropdown(false)} onToggle={() => setShowDropdown((prev) => !prev)} notifications={notifications} unreadCount={unreadCount} />
+                     </div>
+ 
                      <div className="isLogin mb-4">
+
                         <div className="link_btn_group">
                            <Link to="/agency/agencySettings" className="link_btn">
                               <FontAwesomeIcon icon={faUser} />
