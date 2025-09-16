@@ -234,7 +234,12 @@ const PlanDetailPage = () => {
                            </select>
                         </div>
                      )}
-                     <div className="badge mb-3" style={{ backgroundColor: '#6c757d' }}>
+                     <div
+                        className="badge mb-3"
+                        style={{
+                           backgroundColor: displayPlan.agency?.agencyName === 'LG U+' ? '#e6007e' : displayPlan.agency?.agencyName === 'SKT' ? '#e3383b' : displayPlan.agency?.agencyName === 'KT' ? '#1c89ed' : '#6c757d',
+                        }}
+                     >
                         {displayPlan.agency?.agencyName || displayPlan.agencyId}
                      </div>
                      <h2 className="card-title mb-4">{displayPlan.name}</h2>
