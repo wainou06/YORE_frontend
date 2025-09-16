@@ -21,45 +21,49 @@ const Myinfo = () => {
    }, [])
 
    return (
-      <div className="container py-5 content_box">
+      <div className="container content_box py-5">
          <div className="row justify-content-center">
             <div className="col-md-10">
-               <div className="col-12 mb-4">
-                  <div className="text">
-                     <h2>내 정보 관리</h2>
-                     <p>이름: {userName}</p>
-                  </div>
-                  <button onClick={() => navigate('mysettings')}>개인정보 수정하기</button>
-               </div>
-               <div className="col-12 mb-4">
-                  <div className="text">
-                     <h2>내 요금제</h2>
-                     <p>{planName}</p>
-                  </div>
-                  <button onClick={() => navigate('plansettings')}>요금제 관리</button>
-               </div>
-               <div className="col-12 mb-4">
-                  <div className="text">
-                     <h2>나의 사용량</h2>
-                     <div className="my_data">
-                        <p>데이터</p>
-                        <p>통화량</p>
+               <div className="row g-4">
+                  {/* 왼쪽 텍스트 영역 */}
+                  <div className="col-12 col-md-8">
+                     <div className="col-12 mb-4">
+                        <div className="text">
+                           <h2>내 정보 관리</h2>
+                           <p>이름: {userName}</p>
+                        </div>
+                        <button onClick={() => navigate('mysettings')}>개인정보 수정하기</button>
+                     </div>
+
+                     <div className="col-12 mb-4">
+                        <div className="text">
+                           <h2>내 요금제</h2>
+                           <p>{planName}</p>
+                        </div>
+                        <button onClick={() => navigate('plansettings')}>요금제 관리</button>
+                     </div>
+
+                     <div className="col-12 mb-4">
+                        <div className="text">
+                           <h2>요금 청구서</h2>
+                           <p>날짜와 금액</p>
+                        </div>
+                        <button onClick={() => navigate('billing')}>바로가기</button>
+                     </div>
+
+                     <div className="col-12 mb-4">
+                        <div className="text">
+                           <h2>고객센터</h2>
+                           <p>문의하기</p>
+                        </div>
+                        <button onClick={() => navigate('')}>옵챗링크</button>
                      </div>
                   </div>
-               </div>
-               <div className="col-12 mb-4">
-                  <div className="text">
-                     <h2>요금 청구서</h2>
-                     <p>날짜와 금액</p>
+
+                  {/* 오른쪽 이미지 영역 */}
+                  <div className="col-12 col-md-4 d-none d-md-flex align-items-start justify-content-center">
+                     <img src="/src/assets/images/myInfo.png" alt="세팅 이미지" className="img-fluid responsive-settings" />
                   </div>
-                  <button onClick={() => navigate('billing')}>바로가기</button>
-               </div>
-               <div className="col-12 mb-4">
-                  <div className="text">
-                     <h2>고객센터</h2>
-                     <p>문의하기</p>
-                  </div>
-                  <button onClick={() => navigate('')}>옵챗링크</button>
                </div>
             </div>
          </div>

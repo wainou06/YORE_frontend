@@ -1,85 +1,17 @@
-.carrier-selection {
-   display: flex;
-   gap: 20px;
-   margin-bottom: 30px;
+.plan-summary {
+   position: sticky;
+   top: 90px;
 }
 
-.carrier-option {
-   flex: 1;
-   padding: 20px;
-   border-radius: 10px;
-   cursor: pointer;
-   transition: all 0.3s ease;
-   text-align: center;
-}
-
-.carrier-option img {
-   width: 120px;
-   height: auto;
-   margin-bottom: 15px;
-   transition: transform 0.3s ease;
-}
-
-.carrier-option:hover img {
-   transform: scale(1.1);
-}
-
-.carrier-option.selected {
-   transform: translateY(-5px);
-   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
-
-.carrier-name {
-   font-size: 18px;
-   font-weight: 500;
-   margin-top: 10px;
-}
-
-.carrier-benefits {
-   margin-top: 20px;
-   padding: 20px;
-   border-radius: 10px;
-}
-
-.benefit-item {
-   display: flex;
-   align-items: center;
-   gap: 10px;
-   margin-bottom: 10px;
-   color: #666;
-}
-
-.benefit-item i {
-   font-size: 20px;
-}
-
-/* 통신사별 스타일 */
-.carrier-skt {
-   border: 2px solid #e3383b;
-   background-color: #fff5f5;
-}
-
-.carrier-skt.selected {
-   background-color: #e3383b;
-   color: white;
-}
-
-.carrier-kt {
-   border: 2px solid #1c89ed;
-   background-color: #f5f9ff;
-}
-
-.carrier-kt.selected {
-   background-color: #1c89ed;
-   color: white;
-}
-
-.carrier-lgu {
-   border: 2px solid #e6007e;
-   background-color: #fff5fa;
-}
-
-.carrier-lgu.selected {
+.badge-lg {
    background-color: #e6007e;
-   color: white;
+}
+.badge-skt {
+   background-color: #e3383b;
+}
+.badge-kt {
+   background-color: #1c89ed;
+}
+.badge-default {
+   background-color: #6c757d;
 }

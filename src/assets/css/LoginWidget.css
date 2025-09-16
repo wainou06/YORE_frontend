@@ -1,7 +1,13 @@
 .login-textfield {
-   padding: 10px 10px;
-   border-radius: 5px;
+   padding: 6px 12px;
+   border: 1px solid #0d6efd;
+   border-radius: 6px;
+   outline: none;
    font-size: 1rem;
+}
+
+.login-textfield:focus {
+   box-shadow: 0 0 0 3px rgba(81, 168, 255, 0.2);
 }
 
 .link_btn_group {
@@ -11,4 +17,30 @@
 
 .d-grid {
    margin-top: 20px;
+}
+
+.link_btn {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   text-decoration: none;
+   color: inherit;
+}
+
+.link_btn svg {
+   display: block;
+   margin-bottom: 0.25rem;
+}
+
+.link_btn p {
+   margin: 0;
+   text-align: center;
+   font-size: 0.875rem;
+}
+
+.link_btn:hover {
+   text-decoration: none;
+   color: #137fec;
+   transform: translateY(-2px);
+   transition: transform 0.8s, color 0.4s;
 }

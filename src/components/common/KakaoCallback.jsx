@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { logout } from '@/features/auth/authSlice'
+import { logout, getProfile } from '@/features/auth/authSlice'
+import { fetchNotifications } from '@/features/notification/notificationSlice'
 
 const KakaoCallback = () => {
    const navigate = useNavigate()
@@ -34,7 +35,11 @@ const KakaoCallback = () => {
             sessionStorage.setItem('userName', decodeURIComponent(name))
             if (refreshToken) sessionStorage.setItem('refreshToken', refreshToken)
          }
-         navigate('/')
+         // 프로필 및 알림 동기화
+         dispatch(getProfile()).then(() => {
+            dispatch(fetchNotifications())
+            navigate('/')
+         })
       } else {
          localStorage.removeItem('token')
          localStorage.removeItem('refreshToken')

@@ -16,10 +16,10 @@ const LoginWidget = () => {
    const isAuthenticated = useSelector(selectIsAuthenticated)
    const loading = useSelector(selectAuthLoading)
    const error = useSelector(selectAuthError)
-   const userType = useSelector(selectUserType)
 
    const notifications = useSelector((state) => state.notification.notifications)
    const unreadCount = notifications.filter((n) => !n.isRead).length
+   console.log('notifications:', notifications)
 
    const [showDropdown, setShowDropdown] = useState(false)
    const [loginType, setLoginType] = useState('personal')
@@ -27,6 +27,7 @@ const LoginWidget = () => {
    const [password, setPassword] = useState('')
    const [rememberMe, setRememberMe] = useState(false)
 
+   // 아이디 저장 초기화
    useEffect(() => {
       const savedEmail = localStorage.getItem('savedEmail')
       if (savedEmail) {
@@ -35,11 +36,13 @@ const LoginWidget = () => {
       }
    }, [])
 
+   // 토큰 있으면 프로필 조회
    useEffect(() => {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token')
       if (token && token.trim() !== '') dispatch(getProfile())
    }, [dispatch])
 
+   // 토큰 없는데 유저가 남아있으면 초기화
    useEffect(() => {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token')
       if ((!token || token.trim() === '') && (user || isAuthenticated)) {
@@ -127,22 +130,22 @@ const LoginWidget = () => {
             <>
                {user.access === 'user' ? (
                   <>
-                     <div className="d-flex align-items-center justify-content-between mb-3">
+                     <div className="d-flex align-items-center justify-content-between mb-4">
                         <h5 className="mb-0">{user.name}님 환영합니다 🎉</h5>
                         <NotificationDropdown show={showDropdown} onClose={() => setShowDropdown(false)} onToggle={() => setShowDropdown((prev) => !prev)} notifications={notifications} unreadCount={unreadCount} />
                      </div>
-                     <div className="isLogin">
+                     <div className="isLogin mb-4">
                         <div className="link_btn_group">
-                           <Link to="myinfo/mysettings" className="link_btn">
-                              <FontAwesomeIcon icon={faUser} className="me-2" />
+                           <Link to="myinfo/" className="link_btn">
+                              <FontAwesomeIcon icon={faUser} />
                               <p>내 정보</p>
                            </Link>
-                           <Link to="myinfo/plansettings" className="link_btn ">
-                              <FontAwesomeIcon icon={faMobileScreenButton} className="me-2" />
+                           <Link to="myinfo/plansettings" className="link_btn">
+                              <FontAwesomeIcon icon={faMobileScreenButton} />
                               <p>내 요금제</p>
                            </Link>
-                           <Link to="myinfo/billing" className="link_btn ">
-                              <FontAwesomeIcon icon={faCalculator} className="me-2" />
+                           <Link to="myinfo/billing" className="link_btn">
+                              <FontAwesomeIcon icon={faCalculator} />
                               <p>내 청구서</p>
                            </Link>
                         </div>
@@ -156,15 +159,20 @@ const LoginWidget = () => {
                ) : (
                   <>
                      <p>기업 회원 로그인</p>
-                     <h5 className="mb-3">{user.name}님 환영합니다 🎉</h5>
-                     <div className="isLogin">
+                     <div className="d-flex align-items-center justify-content-between mb-3">
+                        <h5 className="mb-0">{user.name}님 환영합니다 🎉</h5>
+                        <NotificationDropdown show={showDropdown} onClose={() => setShowDropdown(false)} onToggle={() => setShowDropdown((prev) => !prev)} notifications={notifications} unreadCount={unreadCount} />
+                     </div>
+ 
+                     <div className="isLogin mb-4">
+
                         <div className="link_btn_group">
                            <Link to="/agency/agencySettings" className="link_btn">
-                              <FontAwesomeIcon icon={faUser} className="me-2" />
+                              <FontAwesomeIcon icon={faUser} />
                               <p>정보 관리</p>
                            </Link>
                            <Link to="/agency/agencyPlanSettings" className="link_btn ">
-                              <FontAwesomeIcon icon={faMobileScreenButton} className="me-2" />
+                              <FontAwesomeIcon icon={faMobileScreenButton} />
                               <p>요금제 관리</p>
                            </Link>
                         </div>
@@ -186,29 +194,36 @@ const LoginWidget = () => {
                   </button>
                </div>
 
-               <div className="text-group mb-4">
-                  <input type="email" name="email" required placeholder="아이디" value={email} onChange={(e) => setEmail(e.target.value)} className="login-textfield col-12 mb-4" />
-                  <input type="password" name="password" required placeholder="비밀번호" value={password} onChange={(e) => setPassword(e.target.value)} className="login-textfield col-12 " />
-               </div>
+               <div className="text-group">
+                  <form
+                     onSubmit={(e) => {
+                        e.preventDefault()
+                        handleLogin()
+                     }}
+                  >
+                     <input type="email" name="email" required placeholder="아이디" value={email} onChange={(e) => setEmail(e.target.value)} className="login-textfield col-12 mb-4" />
+                     <input type="password" name="password" required placeholder="비밀번호" value={password} onChange={(e) => setPassword(e.target.value)} className="login-textfield col-12 mb-4" />
 
-               <div className="sub-func mb-4 justify-content-between align-items-center d-flex">
-                  <div className="sub-func-content">
-                     <input type="checkbox" id="rememberMe" className="me-2" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
-                     <label htmlFor="rememberMe" className="me-3">
-                        아이디 저장
-                     </label>
-                  </div>
-                  <div className="sub-func-content">
-                     <button className="btn btn-link p-0 m-0 align-baseline" onClick={handleForgotPassword}>
-                        비밀번호 찾기
-                     </button>
-                  </div>
-               </div>
+                     <div className="sub-func mb-4 justify-content-between align-items-center d-flex">
+                        <div className="sub-func-content">
+                           <input type="checkbox" id="rememberMe" className="me-2" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
+                           <label htmlFor="rememberMe" className="me-3">
+                              아이디 저장
+                           </label>
+                        </div>
+                        <div className="sub-func-content">
+                           <button className="btn btn-link p-0 m-0 align-baseline" type="button" onClick={handleForgotPassword}>
+                              비밀번호 찾기
+                           </button>
+                        </div>
+                     </div>
 
-               <div className="login-btn">
-                  <button className="btn btn-primary w-100" onClick={handleLogin} disabled={loading}>
-                     {loading ? '로그인 중...' : '로그인'}
-                  </button>
+                     <div className="login-btn">
+                        <button className="btn btn-primary w-100" type="submit" disabled={loading}>
+                           {loading ? '로그인 중...' : '로그인'}
+                        </button>
+                     </div>
+                  </form>
                </div>
 
                {error && error !== '프로필 조회 실패' && (

@@ -104,56 +104,47 @@ const MySettings = () => {
    }
 
    return (
-      <div className="container content_box py-4">
-         <div className="row g-4">
-            {/* 비밀번호 */}
-            <div className="col-12">
-               <div className="card p-3 shadow-sm">
-                  <h5 className="card-title">비밀번호 변경</h5>
-                  <input type="password" placeholder="현재 비밀번호" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} className="form-control mb-2" />
-                  <input type="password" placeholder="새 비밀번호" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className="form-control mb-2" />
-                  <input type="password" placeholder="비밀번호 확인" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="form-control mb-2" />
-                  <button className="btn btn-primary w-100" onClick={handleChangePassword}>
-                     변경
-                  </button>
-               </div>
-            </div>
+      <div className="container content_box py-5">
+         <div className="row justify-content-center">
+            <div className="col-md-10">
+               <div className="row g-4">
+                  <div className="col-12 col-md-8">
+                     <div className="card p-3 shadow-none border-0 mt-3">
+                        <h5 className="card-title mb-4">비밀번호 변경</h5>
+                        <input type="password" placeholder="현재 비밀번호" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} className="form-control mb-2" />
+                        <input type="password" placeholder="새 비밀번호" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className="form-control mb-2" />
+                        <input type="password" placeholder="비밀번호 확인" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="form-control mb-2" />
+                        <div className="d-flex justify-content-end">
+                           <button className="btn custom-btn" onClick={handleChangePassword}>
+                              변경
+                           </button>
+                        </div>
+                     </div>
 
-            {/* 이메일 */}
-            <div className="col-12">
-               <div className="card p-3 shadow-sm">
-                  <h5 className="card-title">이메일 변경</h5>
-                  <input type="email" placeholder={email || '이메일 입력'} value={newEmail} onChange={(e) => setNewEmail(e.target.value)} className="form-control mb-2" />
-                  <button className="btn btn-primary w-100" onClick={handleChangeEmail}>
-                     변경
-                  </button>
-               </div>
-            </div>
+                     <div className="card p-3 shadow-none border-0 mt-3">
+                        <h5 className="card-title mb-4">이메일 변경</h5>
+                        <input type="email" placeholder={email || '이메일 입력'} value={newEmail} onChange={(e) => setNewEmail(e.target.value)} className="form-control mb-2" />
+                        <div className="d-flex justify-content-end">
+                           <button className="btn custom-btn" onClick={handleChangeEmail}>
+                              변경
+                           </button>
+                        </div>
+                     </div>
 
-            {/* 생일 */}
-            <div className="col-12">
-               <div className="card p-3 shadow-sm">
-                  <h5 className="card-title">생일 입력</h5>
-                  <input type="date" value={birth} onChange={(e) => setBirth(e.target.value)} className="form-control mb-2" />
-                  <button className="btn btn-primary w-100" onClick={handleChangeBirth}>
-                     저장
-                  </button>
-               </div>
-            </div>
+                     <div className="card p-3 shadow-none border-0 mt-3">
+                        <h5 className="card-title">생일 입력</h5>
+                        <input type="date" value={birth} onChange={(e) => setBirth(e.target.value)} className="form-control mb-2" />
+                        <div className="d-flex justify-content-end">
+                           <button className="btn custom-btn" onClick={handleChangeBirth}>
+                              저장
+                           </button>
+                        </div>
+                     </div>
+                  </div>
 
-            {/* 추가 정보 1 */}
-            <div className="col-12">
-               <div className="card p-3 shadow-sm">
-                  <h5 className="card-title">추가 정보 1</h5>
-                  <p className="card-text">더미 데이터</p>
-               </div>
-            </div>
-
-            {/* 추가 정보 2 */}
-            <div className="col-12">
-               <div className="card p-3 shadow-sm">
-                  <h5 className="card-title">추가 정보 2</h5>
-                  <p className="card-text">더미 데이터</p>
+                  <div className="col-12 col-md-4 d-none d-md-flex align-items-start justify-content-center">
+                     <img src="/src/assets/images/settings.svg" alt="세팅 이미지" className="img-fluid responsive-settings" />
+                  </div>
                </div>
             </div>
          </div>
