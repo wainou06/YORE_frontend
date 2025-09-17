@@ -86,7 +86,12 @@ const PlanManagement = () => {
       <div className="admin-main-content">
          <div className="container py-5">
             <div className="page-title">
-               <h2 className="mb-4">요금제 관리</h2>
+               <div className="d-flex justify-content-between align-items-center mb-4">
+                  <h2>요금제 관리</h2>
+                  <button className="btn btn-primary" onClick={() => navigate('/admin/plans/create')}>
+                     새 요금제 등록
+                  </button>
+               </div>
             </div>
             {/* 필터 */}
             <div className="admin-color card shadow-sm mb-4">
