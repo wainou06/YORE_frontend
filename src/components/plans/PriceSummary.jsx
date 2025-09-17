@@ -5,6 +5,8 @@ import { createUserPlan } from '@/features/userPlans/userPlanSlice'
 
 import { useRef, useEffect } from 'react'
 
+import { showModalThunk } from '@/features/modal/modalSlice'
+
 const PriceSummary = ({ plan: propPlan, options }) => {
    const dispatch = useDispatch()
    // plan을 전역에서 가져오되, props(plan)가 있으면 우선 사용
@@ -45,40 +47,46 @@ const PriceSummary = ({ plan: propPlan, options }) => {
       setProcessing(true)
       setErrorMsg('')
       setSuccess(false)
-      try {
-         // total_fee, monthly_fee 계산 (total_fee는 totalPrice로)
-         const total_fee = totalPrice
-         let monthly_fee = totalPrice
-         if (options.contract === 12 || options.contract === 24) {
-            monthly_fee = Math.ceil(total_fee / Number(options.contract))
-         }
-         // 1. userPlan 생성 (항상 최신 userId, planId 사용)
-         const userPlanRes = await dispatch(
-            createUserPlan({
+      const result = await dispatch(showModalThunk({ type: 'confirm', placeholder: '선택하신 요금제로 가입하고 결제하시겠습니까?' }))
+      if (result.payload) {
+         try {
+            // total_fee, monthly_fee 계산 (total_fee는 totalPrice로)
+            const total_fee = totalPrice
+            let monthly_fee = totalPrice
+            if (options.contract === 12 || options.contract === 24) {
+               monthly_fee = Math.ceil(total_fee / Number(options.contract))
+            }
+            // 1. userPlan 생성 (항상 최신 userId, planId 사용)
+            const userPlanRes = await dispatch(
+               createUserPlan({
+                  userId: userIdRef.current,
+                  planId: planIdRef.current,
+                  total_fee,
+                  monthly_fee,
+               })
+            ).unwrap()
+            const userPlanId = userPlanRes.data?.id || userPlanRes.id
+            // 2. 결제 생성
+            const transactionPayload = {
                userId: userIdRef.current,
-               planId: planIdRef.current,
-               total_fee,
-               monthly_fee,
-            })
-         ).unwrap()
-         const userPlanId = userPlanRes.data?.id || userPlanRes.id
-         // 2. 결제 생성
-         const transactionPayload = {
-            userId: userIdRef.current,
-            userPlanId,
-            amount: totalPrice,
-            paymentMethod,
-            date: new Date().toISOString(),
-            isInstallment: paymentMethod === 'card' ? installment : false,
-            installmentMonths: paymentMethod === 'card' && installment ? Number(installmentMonths) : null,
-            installmentAmount: paymentMethod === 'card' && installment ? Math.ceil(totalPrice / Number(installmentMonths)) : null,
+               userPlanId,
+               amount: totalPrice,
+               paymentMethod,
+               date: new Date().toISOString(),
+               isInstallment: paymentMethod === 'card' ? installment : false,
+               installmentMonths: paymentMethod === 'card' && installment ? Number(installmentMonths) : null,
+               installmentAmount: paymentMethod === 'card' && installment ? Math.ceil(totalPrice / Number(installmentMonths)) : null,
+            }
+            console.log('결제 요청 payload', transactionPayload)
+            await dispatch(createTransaction(transactionPayload)).unwrap()
+            setSuccess(true)
+         } catch (err) {
+            setErrorMsg(typeof err === 'string' ? err : err?.message || '가입/결제 실패')
+         } finally {
+            setProcessing(false)
          }
-         console.log('결제 요청 payload', transactionPayload)
-         await dispatch(createTransaction(transactionPayload)).unwrap()
-         setSuccess(true)
-      } catch (err) {
-         setErrorMsg(typeof err === 'string' ? err : err?.message || '가입/결제 실패')
-      } finally {
+      } else {
+         // 취소 시에도 바로 처리 상태 해제
          setProcessing(false)
       }
    }
