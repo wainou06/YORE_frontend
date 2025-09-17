@@ -46,6 +46,26 @@ export const getOrdersStatusThunk = createAsyncThunk('analytics/getOrdersStatus'
    }
 })
 
+export const getUserDetailThunk = createAsyncThunk('analytics/getUserDetail', async (id, { rejectWidthValue }) => {
+   try {
+      const response = await analyticsAPI.getUserDetail(id)
+      return response.data
+   } catch (error) {
+      return rejectWidthValue(error.response?.data?.message)
+   }
+})
+
+export const putPlanStatusThunk = createAsyncThunk('analytics/putPlanStatus', async (data, { rejectWidthValue }) => {
+   try {
+      const id = data.planId
+      const status = data.newStatus
+      const response = await analyticsAPI.putPlanStatus({ id, status })
+      return response.data
+   } catch (error) {
+      return rejectWidthValue(error.response?.data?.message)
+   }
+})
+
 export const analyticsSlice = createSlice({
    name: 'analytics',
    initialState: {
@@ -55,6 +75,8 @@ export const analyticsSlice = createSlice({
       userManagement: {},
       plansStatus: {},
       ordersStatus: {},
+      userDetail: {},
+      planDetail: {},
    },
    reducers: {
       clearAnalyticsError: (state) => {
@@ -108,6 +130,30 @@ export const analyticsSlice = createSlice({
             state.ordersStatus = action.payload
          })
          .addCase(getOrdersStatusThunk.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload
+         })
+         .addCase(getUserDetailThunk.pending, (state) => {
+            state.loading = true
+            state.error = null
+         })
+         .addCase(getUserDetailThunk.fulfilled, (state, action) => {
+            state.loading = false
+            state.userDetail = action.payload
+         })
+         .addCase(getUserDetailThunk.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload
+         })
+         .addCase(putPlanStatusThunk.pending, (state) => {
+            state.loading = true
+            state.error = null
+         })
+         .addCase(putPlanStatusThunk.fulfilled, (state, action) => {
+            state.loading = false
+            state.planDetail = action.payload
+         })
+         .addCase(putPlanStatusThunk.rejected, (state, action) => {
             state.loading = false
             state.error = action.payload
          })
