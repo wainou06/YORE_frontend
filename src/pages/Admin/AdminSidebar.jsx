@@ -2,12 +2,19 @@ import { faHome, faUsers, faCreditCard, faShoppingCart, faHandshake, faQuestionC
 import { useNavigate, Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import NotificationDropdown from '@/components/common/NotificationDropdown'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchNotifications } from '@features/notification/notificationSlice'
 
 export const AdminSidebar = () => {
    let localdark = localStorage.getItem('theme')
    if (!localdark) localdark = 'light'
    const [darkMode, setDarkMode] = useState(localdark)
    const [currentPage, setCurrentPage] = useState(0)
+   const [showDropdown, setShowDropdown] = useState(false)
+   const notifications = useSelector((state) => state.notification.notifications)
+   const unreadCount = notifications.filter((n) => !n.isRead).length
+   const dispatch = useDispatch()
 
    useEffect(() => {
       const pathname = window.location.pathname
@@ -26,15 +33,17 @@ export const AdminSidebar = () => {
             setCurrentPage(3)
             break
       }
+      dispatch(fetchNotifications())
    }, [])
 
    return (
       <div className="admin-sidebar">
          <div className="sidebar-content">
-            <div className="sidebar-header">
+            <div className="sidebar-header d-flex justify-content-between">
                <Link to="/admin" onClick={() => setCurrentPage(0)} className="logo">
                   YORE
                </Link>
+               <NotificationDropdown show={showDropdown} onClose={() => setShowDropdown(false)} onToggle={() => setShowDropdown((prev) => !prev)} notifications={notifications} unreadCount={unreadCount} />
             </div>
             <nav className="sidebar-menu">
                {currentPage === 0 ? (
