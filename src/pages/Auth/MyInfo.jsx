@@ -1,22 +1,26 @@
 import { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { getMyUserPlanBill } from '@/features/userPlans/userPlanSlice'
 import '@assets/css/MyInfo.css'
 
 const Myinfo = () => {
+   const dispatch = useDispatch()
    const navigate = useNavigate()
+   const { userPlanBill } = useSelector((state) => state.userPlans)
    const [userName, setUserName] = useState('')
-   const [planName, setPlanName] = useState('사용 중인 요금제가 없습니다.')
+   const planName = userPlanBill?.planName || ''
+   const transaction = userPlanBill?.transaction
+   const monthlyFee = transaction?.installmentAmount || transaction?.amount || ''
+
+   useEffect(() => {
+      dispatch(getMyUserPlanBill())
+   }, [dispatch])
 
    useEffect(() => {
       const storedName = localStorage.getItem('userName')
       if (storedName) {
          setUserName(storedName)
-      }
-
-      // 필요하면 요금제 이름도 localStorage에서 가져오기
-      const storedPlan = localStorage.getItem('userPlan')
-      if (storedPlan) {
-         setPlanName(storedPlan)
       }
    }, [])
 
@@ -38,15 +42,16 @@ const Myinfo = () => {
                      <div className="col-12 mb-4">
                         <div className="text">
                            <h2>내 요금제</h2>
-                           <p>{planName}</p>
+                           <p>요금제: {planName}</p>
                         </div>
+
                         <button onClick={() => navigate('plansettings')}>요금제 관리</button>
                      </div>
 
                      <div className="col-12 mb-4">
                         <div className="text">
                            <h2>요금 청구서</h2>
-                           <p>날짜와 금액</p>
+                           <p>월 요금: {monthlyFee ? `${monthlyFee.toLocaleString()} 원` : '불러오는 중...'}</p>
                         </div>
                         <button onClick={() => navigate('billing')}>청구서 보기</button>
                      </div>
