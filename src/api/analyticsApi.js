@@ -3,9 +3,9 @@ import api from './adminAxiosApi'
 export const analyticsAPI = {
    //홈 통계
    getHomeStatus: () => api.get('/analytics/getHomeStatus'),
-   getUserStatus: (page) => api.get(`/analytics/getUserStatus?page=${page}`),
-   getPlansStatus: (page) => api.get(`/analytics/getPlansStatus?page=${page}`),
-   getOrdersStatus: (page) => api.get(`/analytics/getOrdersStatus?page=${page}`),
+   getUserStatus: ({ page, filter }) => api.get(`/analytics/getUserStatus?page=${page}&filter=${filter}`),
+   getPlansStatus: ({ page, filter }) => api.get(`/analytics/getPlansStatus?page=${page}&filter=${filter}`),
+   getOrdersStatus: ({ page, filterName, filterStatus }) => api.get(`/analytics/getOrdersStatus?page=${page}&filterName=${filterName}&filterStatus=${filterStatus}`),
 
    // 전체 통계
    getServiceStats: () => api.get('/analytics'),

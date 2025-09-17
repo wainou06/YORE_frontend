@@ -72,17 +72,14 @@ const AdminDashboard = () => {
                   <div className="stat-card">
                      <h3>총 수익</h3>
                      <div className="stat-value">₩{(stats.totalRevenue ?? 0).toLocaleString()}</div>
-                     <div className="stat-change positive">+5%</div>
                   </div>
                   <div className="stat-card">
                      <h3>신규 가입자(하루)</h3>
                      <div className="stat-value">{(stats.newUsers ?? 0).toLocaleString()}</div>
-                     <div className="stat-change positive">+15%</div>
                   </div>
                   <div className="stat-card">
                      <h3>평균 결제 금액</h3>
                      <div className="stat-value">₩{(stats.averageOrder ?? 0).toLocaleString()}</div>
-                     <div className="stat-change negative">-2%</div>
                   </div>
                </div>
                <section className="recent-section">

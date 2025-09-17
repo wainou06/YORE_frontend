@@ -1,7 +1,7 @@
 import '../../../assets/css/modal.css'
 
 import { closeModal, getInput, showModalThunk } from '@/features/modal/modalSlice'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { registerAdmin } from '@/features/admin/adminSlice'
 import { useState, useId } from 'react'
 
@@ -85,6 +85,19 @@ export const ModalManagerLoginComponent = () => {
 
 export const ModalAdminUserDetailComponent = () => {
    const dispatch = useDispatch()
+   const modal = useSelector((state) => state.modal)
+
+   console.log(modal.placeholder)
+
+   const onClickConfirm = () => {
+      dispatch(getInput(null))
+      dispatch(closeModal())
+   }
+
+   const onClickClose = () => {
+      dispatch(getInput(null))
+      dispatch(closeModal())
+   }
 
    return (
       <div className="overlay modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog" aria-labelledby="modalTitleId" aria-modal="true">
@@ -92,30 +105,16 @@ export const ModalAdminUserDetailComponent = () => {
             <div className="modal-content">
                <div className="modal-header">
                   <h5 className="modal-title" id="modalTitleId">
-                     매니저 로그인 화면입니다.
+                     유저 자세히 보기입니다.
                   </h5>
                   <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={onClickClose} />
                </div>
                <div className="modal-body text-center">
                   <ul className="list-unstyled">
-                     <li className="mt-3">
-                        <input id={`${idPrefix}-modalAdminEmail`} onChange={(e) => setId(e.target.value)} value={email} placeholder="이메일을 입력해주세요"></input>
-                     </li>
-                     <li className="mt-3">
-                        <input id={`${idPrefix}-modalAdminPassword`} onKeyDown={(e) => onKeydownKey(e)} type="password" onChange={(e) => setPassword(e.target.value)} value={password} placeholder="비밀번호를 입력해주세요"></input>
-                     </li>
-                     <li className="mt-3 d-flex align-items-center justify-content-center">
-                        <input type="checkbox" id={`${idPrefix}-modalAdminRememberMeCheckbox`} className="me-2" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
-                        <label htmlFor={`${idPrefix}-modalAdminRememberMeCheckbox`} className="mb-0" style={{ fontSize: '0.95em', cursor: 'pointer' }}>
-                           로그인 유지
-                        </label>
-                     </li>
+                     <li className="mt-3">{modal.placeholder.name}</li>
                   </ul>
                </div>
                <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={onClickClose}>
-                     취소
-                  </button>
                   <button type="button" className="btn btn-primary" onClick={onClickConfirm}>
                      확인
                   </button>

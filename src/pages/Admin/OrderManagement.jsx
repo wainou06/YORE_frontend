@@ -14,6 +14,8 @@ const OrderManagement = () => {
    const [totalPages, setTotalPages] = useState(1)
    const { isAuthenticated } = useSelector((state) => state.admin)
    const { loading, ordersStatus } = useSelector((state) => state.analytics)
+   const [filterName, setFilterName] = useState('')
+   const [filterStatus, setFilterStatus] = useState('')
 
    // 관리자 권한 체크
    useEffect(() => {
@@ -27,8 +29,8 @@ const OrderManagement = () => {
          return
       }
 
-      dispatch(getOrdersStatusThunk(currentPage))
-   }, [currentPage, dispatch])
+      dispatch(getOrdersStatusThunk({ currentPage, filterName, filterStatus }))
+   }, [currentPage, dispatch, filterName, filterStatus])
 
    // 주문 목록 로드
    useEffect(() => {
@@ -37,136 +39,19 @@ const OrderManagement = () => {
          setOrders(ordersStatus.data)
          setTotalPages(ordersStatus.totalPages)
       }
-      const fetchOrders = async () => {
-         try {
-            // TODO: API 연동
-            // const response = await fetch(
-            //   `/api/admin/orders?page=${currentPage}&search=${searchTerm}&status=${statusFilter}`
-            // );
-            // const data = await response.json();
-            // 테스트용 주문 데이터
-            // const mockOrders = [
-            //    {
-            //       id: 1,
-            //       customerName: '홍길동',
-            //       customerEmail: 'hong@example.com',
-            //       customerPhone: '010-1234-5678',
-            //       planName: 'SKT 5G 프리미엄',
-            //       planCarrier: 'SKT',
-            //       originalPrice: 85000,
-            //       amount: 63750,
-            //       discountRate: 25,
-            //       paymentMethod: 'card',
-            //       cardCompany: '삼성카드',
-            //       cardNumber: '5412-****-****-1234',
-            //       status: 'completed',
-            //       orderDate: '2025-09-05 14:30:00',
-            //       completedDate: '2025-09-05 14:31:23',
-            //       usePoint: 0,
-            //       earnedPoint: 1275,
-            //       contract: '24개월',
-            //       features: ['VIP 혜택', '데이터 완전 무제한'],
-            //    },
-            //    {
-            //       id: 2,
-            //       customerName: '김철수',
-            //       customerEmail: 'kim@example.com',
-            //       customerPhone: '010-9876-5432',
-            //       planName: 'KT 5G 슈퍼플랜',
-            //       planCarrier: 'KT',
-            //       originalPrice: 65000,
-            //       amount: 52000,
-            //       discountRate: 20,
-            //       paymentMethod: 'card',
-            //       cardCompany: '현대카드',
-            //       cardNumber: '4321-****-****-5678',
-            //       status: 'pending',
-            //       orderDate: '2025-09-05 13:45:00',
-            //       usePoint: 1000,
-            //       earnedPoint: 1020,
-            //       contract: '12개월',
-            //       features: ['데이터 로밍', '음악 스트리밍'],
-            //    },
-            //    {
-            //       id: 3,
-            //       customerName: '이영희',
-            //       customerEmail: 'lee@example.com',
-            //       customerPhone: '010-2222-3333',
-            //       planName: 'LG U+ 5G 베이직',
-            //       planCarrier: 'LGU+',
-            //       originalPrice: 45000,
-            //       amount: 38250,
-            //       discountRate: 15,
-            //       paymentMethod: 'bank',
-            //       bankName: '신한은행',
-            //       accountNumber: '110-***-******',
-            //       status: 'completed',
-            //       orderDate: '2025-09-04 10:15:00',
-            //       completedDate: '2025-09-04 10:17:42',
-            //       usePoint: 500,
-            //       earnedPoint: 757,
-            //       contract: '무약정',
-            //       features: ['기본 데이터'],
-            //    },
-            //    {
-            //       id: 4,
-            //       customerName: '박지성',
-            //       customerEmail: 'park@example.com',
-            //       customerPhone: '010-7777-8888',
-            //       planName: '청소년 요금제',
-            //       planCarrier: 'SKT',
-            //       originalPrice: 35000,
-            //       amount: 24500,
-            //       discountRate: 30,
-            //       paymentMethod: 'card',
-            //       cardCompany: '국민카드',
-            //       cardNumber: '9876-****-****-4321',
-            //       status: 'failed',
-            //       orderDate: '2025-09-04 09:30:00',
-            //       failReason: '한도초과',
-            //       features: ['유해 콘텐츠 차단', '위치 알림'],
-            //    },
-            // ]
-            // // 검색어 필터링
-            // let filteredOrders = mockOrders
-            // if (searchTerm) {
-            //    const searchLower = searchTerm.toLowerCase()
-            //    filteredOrders = mockOrders.filter((order) => order.customerName.toLowerCase().includes(searchLower) || order.customerEmail.toLowerCase().includes(searchLower) || order.planName.toLowerCase().includes(searchLower))
-            // }
-            // // 상태 필터링
-            // if (statusFilter) {
-            //    filteredOrders = filteredOrders.filter((order) => order.status === statusFilter)
-            // }
-            // // 페이지네이션
-            // const itemsPerPage = 5
-            // const start = (currentPage - 1) * itemsPerPage
-            // const paginatedOrders = filteredOrders.slice(start, start + itemsPerPage)
-            // setOrders(paginatedOrders)
-            // setTotalPages(Math.ceil(filteredOrders.length / itemsPerPage))
-         } catch (error) {
-            console.error('주문 목록 로드 실패:', error)
-         }
-      }
-
-      fetchOrders()
-   }, [currentPage, searchTerm, statusFilter, loading])
+   }, [loading])
 
    const handleSearch = (e) => {
       e.preventDefault()
       setCurrentPage(1)
-      // fetchOrders()가 useEffect에 의해 자동으로 호출됨
+      setFilterName(searchTerm)
+      setFilterStatus(statusFilter)
    }
 
    const handleRefund = async (orderId) => {
       if (!window.confirm('정말 환불 처리하시겠습니까?')) return
 
       try {
-         // TODO: API 연동
-         // await fetch(`/api/admin/orders/${orderId}/refund`, {
-         //   method: 'POST'
-         // });
-
-         // 임시 상태 업데이트
          setOrders(orders.map((order) => (order.id === orderId ? { ...order, status: 'refunded' } : order)))
       } catch (error) {
          console.error('환불 처리 실패:', error)
@@ -190,12 +75,11 @@ const OrderManagement = () => {
                            <input type="text" className="admin-color-second form-control" placeholder="고객명, 이메일, 요금제명으로 검색" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
                         </div>
                         <div className="col-md-3">
-                           <select className="admin-color-second form-select" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+                           <select className="admin-color-second form-select admin-color-select" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
                               <option value="">모든 상태</option>
-                              <option value="completed">결제완료</option>
+                              <option value="success">결제완료</option>
                               <option value="pending">결제대기</option>
                               <option value="failed">결제실패</option>
-                              <option value="refunded">환불완료</option>
                            </select>
                         </div>
                         <div className="col-md-2">

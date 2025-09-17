@@ -10,27 +10,36 @@ export const getHomeStatusThunk = createAsyncThunk('analytics/getHomeStatus', as
    }
 })
 
-export const getUserStatusThunk = createAsyncThunk('analytics/getUserStatus', async (page, { rejectWidthValue }) => {
+export const getUserStatusThunk = createAsyncThunk('analytics/getUserStatus', async (data, { rejectWidthValue }) => {
    try {
-      const response = await analyticsAPI.getUserStatus(page)
+      const page = data.currentPage
+      const filter = data.filter
+
+      const response = await analyticsAPI.getUserStatus({ page, filter })
+      return response.data
+   } catch (error) {
+      console.log(error)
+      return rejectWidthValue(error.response?.data?.message)
+   }
+})
+
+export const getPlansStatusThunk = createAsyncThunk('analytics/getPlansStatus', async (data, { rejectWidthValue }) => {
+   try {
+      const page = data.currentPage
+      const filter = data.filter
+      const response = await analyticsAPI.getPlansStatus({ page, filter })
       return response.data
    } catch (error) {
       return rejectWidthValue(error.response?.data?.message)
    }
 })
 
-export const getPlansStatusThunk = createAsyncThunk('analytics/getPlansStatus', async (page, { rejectWidthValue }) => {
+export const getOrdersStatusThunk = createAsyncThunk('analytics/getOrdersStatus', async (data, { rejectWidthValue }) => {
    try {
-      const response = await analyticsAPI.getPlansStatus(page)
-      return response.data
-   } catch (error) {
-      return rejectWidthValue(error.response?.data?.message)
-   }
-})
-
-export const getOrdersStatusThunk = createAsyncThunk('analytics/getOrdersStatus', async (page, { rejectWidthValue }) => {
-   try {
-      const response = await analyticsAPI.getOrdersStatus(page)
+      const page = data.currentPage
+      const filterName = data.filterName
+      const filterStatus = data.filterStatus
+      const response = await analyticsAPI.getOrdersStatus({ page, filterName, filterStatus })
       return response.data
    } catch (error) {
       return rejectWidthValue(error.response?.data?.message)
