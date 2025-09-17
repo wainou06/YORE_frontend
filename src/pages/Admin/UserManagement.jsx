@@ -103,7 +103,7 @@ const UserManagement = () => {
                                  <th>전화번호</th>
                                  <th>가입일</th>
                                  <th>주문 수</th>
-                                 <th>상태</th>
+                                 <th>역할</th>
                                  <th>관리</th>
                               </tr>
                            </thead>
@@ -117,7 +117,7 @@ const UserManagement = () => {
                                     <td>{user.createdAt}</td>
                                     <td>{user.orderCount}</td>
                                     <td>
-                                       <span className={`badge bg-${user.status === 'user' ? 'success' : 'warning'}`}>{user.status === 'user' ? '사용자' : '중개인'}</span>
+                                       <span className={`badge bg-${user.status === 'user' ? 'success' : 'danger'}`}>{user.status === 'user' ? '사용자' : '통신사'}</span>
                                     </td>
                                     <td>
                                        <div className="dropdown">

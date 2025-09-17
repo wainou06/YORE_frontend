@@ -121,7 +121,7 @@ export const ModalAdminUserDetailComponent = () => {
                      <li className="mt-3">전화번호: {userDetail?.userDetail?.phone}</li>
                      <li className="mt-3">생일: {userDetail?.userDetail?.birth ? <>{userDetail?.userDetail?.birth}</> : <>아직 정하지 않았어요</>}</li>
                      <li className="mt-3">포인트: {userDetail?.userDetail?.point}</li>
-                     <li className="mt-3">상태: {userDetail?.userDetail?.access}</li>
+                     <li className="mt-3">역할: {userDetail?.userDetail?.access}</li>
                      <li className="mt-3">생성일: {new Date(userDetail?.userDetail?.createdAt).toLocaleDateString()}</li>
                   </ul>
                </div>
