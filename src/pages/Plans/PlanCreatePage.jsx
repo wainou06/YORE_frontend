@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { createPlan } from '@/features/plans/planSlice'
-import { createService } from '@/features/services/serviceSlice'
 import api from '@/api/axiosApi'
 
 import PlanQuotaForm from '@/components/Plans/PlanQuotaForm'
@@ -236,20 +235,6 @@ const PlanCreatePage = () => {
          dispatch(showModalThunk({ type: 'alert', placeholder: '요금제 생성에 실패했습니다.' }))
          return
       }
-      const servicePromises = newServices
-         .filter((svc) => svc.name && svc.description && svc.price)
-         .map((svc) =>
-            dispatch(
-               createService({
-                  name: svc.name,
-                  description: svc.description,
-                  provider: admin ? 'YORE' : agencyInfo?.agencyName,
-                  planId,
-                  fee: stripComma(svc.price),
-               })
-            )
-         )
-      await Promise.all(servicePromises)
       if (admin) {
          dispatch(showModalThunk({ type: 'alert', placeholder: '요금제 및 부가서비스가 등록되었습니다.' }))
          navigate('/admin/plans')

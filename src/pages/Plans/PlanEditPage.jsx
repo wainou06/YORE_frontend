@@ -207,7 +207,12 @@ const PlanEditPage = () => {
       let agencyId = planData.agencyId
       const basePriceNum = Number(stripComma(planData.basePrice || planData.price)) || 0
       const disNum = Number(stripComma(planData.dis)) || 0
-      const finalPriceNum = basePriceNum - disNum
+      let finalPriceNum
+      if (disNum === 0) {
+         finalPriceNum = basePriceNum
+      } else {
+         finalPriceNum = Math.round(basePriceNum * disNum)
+      }
       const planPayload = {
          ...planData,
          price: stripComma(planData.price),
