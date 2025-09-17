@@ -93,8 +93,6 @@ export const ModalAdminUserDetailComponent = () => {
       dispatch(getUserDetailThunk(modal.placeholder))
    }, [dispatch])
 
-   console.log(userDetail)
-
    const onClickConfirm = () => {
       dispatch(getInput(null))
       dispatch(closeModal())
