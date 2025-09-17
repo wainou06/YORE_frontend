@@ -143,35 +143,58 @@ const LoginWidget = () => {
    return (
       <div className="card shadow-sm p-4">
          {isAuthenticated && user ? (
-            <>
-               <div className="d-flex align-items-center justify-content-between mb-4">
-                  <h5 className="mb-0">{userName || user.name}님 환영합니다 🎉</h5>
-                  <NotificationDropdown show={showDropdown} onClose={() => setShowDropdown(false)} onToggle={() => setShowDropdown((prev) => !prev)} notifications={notifications} unreadCount={unreadCount} />
-               </div>
-
-               <div className="isLogin mb-4">
-                  <div className="link_btn_group">
-                     <Link to="myinfo/" className="link_btn">
-                        <FontAwesomeIcon icon={faUser} />
-                        <p>내 정보</p>
-                     </Link>
-                     <Link to="myinfo/plansettings" className="link_btn">
-                        <FontAwesomeIcon icon={faMobileScreenButton} />
-                        <p>내 요금제</p>
-                     </Link>
-                     <Link to="myinfo/billing" className="link_btn">
-                        <FontAwesomeIcon icon={faCalculator} />
-                        <p>내 청구서</p>
-                     </Link>
+            user.access === 'user' ? (
+               <>
+                  <div className="d-flex align-items-center justify-content-between mb-4">
+                     <h5 className="mb-0">{user.name}님 환영합니다 🎉</h5>
+                     <NotificationDropdown show={showDropdown} onClose={() => setShowDropdown(false)} onToggle={() => setShowDropdown((prev) => !prev)} notifications={notifications} unreadCount={unreadCount} />
                   </div>
-               </div>
-
-               <div className="text-center">
+                  <div className="isLogin mb-4">
+                     <div className="link_btn_group">
+                        <Link to="myinfo/" className="link_btn">
+                           <FontAwesomeIcon icon={faUser} />
+                           <p>내 정보</p>
+                        </Link>
+                        <Link to="myinfo/plansettings" className="link_btn">
+                           <FontAwesomeIcon icon={faMobileScreenButton} />
+                           <p>내 요금제</p>
+                        </Link>
+                        <Link to="myinfo/billing" className="link_btn">
+                           <FontAwesomeIcon icon={faCalculator} />
+                           <p>내 청구서</p>
+                        </Link>
+                     </div>
+                  </div>
+                  <div className="text-center">
+                     <button className="btn btn-outline-danger w-100" onClick={handleLogout}>
+                        로그아웃
+                     </button>
+                  </div>
+               </>
+            ) : (
+               <div>
+                  <p>기업 회원 로그인</p>
+                  <div className="d-flex align-items-center justify-content-between mb-3">
+                     <h5 className="mb-0">{userName || user.name}님 환영합니다 🎉</h5>
+                     <NotificationDropdown show={showDropdown} onClose={() => setShowDropdown(false)} onToggle={() => setShowDropdown((prev) => !prev)} notifications={notifications} unreadCount={unreadCount} />
+                  </div>
+                  <div className="isLogin mb-4">
+                     <div className="link_btn_group">
+                        <Link to="/agency/agencySettings" className="link_btn">
+                           <FontAwesomeIcon icon={faUser} />
+                           <p>정보 관리</p>
+                        </Link>
+                        <Link to="/agency/plans" className="link_btn ">
+                           <FontAwesomeIcon icon={faMobileScreenButton} />
+                           <p>요금제 관리</p>
+                        </Link>
+                     </div>
+                  </div>
                   <button className="btn btn-outline-danger w-100" onClick={handleLogout}>
                      로그아웃
                   </button>
                </div>
-            </>
+            )
          ) : (
             <>
                <div className="btn-group w-100 mb-4">
