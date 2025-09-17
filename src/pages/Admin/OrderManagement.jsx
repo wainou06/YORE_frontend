@@ -35,7 +35,6 @@ const OrderManagement = () => {
    // 주문 목록 로드
    useEffect(() => {
       if (!loading) {
-         console.log(ordersStatus)
          setOrders(ordersStatus.data)
          setTotalPages(ordersStatus.totalPages)
       }
@@ -59,20 +58,26 @@ const OrderManagement = () => {
       }
    }
 
+   const onKeydownKey = (e) => {
+      if (e.key === 'Enter') {
+         handleSearch()
+         return
+      }
+   }
+
    return (
       <div className="admin-main-content">
-         <div className="page-title">
-            <h2 className="mb-4">주문 관리</h2>
-         </div>
-
          <div className="container py-5">
+            <div className="page-title">
+               <h2 className="mb-4">주문 관리</h2>
+            </div>
             {/* 검색 및 필터 */}
             <div className="admin-color card shadow-sm mb-4">
                <div className="card-body">
                   <form onSubmit={handleSearch}>
                      <div className="row g-2">
                         <div className="col-md-6">
-                           <input type="text" className="admin-color-second form-control" placeholder="고객명, 이메일, 요금제명으로 검색" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+                           <input onKeyDown={(e) => onKeydownKey(e.target.value)} type="text" className="admin-color-second form-control" placeholder="고객명, 이메일, 요금제명으로 검색" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
                         </div>
                         <div className="col-md-3">
                            <select className="admin-color-second form-select admin-color-select" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
@@ -104,7 +109,6 @@ const OrderManagement = () => {
                            <th>결제 정보</th>
                            <th>포인트</th>
                            <th>상태</th>
-                           <th>관리</th>
                         </tr>
                      </thead>
                      <tbody>
@@ -165,18 +169,6 @@ const OrderManagement = () => {
                                  {order.completedDate && <div className="admin-color-text small text-muted mt-1">완료: {new Date(order.completedDate).toLocaleTimeString()}</div>}
                                  {order.refundedDate && <div className="admin-color-text small text-muted mt-1">환불: {new Date(order.refundedDate).toLocaleDateString()}</div>}
                                  {order.failReason && <div className="small text-danger mt-1">사유: {order.failReason}</div>}
-                              </td>
-                              <td>
-                                 <div className="btn-group-vertical w-100">
-                                    <button className="btn btn-sm btn-outline-primary mb-1" onClick={() => navigate(`/admin/orders/${order.id}`)}>
-                                       상세보기
-                                    </button>
-                                    {order.status === 'completed' && (
-                                       <button className="btn btn-sm btn-outline-danger" onClick={() => handleRefund(order.id)}>
-                                          환불처리
-                                       </button>
-                                    )}
-                                 </div>
                               </td>
                            </tr>
                         ))}

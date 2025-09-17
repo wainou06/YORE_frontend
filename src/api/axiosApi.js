@@ -7,8 +7,12 @@ const api = axios.create({
 api.interceptors.request.use(
    (config) => {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+      const adminToken = localStorage.getItem('adminToken') || sessionStorage.getItem('adminToken')
       if (token) {
          config.headers.Authorization = `Bearer ${token}`
+      }
+      if (adminToken) {
+         config.headers.Authorization = `Bearer ${adminToken}`
       }
       return config
    },
@@ -25,6 +29,8 @@ api.interceptors.response.use(
          originalRequest._retry = true
          localStorage.removeItem('token')
          sessionStorage.removeItem('token')
+         localStorage.removeItem('adminToken')
+         sessionStorage.removeItem('adminToken')
       }
       return Promise.reject(error)
    }
