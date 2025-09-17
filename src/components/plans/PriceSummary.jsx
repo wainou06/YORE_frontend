@@ -56,6 +56,8 @@ const PriceSummary = ({ plan: propPlan, options }) => {
             if (options.contract === 12 || options.contract === 24) {
                monthly_fee = Math.ceil(total_fee / Number(options.contract))
             }
+            // 선택된 부가서비스 id 배열 추출
+            const selectedServiceIds = options.services?.map((svc) => svc.id) || []
             // 1. userPlan 생성 (항상 최신 userId, planId 사용)
             const userPlanRes = await dispatch(
                createUserPlan({
@@ -63,6 +65,7 @@ const PriceSummary = ({ plan: propPlan, options }) => {
                   planId: planIdRef.current,
                   total_fee,
                   monthly_fee,
+                  selectedServiceIds,
                })
             ).unwrap()
             const userPlanId = userPlanRes.data?.id || userPlanRes.id
