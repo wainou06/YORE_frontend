@@ -163,9 +163,8 @@ const LoginWidget = () => {
                         <h5 className="mb-0">{user.name}님 환영합니다 🎉</h5>
                         <NotificationDropdown show={showDropdown} onClose={() => setShowDropdown(false)} onToggle={() => setShowDropdown((prev) => !prev)} notifications={notifications} unreadCount={unreadCount} />
                      </div>
- 
-                     <div className="isLogin mb-4">
 
+                     <div className="isLogin mb-4">
                         <div className="link_btn_group">
                            <Link to="/agency/agencySettings" className="link_btn">
                               <FontAwesomeIcon icon={faUser} />

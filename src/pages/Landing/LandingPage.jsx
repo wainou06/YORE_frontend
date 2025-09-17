@@ -1,4 +1,4 @@
-import Slider from 'react-slick'
+import { Swiper, SwiperSlide } from 'swiper/react'
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -7,15 +7,13 @@ import { fetchSurveys } from '@/features/survey/surveySlice'
 import carrierSKT from '@assets/images/carrier/SK.png'
 import carrierKT from '@assets/images/carrier/kt.png'
 import carrierLGU from '@assets/images/carrier/LGU.png'
-import banner1 from '@assets/images/banner/banner1.svg'
-import banner2 from '@assets/images/banner/banner2.svg'
-import banner3 from '@assets/images/banner/banner3.svg'
-import banner4 from '@assets/images/banner/banner4.svg'
 
 import '@assets/css/PlanCard.css'
+import 'swiper/css/pagination'
 
 import LoginWidget from '@components/common/LoginWidget'
 import RecommendPlans from '@components/plans/RecommendPlans'
+import { Autoplay, Pagination } from 'swiper/modules'
 
 // 기본 요금제 데이터
 const defaultPlans = [
@@ -102,37 +100,76 @@ const LandingPage = () => {
       setRecommendedPlans(updatedPlans.sort((a, b) => b.likes - a.likes))
    }
 
-   const sliderSettings = {
-      dots: true,
-      infinite: true,
-      speed: 500,
-      slidesToShow: 1,
-      slidesToScroll: 1,
-      autoplay: true,
-      autoplaySpeed: 3000,
-   }
-
    return (
       <div>
          {/* 섹션 1: 배너 & 로그인 */}
          <section className="common-padding bg-sub">
             <div className="container">
                <div className="row align-items-center">
-                  <div className="col-lg-8">
-                     <Slider {...sliderSettings}>
-                        <div>
-                           <img src={banner1} alt="프로모션 1" className="img-fluid rounded" />
-                        </div>
-                        <div>
-                           <img src={banner2} alt="프로모션 2" className="img-fluid rounded" />
-                        </div>
-                        <div>
-                           <img src={banner3} alt="프로모션 3" className="img-fluid rounded" />
-                        </div>
-                        <div>
-                           <img src={banner4} alt="프로모션 4" className="img-fluid rounded" />
-                        </div>
-                     </Slider>
+                  <div className="col-lg-8 banner-section">
+                     <div className="banner-swiper">
+                        <Swiper
+                           spaceBetween={30}
+                           centeredSlides={true}
+                           autoplay={{
+                              delay: 10000,
+                              disableOnInteraction: false,
+                           }}
+                           pagination={{
+                              clickable: true,
+                           }}
+                           modules={[Autoplay, Pagination]}
+                           className="mySwiper"
+                        >
+                           <SwiperSlide className="Slide1 rounded ">
+                              <div className="Slide-bg rounded">
+                                 <h3 className="text-white">
+                                    맞춤 요금제를
+                                    <br /> 리서치 하세요
+                                 </h3>
+                                 <div className="mt-40">
+                                    <a href="/">YORE</a>
+                                 </div>
+                              </div>
+                           </SwiperSlide>
+                           <SwiperSlide className="Slide2 rounded">
+                              <div className="Slide-bg rounded">
+                                 <h3 className="text-white">
+                                    당신에게 딱 맞는
+                                    <br /> 요금제를 찾아드립니다
+                                 </h3>
+                                 <div className="mt-40">
+                                    <a href="/plans">바로가기</a>
+                                 </div>
+                              </div>
+                           </SwiperSlide>
+                           <SwiperSlide className="Slide3 rounded">
+                              {' '}
+                              <div className="Slide-bg rounded">
+                                 <h3 className="text-white text-center">
+                                    간편한 비교로
+                                    <br /> 최적의 선택을!
+                                 </h3>
+                                 <div className="mt-40">
+                                    <a href="/carriers">바로가기</a>
+                                 </div>
+                              </div>
+                           </SwiperSlide>
+                           <SwiperSlide className="Slide4 rounded">
+                              <div className="Slide-bg rounded">
+                                 <h3 className="text-white">
+                                    처음이시라고요?
+                                    <br />
+                                    회원가입부터 시작하세요!
+                                 </h3>
+                                 <p className="text-white">첫 가입 시, 쿠폰 증정!</p>
+                                 <div className="mt-40">
+                                    <a href="/signup">가입하기</a>
+                                 </div>
+                              </div>
+                           </SwiperSlide>
+                        </Swiper>
+                     </div>
                   </div>
                   <div className="col-lg-4">
                      <LoginWidget />
@@ -168,7 +205,7 @@ const LandingPage = () => {
                               </div>
                               <div className="price-container">
                                  <div className="price-original">￦{(plan.price + 1000).toLocaleString()}</div>
-                                 <div className='d-flex align-items-end gap-2'>
+                                 <div className="d-flex align-items-end gap-2">
                                     <div className="price-current">￦{plan.price.toLocaleString()}</div>
                                     <div className="price-unit">/월</div>
                                  </div>

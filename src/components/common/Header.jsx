@@ -73,7 +73,7 @@ const Header = () => {
                      </>
                   )}
                   <li className="nav-item">
-                     <a className="nav-link" href="https://open.kakao.com" target="_blank" rel="noopener noreferrer">
+                     <a className="nav-link" href="https://pf.kakao.com/_tFPkn/chat" target="_blank" rel="noopener noreferrer">
                         고객센터
                      </a>
                   </li>
