@@ -8,6 +8,7 @@ const initialState = {
    loading: false,
    error: null,
    token: null,
+   userPlans: [],
 }
 
 // User Auth Thunks
@@ -15,7 +16,6 @@ export const login = createAsyncThunk('auth/login', async ({ email, password, us
    try {
       const response = await authAPI.login(email, password, userType)
       const { token, user } = response.data
-      // token 저장은 LoginWidget에서 rememberMe 체크 시에만 처리
       return { user, userType, token }
    } catch (error) {
       return rejectWithValue(error.response?.data?.message || '로그인 실패')
@@ -77,23 +77,39 @@ export const changePassword = createAsyncThunk('auth/changePassword', async (pas
    }
 })
 
-// Profile Thunks
 export const changeBirth = createAsyncThunk('auth/changeBirth', async ({ birth }, { rejectWithValue }) => {
    try {
-      const response = await authAPI.changeBirth({ birth }) // post('/auth/change-birth')
+      const response = await authAPI.changeBirth({ birth })
       return response.data
    } catch (error) {
       return rejectWithValue(error.response?.data?.message || '생일 변경 실패')
    }
 })
 
-// Agency Profile Thunks
 export const updateAgencyProfile = createAsyncThunk('auth/updateAgencyProfile', async ({ agencyName, businessNumber }, { rejectWithValue }) => {
    try {
       const response = await authAPI.updateAgencyProfile({ agencyName, businessNumber })
       return response.data
    } catch (error) {
       return rejectWithValue(error.response?.data?.message || '기업 정보 수정 실패')
+   }
+})
+
+export const getMyUserPlans = createAsyncThunk('auth/getMyUserPlans', async (_, { rejectWithValue }) => {
+   try {
+      const response = await authAPI.getMyUserPlans()
+      return response.data
+   } catch (error) {
+      return rejectWithValue(error.response?.data?.message || '요금제 조회 실패')
+   }
+})
+
+export const updateUserPlanStatus = createAsyncThunk('auth/updateUserPlanStatus', async ({ id, status }, { rejectWithValue }) => {
+   try {
+      const response = await authAPI.updateUserPlanStatus(id, status)
+      return response.data
+   } catch (error) {
+      return rejectWithValue(error.response?.data?.message || '상태 변경 실패')
    }
 })
 
@@ -112,7 +128,6 @@ const authSlice = createSlice({
    },
    extraReducers: (builder) => {
       builder
-         // 로그인
          .addCase(login.pending, (state) => {
             state.loading = true
             state.error = null
@@ -124,13 +139,13 @@ const authSlice = createSlice({
             state.userType = action.payload.userType
             state.error = null
             state.token = action.payload.token
+            localStorage.setItem('token', action.payload.token)
          })
          .addCase(login.rejected, (state, action) => {
             state.loading = false
             state.error = action.payload
          })
 
-         // 회원가입
          .addCase(register.pending, (state) => {
             state.loading = true
             state.error = null
@@ -144,7 +159,6 @@ const authSlice = createSlice({
             state.error = action.payload
          })
 
-         // 로그아웃
          .addCase(logout.pending, (state) => {
             state.loading = true
          })
@@ -153,7 +167,6 @@ const authSlice = createSlice({
             return initialState
          })
 
-         // 프로필 조회
          .addCase(getProfile.pending, (state) => {
             state.loading = true
             state.error = null
@@ -170,7 +183,6 @@ const authSlice = createSlice({
             state.isAuthenticated = false
          })
 
-         // 프로필 수정
          .addCase(updateProfile.pending, (state) => {
             state.loading = true
             state.error = null
@@ -185,7 +197,6 @@ const authSlice = createSlice({
             state.error = action.payload
          })
 
-         // 비밀번호 변경
          .addCase(changePassword.pending, (state) => {
             state.loading = true
             state.error = null
@@ -199,7 +210,6 @@ const authSlice = createSlice({
             state.error = action.payload
          })
 
-         // 생일 업데이트
          .addCase(changeBirth.pending, (state) => {
             state.loading = true
             state.error = null
@@ -214,7 +224,6 @@ const authSlice = createSlice({
             state.error = action.payload
          })
 
-         // 기업 정보 수정
          .addCase(updateAgencyProfile.pending, (state) => {
             state.loading = true
             state.error = null
@@ -230,17 +239,44 @@ const authSlice = createSlice({
             state.loading = false
             state.error = action.payload
          })
+
+         .addCase(getMyUserPlans.pending, (state) => {
+            state.loading = true
+            state.error = null
+         })
+         .addCase(getMyUserPlans.fulfilled, (state, action) => {
+            state.loading = false
+            state.userPlans = action.payload.data
+         })
+         .addCase(getMyUserPlans.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload
+         })
+
+         .addCase(updateUserPlanStatus.pending, (state) => {
+            state.loading = true
+            state.error = null
+         })
+         .addCase(updateUserPlanStatus.fulfilled, (state, action) => {
+            state.loading = false
+            const updatedPlan = action.payload.userPlan
+            state.userPlans = state.userPlans.map((plan) => (plan.id === updatedPlan.id ? updatedPlan : plan))
+         })
+         .addCase(updateUserPlanStatus.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload
+         })
    },
 })
 
 export const { clearError, resetAuthState, setToken } = authSlice.actions
 
-// Selectors
 export const selectUser = (state) => state.auth.user
 export const selectIsAuthenticated = (state) => state.auth.isAuthenticated
 export const selectUserType = (state) => state.auth.userType
 export const selectAuthLoading = (state) => state.auth.loading
 export const selectAuthError = (state) => state.auth.error
 export const selectToken = (state) => state.auth.token
+export const selectUserPlans = (state) => state.auth.userPlans
 
 export default authSlice.reducer

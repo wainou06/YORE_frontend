@@ -21,34 +21,48 @@ const Billing = () => {
    const paymentMethod = transaction?.paymentMethod || ''
 
    return (
-      <div className="container content_box py-4">
+      <div className="container content_box py-5">
          {error ? (
             <div className="alert alert-danger">{typeof error === 'string' ? error : error.message}</div>
          ) : (
-            <>
-               <div className="row g-4">
-                  {/* 1. 내 요금제 정보 */}
-                  <div className="col-12">
-                     <div className="card p-3 shadow-sm">
-                        <h5 className="card-title">내 요금제 정보</h5>
-                        <p>요금제: {planName || '불러오는 중...'}</p>
-                        <p>상태: {status || '불러오는 중...'}</p>
-                        <p>개통일: {startDate || '불러오는 중...'}</p>
-                     </div>
-                  </div>
+            <div className="row justify-content-center">
+               <div className="col-md-10">
+                  <div className="row g-4">
+                     {/* 왼쪽: 카드 섹션들 */}
+                     <div className="col-12 col-md-8">
+                        {/* 1. 내 요금제 정보 */}
+                        <div className="card p-3 shadow-none border-0 mt-3">
+                           <h5 className="card-title">내 요금제 정보</h5>
+                           <p>요금제: {planName || '불러오는 중...'}</p>
+                           <p>상태: {status || '불러오는 중...'}</p>
+                           <p>개통일: {startDate || '불러오는 중...'}</p>
+                        </div>
 
-                  {/* 2. 납부 정보 */}
-                  <div className="col-12">
-                     <div className="card p-3 shadow-sm">
-                        <h5 className="card-title">납부 정보</h5>
-                        <p>월 요금: {monthlyFee || '불러오는 중...'}</p>
-                        <p>납부일: {paymentDate || '불러오는 중...'}</p>
-                        <p>결제수단: {paymentMethod || '불러오는 중...'}</p>
+                        {/* 2. 납부 정보 */}
+                        <div className="card p-3 shadow-none border-0 mt-3">
+                           <h5 className="card-title">납부 정보</h5>
+                           <p>월 요금: {monthlyFee ? `${monthlyFee.toLocaleString()} 원` : '불러오는 중...'}</p>
+                           <p>납부일: {paymentDate || '불러오는 중...'}</p>
+                           <p>결제수단: {paymentMethod || '불러오는 중...'}</p>
+                        </div>
+
+                        {/* 3. 추가 정보 (더미 데이터) */}
+                        <div className="card p-3 shadow-none border-0 mt-3">
+                           <h5 className="card-title">부가 서비스</h5>
+                           <p>부가 서비스: 유튜브 프리미엄</p>
+                           <p>금액: 4,500원</p>
+                        </div>
+
+                        {loading && <div className="text-center my-3">불러오는 중...</div>}
+                     </div>
+
+                     {/* 오른쪽: 이미지 */}
+                     <div className="col-12 col-md-4 d-none d-md-flex align-items-start justify-content-center">
+                        <img src="/src/assets/images/settings.svg" alt="세팅 이미지" className="img-fluid responsive-settings" />
                      </div>
                   </div>
                </div>
-               {loading && <div className="text-center my-3">불러오는 중...</div>}
-            </>
+            </div>
          )}
       </div>
    )

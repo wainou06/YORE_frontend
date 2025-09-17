@@ -1,3 +1,4 @@
+// src/api/authApi.js
 import api from './axiosApi'
 
 export const authAPI = {
@@ -23,6 +24,14 @@ export const authAPI = {
 
    // 비밀번호 찾기
    findPassword: ({ method, value }) => api.post('/auth/find-password', { method, value }),
+
+   // ✅ 요금제 조회만
+   getMyUserPlans: () => {
+      const token = localStorage.getItem('token')
+      return api.get('/user-plans', {
+         headers: { Authorization: token ? `Bearer ${token}` : '' },
+      })
+   },
 }
 
 export default authAPI

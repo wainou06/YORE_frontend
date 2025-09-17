@@ -250,6 +250,7 @@ const PlanCreatePage = () => {
             )
          )
       await Promise.all(servicePromises)
+
       if (admin) {
          dispatch(showModalThunk({ type: 'alert', placeholder: '요금제 및 부가서비스가 등록되었습니다.' }))
          navigate('/admin/plans')
@@ -303,6 +304,7 @@ const PlanCreatePage = () => {
                </div>
             </div>
             <div className="d-flex justify-content-end gap-2">
+
                {admin && (
                   <>
                      <button type="button" className={`btn btn-outline-success${planData.status === 'active' ? ' active' : ''}`} onClick={() => setPlanData((prev) => ({ ...prev, status: 'active' }))}>
