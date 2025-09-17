@@ -19,7 +19,7 @@ const LoginWidget = () => {
 
    const notifications = useSelector((state) => state.notification.notifications)
    const unreadCount = notifications.filter((n) => !n.isRead).length
-   console.log('notifications:', notifications)
+   // console.log('notifications:', notifications)
 
    const [showDropdown, setShowDropdown] = useState(false)
    const [loginType, setLoginType] = useState('personal')
@@ -71,6 +71,8 @@ const LoginWidget = () => {
                localStorage.removeItem('token')
             }
          }
+
+         await dispatch(showModalThunk({ type: 'alert', placeholder: '로그인 되었습니다.' })).unwrap()
 
          await dispatch(getProfile()).unwrap()
          await dispatch(fetchNotifications())
@@ -163,15 +165,14 @@ const LoginWidget = () => {
                         <h5 className="mb-0">{user.name}님 환영합니다 🎉</h5>
                         <NotificationDropdown show={showDropdown} onClose={() => setShowDropdown(false)} onToggle={() => setShowDropdown((prev) => !prev)} notifications={notifications} unreadCount={unreadCount} />
                      </div>
- 
-                     <div className="isLogin mb-4">
 
+                     <div className="isLogin mb-4">
                         <div className="link_btn_group">
                            <Link to="/agency/agencySettings" className="link_btn">
                               <FontAwesomeIcon icon={faUser} />
                               <p>정보 관리</p>
                            </Link>
-                           <Link to="/agency/agencyPlanSettings" className="link_btn ">
+                           <Link to="/agency/plans" className="link_btn ">
                               <FontAwesomeIcon icon={faMobileScreenButton} />
                               <p>요금제 관리</p>
                            </Link>
