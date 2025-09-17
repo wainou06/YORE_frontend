@@ -53,7 +53,7 @@ const PlanCreatePage = () => {
    const navigate = useNavigate()
    const location = useLocation()
    const dispatch = useDispatch()
-   const admin = useSelector((state) => state.admin)
+   const admin = useSelector((state) => state.admin.isAuthenticated)
    const user = useSelector((state) => state.auth.user)
    const isAdminRoute = location.pathname.startsWith('/admin')
    const planLoading = useSelector((state) => state.plans.loading)
@@ -179,12 +179,13 @@ const PlanCreatePage = () => {
    // 제출
    const handleSubmit = async (e) => {
       e.preventDefault()
+      console.log(admin)
       if (!validateForm()) return
-      if (!admin.admin && !agencyInfo?.id) {
+      if (!admin && !agencyInfo?.id) {
          dispatch(showModalThunk({ type: 'alert', placeholder: '통신사 정보가 없습니다. 다시 로그인하거나 관리자에게 문의하세요.' }))
          return
       }
-      let agencyId = admin.admin ? agencyInfo?.id || planData.agencyId : agencyInfo.id
+      let agencyId = admin ? 1 : agencyInfo.id
       const basePriceNum = Number(stripComma(planData.basePrice || planData.price)) || 0
       const disNum = Number(planData.dis) || 0
       let finalPriceNum
@@ -200,14 +201,14 @@ const PlanCreatePage = () => {
          .map((svc) => ({
             name: svc.name,
             description: svc.description,
-            provider: admin.admin ? 'YORE' : agencyInfo?.agencyName,
+            provider: admin ? 'YORE' : agencyInfo?.agencyName,
             fee: Number(stripComma(svc.price)),
          }))
       const planPayload = {
          ...rest,
          basePrice: basePriceNum,
          finalPrice: finalPriceNum,
-         status: admin.admin ? planData.status || 'active' : 'pending',
+         status: admin ? planData.status || 'active' : 'pending',
          agencyId,
          // ENUM 컬럼은 항상 문자열로 보장
          type: planData.type ? String(planData.type) : '',
@@ -242,14 +243,15 @@ const PlanCreatePage = () => {
                createService({
                   name: svc.name,
                   description: svc.description,
-                  provider: admin.admin ? 'YORE' : agencyInfo?.agencyName,
+                  provider: admin ? 'YORE' : agencyInfo?.agencyName,
                   planId,
                   fee: stripComma(svc.price),
                })
             )
          )
       await Promise.all(servicePromises)
-      if (admin.admin) {
+
+      if (admin) {
          dispatch(showModalThunk({ type: 'alert', placeholder: '요금제 및 부가서비스가 등록되었습니다.' }))
          navigate('/admin/plans')
       } else {
@@ -302,7 +304,8 @@ const PlanCreatePage = () => {
                </div>
             </div>
             <div className="d-flex justify-content-end gap-2">
-               {admin.admin && (
+
+               {admin && (
                   <>
                      <button type="button" className={`btn btn-outline-success${planData.status === 'active' ? ' active' : ''}`} onClick={() => setPlanData((prev) => ({ ...prev, status: 'active' }))}>
                         승인

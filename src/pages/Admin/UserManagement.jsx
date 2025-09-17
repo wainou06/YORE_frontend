@@ -36,7 +36,6 @@ const UserManagement = () => {
    // 사용자 목록 로드
    useEffect(() => {
       if (!loading) {
-         console.log(userManagement)
          setTotalPages(userManagement.totalPages)
          setUsers(userManagement.data)
       }
@@ -56,8 +55,8 @@ const UserManagement = () => {
       }
    }
 
-   const onClickDetailModal = async (user) => {
-      await dispatch(showModalThunk({ type: 'detail', placeholder: user }))
+   const onClickDetailModal = async (id) => {
+      await dispatch(showModalThunk({ type: 'detail', placeholder: id }))
    }
 
    const onKeydownKey = (e) => {
@@ -71,11 +70,10 @@ const UserManagement = () => {
       <>
          <>
             <div className="admin-main-content">
-               <div className="page-title">
-                  <h2 className="mb-4">사용자 관리</h2>
-               </div>
-
                <div className="container py-5">
+                  <div className="page-title">
+                     <h2 className="mb-4">사용자 관리</h2>
+                  </div>
                   {/* 검색 */}
                   <div className="admin-color card shadow-sm mb-4">
                      <div className="card-body">
@@ -105,7 +103,7 @@ const UserManagement = () => {
                                  <th>전화번호</th>
                                  <th>가입일</th>
                                  <th>주문 수</th>
-                                 <th>상태</th>
+                                 <th>역할</th>
                                  <th>관리</th>
                               </tr>
                            </thead>
@@ -113,18 +111,18 @@ const UserManagement = () => {
                               {users?.map((user) => (
                                  <tr className="admin-table-pointer" key={user.id}>
                                     <td>{user.id}</td>
-                                    <td onClick={() => onClickDetailModal(user)}>{user.name}</td>
-                                    <td onClick={() => onClickDetailModal(user)}>{user.email}</td>
-                                    <td onClick={() => onClickDetailModal(user)}>{user.phone}</td>
-                                    <td onClick={() => onClickDetailModal(user)}>{user.createdAt}</td>
-                                    <td onClick={() => onClickDetailModal(user)}>{user.orderCount}</td>
-                                    <td onClick={() => onClickDetailModal(user)}>
-                                       <span className={`badge bg-${user.status === 'active' ? 'success' : user.status === 'inactive' ? 'warning' : 'danger'}`}>{user.status === 'active' ? '활성' : user.status === 'inactive' ? '휴면' : '정지'}</span>
+                                    <td>{user.name}</td>
+                                    <td>{user.email}</td>
+                                    <td>{user.phone}</td>
+                                    <td>{user.createdAt}</td>
+                                    <td>{user.orderCount}</td>
+                                    <td>
+                                       <span className={`badge bg-${user.status === 'user' ? 'success' : 'danger'}`}>{user.status === 'user' ? '사용자' : '통신사'}</span>
                                     </td>
                                     <td>
                                        <div className="dropdown">
-                                          <button className="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                             관리
+                                          <button onClick={() => onClickDetailModal(user.id)} className="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown">
+                                             상세보기
                                           </button>
                                           <ul className="dropdown-menu">
                                              <li>

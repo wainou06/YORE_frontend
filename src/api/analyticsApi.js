@@ -6,6 +6,8 @@ export const analyticsAPI = {
    getUserStatus: ({ page, filter }) => api.get(`/analytics/getUserStatus?page=${page}&filter=${filter}`),
    getPlansStatus: ({ page, filter }) => api.get(`/analytics/getPlansStatus?page=${page}&filter=${filter}`),
    getOrdersStatus: ({ page, filterName, filterStatus }) => api.get(`/analytics/getOrdersStatus?page=${page}&filterName=${filterName}&filterStatus=${filterStatus}`),
+   getUserDetail: (id) => api.get(`/analytics/getUserDetail?id=${id}`),
+   putPlanStatus: ({ id, status }) => api.put(`/analytics/putPlanStatus?id=${id}&status=${status}`),
 
    // 전체 통계
    getServiceStats: () => api.get('/analytics'),

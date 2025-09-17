@@ -62,6 +62,10 @@
    text-decoration: none;
 }
 
+.sidebar-header .end-0 {
+   right: -255px !important;
+}
+
 .sidebar-menu {
    display: flex;
    flex-direction: column;

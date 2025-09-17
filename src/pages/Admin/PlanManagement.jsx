@@ -1,4 +1,4 @@
-import { getPlansStatusThunk } from '@/features/analytics/analyticsSlice'
+import { getPlansStatusThunk, putPlanStatusThunk } from '@/features/analytics/analyticsSlice'
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -49,7 +49,6 @@ const PlanManagement = () => {
    // 요금제 목록 로드
    useEffect(() => {
       if (!loading) {
-         console.log(plansStatus)
          setPlans(plansStatus.data)
          setTotalPages(plansStatus.totalPages)
       }
@@ -57,7 +56,8 @@ const PlanManagement = () => {
 
    const handleStatusChange = async (planId, newStatus) => {
       try {
-         setPlans(plans.map((plan) => (plan.id === planId ? { ...plan, status: newStatus } : plan)))
+         await dispatch(putPlanStatusThunk({ planId, newStatus })).unwrap()
+         dispatch(getPlansStatusThunk({ currentPage, filter }))
       } catch (error) {
          console.error('요금제 상태 변경 실패:', error)
       }
@@ -84,15 +84,15 @@ const PlanManagement = () => {
 
    return (
       <div className="admin-main-content">
-         <div className="page-title">
-            <div className="d-flex justify-content-between align-items-center mb-4">
-               <h2>요금제 관리</h2>
-               <button className="btn btn-primary" onClick={() => navigate('/admin/plans/new')}>
-                  새 요금제 등록
-               </button>
-            </div>
-         </div>
          <div className="container py-5">
+            <div className="page-title">
+               <div className="d-flex justify-content-between align-items-center mb-4">
+                  <h2>요금제 관리</h2>
+                  <button className="btn btn-primary" onClick={() => navigate('/admin/plans/create')}>
+                     새 요금제 등록
+                  </button>
+               </div>
+            </div>
             {/* 필터 */}
             <div className="admin-color card shadow-sm mb-4">
                <div className="card-body">
@@ -176,7 +176,7 @@ const PlanManagement = () => {
                                  </td>
                                  <td>{plan.createdAt}</td>
                                  <td>
-                                    <span className={`badge bg-${plan.status === 'active' ? 'success' : 'danger'}`}>{plan.status === 'active' ? '판매중' : '대기중'}</span>
+                                    <span className={`badge bg-${plan.status === 'active' ? 'success' : 'danger'}`}>{plan.status === 'active' ? '판매중' : '판매중지'}</span>
                                  </td>
                                  <td>
                                     <div className="btn-group">

@@ -50,8 +50,6 @@ const AdminDashboard = () => {
       }
    }, [loading])
 
-   console.log(home)
-
    return (
       <>
          {modal.type === 'alert' && <ModalAlert />}
@@ -67,7 +65,7 @@ const AdminDashboard = () => {
                   <div className="stat-card">
                      <h3>총 사용자 수</h3>
                      <div className="stat-value">{(stats.totalUsers ?? 0).toLocaleString()}</div>
-                     <div className="stat-change positive">+{stats.newUsers}</div>
+                     {stats.newUsers > 0 && <div className="stat-change positive">+{stats.newUsers}</div>}
                   </div>
                   <div className="stat-card">
                      <h3>총 수익</h3>

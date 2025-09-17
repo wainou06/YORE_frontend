@@ -3,7 +3,8 @@ import '../../../assets/css/modal.css'
 import { closeModal, getInput, showModalThunk } from '@/features/modal/modalSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { registerAdmin } from '@/features/admin/adminSlice'
-import { useState, useId } from 'react'
+import { useState, useId, useEffect } from 'react'
+import { getUserDetailThunk } from '@/features/analytics/analyticsSlice'
 
 export const ModalManagerLoginComponent = () => {
    const dispatch = useDispatch()
@@ -86,8 +87,11 @@ export const ModalManagerLoginComponent = () => {
 export const ModalAdminUserDetailComponent = () => {
    const dispatch = useDispatch()
    const modal = useSelector((state) => state.modal)
+   const userDetail = useSelector((state) => state.analytics.userDetail)
 
-   console.log(modal.placeholder)
+   useEffect(() => {
+      dispatch(getUserDetailThunk(modal.placeholder))
+   }, [dispatch])
 
    const onClickConfirm = () => {
       dispatch(getInput(null))
@@ -105,13 +109,20 @@ export const ModalAdminUserDetailComponent = () => {
             <div className="modal-content">
                <div className="modal-header">
                   <h5 className="modal-title" id="modalTitleId">
-                     유저 자세히 보기입니다.
+                     유저 상세보기입니다.
                   </h5>
                   <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={onClickClose} />
                </div>
-               <div className="modal-body text-center">
+               <div className="modal-body">
                   <ul className="list-unstyled">
-                     <li className="mt-3">{modal.placeholder.name}</li>
+                     <li className="mt-3">번호: {userDetail?.userDetail?.id}</li>
+                     <li className="mt-3">이름: {userDetail?.userDetail?.name}</li>
+                     <li className="mt-3">이메일: {userDetail?.userDetail?.email}</li>
+                     <li className="mt-3">전화번호: {userDetail?.userDetail?.phone}</li>
+                     <li className="mt-3">생일: {userDetail?.userDetail?.birth ? <>{userDetail?.userDetail?.birth}</> : <>아직 정하지 않았어요</>}</li>
+                     <li className="mt-3">포인트: {userDetail?.userDetail?.point}</li>
+                     <li className="mt-3">역할: {userDetail?.userDetail?.access}</li>
+                     <li className="mt-3">생성일: {new Date(userDetail?.userDetail?.createdAt).toLocaleDateString()}</li>
                   </ul>
                </div>
                <div className="modal-footer">
