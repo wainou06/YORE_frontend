@@ -48,7 +48,7 @@ const Myinfo = () => {
                            <h2>요금 청구서</h2>
                            <p>날짜와 금액</p>
                         </div>
-                        <button onClick={() => navigate('billing')}>바로가기</button>
+                        <button onClick={() => navigate('billing')}>청구서 보기</button>
                      </div>
 
                      <div className="col-12 mb-4">
@@ -56,7 +56,11 @@ const Myinfo = () => {
                            <h2>고객센터</h2>
                            <p>문의하기</p>
                         </div>
-                        <button onClick={() => navigate('')}>옵챗링크</button>
+                        <button>
+                           <a className="nav-link" href="https://pf.kakao.com/_tFPkn/chat" target="_blank" rel="noopener noreferrer">
+                              고객센터 연결
+                           </a>
+                        </button>
                      </div>
                   </div>
 

@@ -30,6 +30,7 @@ export const getPlansStatusThunk = createAsyncThunk('analytics/getPlansStatus', 
       const response = await analyticsAPI.getPlansStatus({ page, filter })
       return response.data
    } catch (error) {
+      console.log(error)
       return rejectWidthValue(error.response?.data?.message)
    }
 })

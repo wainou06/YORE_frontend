@@ -13,7 +13,6 @@ import { formatWithComma, stripComma } from '@/utils/priceSet'
 import '@assets/css/PlanDetail.css'
 
 import { showModalThunk } from '@/features/modal/modalSlice'
-import { checkAdminState } from '@/features/admin/adminSlice'
 
 const networkTypeOptions = [
    { value: '2', label: '3G' },
@@ -54,19 +53,11 @@ const PlanCreatePage = () => {
    const navigate = useNavigate()
    const location = useLocation()
    const dispatch = useDispatch()
-   const { isAuthenticated } = useSelector((state) => state.admin)
+   const admin = useSelector((state) => state.admin)
    const user = useSelector((state) => state.auth.user)
    const isAdminRoute = location.pathname.startsWith('/admin')
    const planLoading = useSelector((state) => state.plans.loading)
    const serviceLoading = useSelector((state) => state.services.loading)
-
-   console.log(isAuthenticated)
-
-   useEffect(() => {
-      dispatch(checkAdminState())
-   }, [dispatch])
-
-   console.log(isAuthenticated)
 
    // 통신사 정보 fetch
    const [agencyInfo, setAgencyInfo] = useState(null)
@@ -258,7 +249,7 @@ const PlanCreatePage = () => {
             )
          )
       await Promise.all(servicePromises)
-      if (isAuthenticated) {
+      if (admin.admin) {
          dispatch(showModalThunk({ type: 'alert', placeholder: '요금제 및 부가서비스가 등록되었습니다.' }))
          navigate('/admin/plans')
       } else {
@@ -311,7 +302,7 @@ const PlanCreatePage = () => {
                </div>
             </div>
             <div className="d-flex justify-content-end gap-2">
-               {isAuthenticated && (
+               {admin.admin && (
                   <>
                      <button type="button" className={`btn btn-outline-success${planData.status === 'active' ? ' active' : ''}`} onClick={() => setPlanData((prev) => ({ ...prev, status: 'active' }))}>
                         승인
