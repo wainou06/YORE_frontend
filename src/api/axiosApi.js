@@ -8,11 +8,10 @@ api.interceptors.request.use(
    (config) => {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token')
       const adminToken = localStorage.getItem('adminToken') || sessionStorage.getItem('adminToken')
-      if (token) {
-         config.headers.Authorization = `Bearer ${token}`
-      }
       if (adminToken) {
          config.headers.Authorization = `Bearer ${adminToken}`
+      } else if (token) {
+         config.headers.Authorization = `Bearer ${token}`
       }
       return config
    },

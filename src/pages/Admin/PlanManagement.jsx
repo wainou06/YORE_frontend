@@ -151,9 +151,9 @@ const PlanManagement = () => {
                                        {plan.carrier}
                                     </span>
                                  </td>
-                                 <td>{plan.data}</td>
-                                 <td>{plan.voice}</td>
-                                 <td>{plan.sms}</td>
+                                 <td>{['99999', '999999'].includes(String(plan.data)) ? '무제한' : plan.data}</td>
+                                 <td>{['99999', '999999'].includes(String(plan.voice)) ? '무제한' : plan.voice}</td>
+                                 <td>{['99999', '999999'].includes(String(plan.sms)) ? '무제한' : plan.sms}</td>
                                  <td>
                                     <div>
                                        <strong>{plan.price.toLocaleString()}원</strong>
@@ -175,16 +175,14 @@ const PlanManagement = () => {
                                     </div>
                                  </td>
                                  <td>{plan.createdAt}</td>
-                                 <td>
-                                    <span className={`badge bg-${plan.status === 'active' ? 'success' : 'danger'}`}>{plan.status === 'active' ? '판매중' : '판매중지'}</span>
-                                 </td>
+                                 <td>{plan.status === 'active' ? <span className="badge bg-success">판매중</span> : plan.status === 'pending' ? <span className="badge bg-warning text-dark">승인대기</span> : <span className="badge bg-danger">판매중지</span>}</td>
                                  <td>
                                     <div className="btn-group">
                                        <button className="btn btn-sm btn-outline-primary" onClick={() => navigate(`/admin/plans/${plan.id}/edit`)}>
                                           수정
                                        </button>
                                        <button className={`btn btn-sm btn-outline-${plan.status === 'active' ? 'danger' : 'success'}`} onClick={() => handleStatusChange(plan.id, plan.status === 'active' ? 'inactive' : 'active')}>
-                                          {plan.status === 'active' ? '판매중지' : '판매재개'}
+                                          {plan.status === 'active' ? '거절' : '승인'}
                                        </button>
                                     </div>
                                  </td>
