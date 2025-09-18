@@ -11,7 +11,6 @@ const Billing = () => {
       dispatch(getMyUserPlanBill())
    }, [dispatch])
 
-   // 데이터 매핑
    const planName = userPlanBill?.planName || ''
    const status = userPlanBill?.status || ''
    const startDate = userPlanBill?.startDate ? new Date(userPlanBill.startDate).toLocaleDateString() : ''
@@ -28,9 +27,7 @@ const Billing = () => {
             <div className="row justify-content-center">
                <div className="col-md-10">
                   <div className="row g-4">
-                     {/* 왼쪽: 카드 섹션들 */}
                      <div className="col-12 col-md-8">
-                        {/* 1. 내 요금제 정보 */}
                         <div className="card p-3 shadow-none border-0 mt-3">
                            <h5 className="card-title">내 요금제 정보</h5>
                            <p>요금제: {planName || '불러오는 중...'}</p>
@@ -38,7 +35,6 @@ const Billing = () => {
                            <p>개통일: {startDate || '불러오는 중...'}</p>
                         </div>
 
-                        {/* 2. 납부 정보 */}
                         <div className="card p-3 shadow-none border-0 mt-3">
                            <h5 className="card-title">납부 정보</h5>
                            <p>월 요금: {monthlyFee ? `${monthlyFee.toLocaleString()} 원` : '불러오는 중...'}</p>
@@ -46,7 +42,6 @@ const Billing = () => {
                            <p>결제수단: {paymentMethod || '불러오는 중...'}</p>
                         </div>
 
-                        {/* 3. 추가 정보 (더미 데이터) */}
                         <div className="card p-3 shadow-none border-0 mt-3">
                            <h5 className="card-title">부가 서비스</h5>
                            <p>부가 서비스: 유튜브 프리미엄</p>
@@ -56,7 +51,6 @@ const Billing = () => {
                         {loading && <div className="text-center my-3">불러오는 중...</div>}
                      </div>
 
-                     {/* 오른쪽: 이미지 */}
                      <div className="col-12 col-md-4 d-none d-md-flex align-items-start justify-content-center">
                         <img src="/src/assets/images/settings.svg" alt="세팅 이미지" className="img-fluid responsive-settings" />
                      </div>

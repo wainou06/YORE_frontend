@@ -4,14 +4,13 @@ import { authAPI } from '@/api/authApi'
 const initialState = {
    user: null,
    isAuthenticated: false,
-   userType: null, // 'user' | 'agency' | 'admin'
+   userType: null,
    loading: false,
    error: null,
    token: null,
    userPlans: [],
 }
 
-// User Auth Thunks
 export const login = createAsyncThunk('auth/login', async ({ email, password, userType }, { rejectWithValue }) => {
    try {
       const response = await authAPI.login(email, password, userType)
@@ -22,7 +21,6 @@ export const login = createAsyncThunk('auth/login', async ({ email, password, us
    }
 })
 
-// user를 직접 세팅하는 액션
 export const setUser = (user) => (dispatch) => {
    dispatch(authSlice.actions.setUser(user))
 }
@@ -46,7 +44,6 @@ export const logout = createAsyncThunk('auth/logout', async (_, { rejectWithValu
    }
 })
 
-// Profile Thunks
 export const getProfile = createAsyncThunk('auth/getProfile', async (_, { rejectWithValue }) => {
    try {
       const response = await authAPI.getProfile()

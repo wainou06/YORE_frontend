@@ -52,22 +52,18 @@ const component = () => { //이름은 상관 없습니다
 //modals 파일의 컴포넌트를 끌어다 놓습니다
 //새 모달 창을 만들어야 한다면 modals 파일에 생성하여 작성 한 뒤, 이곳에서 모아주면 됩니다
 
-//알림, 확인 버튼이 존재합니다
 export const ModalAlert = () => {
    return <ModalAlertComponent />
 }
 
-//수락, 확인과 취소 버튼이 존재합니다
 export const ModalConfirm = () => {
    return <ModalConfirmComponent />
 }
 
-//입력, 데이터 값의 입력 창과, 확인과 취소 버튼이 존재합니다
 export const ModalPrompt = () => {
    return <ModalPromptComponent />
 }
 
-//매니저 관련 모달 컴포넌트 입니다
 export const ModalManagerLogin = () => {
    return <ModalManagerLoginComponent />
 }
@@ -76,7 +72,6 @@ export const ModalAdminUserDetail = () => {
    return <ModalAdminUserDetailComponent />
 }
 
-// 비밀번호 찾기 관련 모달 컴포넌트 입니다
 export const ModalPw = () => {
    return <ModalForgetPassword />
 }

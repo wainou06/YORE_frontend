@@ -37,7 +37,6 @@ const MySettings = () => {
       }
    }, [dispatch, isAuthenticated, user, navigate])
 
-   // 비밀번호 변경
    const handleChangePassword = () => {
       if (!currentPassword || !newPassword || !confirmPassword) {
          dispatch(showModalThunk({ type: 'alert', placeholder: '모든 필드를 입력해주세요.' }))
@@ -63,7 +62,6 @@ const MySettings = () => {
          .catch((err) => alert(err))
    }
 
-   // 이메일 변경
    const handleChangeEmail = () => {
       if (!newEmail) {
          dispatch(showModalThunk({ type: 'alert', placeholder: '이메일을 입력해주세요.' }))
@@ -84,7 +82,6 @@ const MySettings = () => {
          .catch((err) => alert(err))
    }
 
-   // 생일 변경
    const handleChangeBirth = () => {
       if (!birth) {
          dispatch(showModalThunk({ type: 'alert', placeholder: '생일을 입력해주세요.' }))

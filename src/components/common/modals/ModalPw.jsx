@@ -8,8 +8,8 @@ export const ModalForgetPassword = () => {
    const dispatch = useDispatch()
    const modal = useSelector((state) => state.modal)
 
-   const [step, setStep] = useState(1) // 1단계: 방법 선택 / 2단계: 입력
-   const [method, setMethod] = useState(null) // 'email' | 'phone'
+   const [step, setStep] = useState(1)
+   const [method, setMethod] = useState(null)
    const [inputValue, setInputValue] = useState('')
    const [tempPassword, setTempPassword] = useState(null)
 
@@ -27,7 +27,6 @@ export const ModalForgetPassword = () => {
             setTempPassword(res.data.message || '해당 사용자가 존재하지 않습니다.')
          }
       } catch (err) {
-         console.error(err)
          setTempPassword('서버 오류가 발생했습니다.')
       }
    }
@@ -52,7 +51,6 @@ export const ModalForgetPassword = () => {
                </div>
 
                <div className="modal-body">
-                  {/* STEP 1: 찾기 방법 선택 */}
                   {step === 1 && (
                      <div className="d-flex flex-column gap-3">
                         <button className="btn btn-outline-primary" onClick={() => handleMethodSelect('email')}>
@@ -64,7 +62,6 @@ export const ModalForgetPassword = () => {
                      </div>
                   )}
 
-                  {/* STEP 2: 입력 */}
                   {step === 2 && (
                      <div>
                         {!tempPassword ? (
