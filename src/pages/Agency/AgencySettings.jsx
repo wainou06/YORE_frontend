@@ -87,6 +87,10 @@ const AgencySettings = () => {
          dispatch(showModalThunk({ type: 'alert', placeholder: '모든 필드를 입력해주세요.' }))
          return
       }
+      if (businessNumber.length < 10) {
+         dispatch(showModalThunk({ type: 'alert', placeholder: '사업자 등록번호를 확인해주세요.' }))
+         return
+      }
 
       dispatch(updateAgencyProfile({ agencyName, businessNumber }))
          .unwrap()

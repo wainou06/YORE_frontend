@@ -3,6 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMobileAlt, faWifi, faEnvelope } from '@fortawesome/free-solid-svg-icons'
 
 const PlanCard = ({ plan }) => {
+   // 99999/999999면 '무제한'으로 표시
+   const formatQuota = (val) => {
+      if (val === 99999 || val === 999999 || val === '99999' || val === '999999') return '무제한'
+      return val ?? '-'
+   }
    return (
       <div className="card h-100">
          <div className="card-body">
@@ -12,15 +17,15 @@ const PlanCard = ({ plan }) => {
             <div className="my-3">
                <div className="d-flex align-items-center mb-2">
                   <FontAwesomeIcon icon={faWifi} className="text-primary me-2" />
-                  <span>데이터 {plan.data || plan.dataAmount || '-'}</span>
+                  <span>데이터 {formatQuota(plan.data || plan.dataAmount)}</span>
                </div>
                <div className="d-flex align-items-center mb-2">
                   <FontAwesomeIcon icon={faMobileAlt} className="text-primary me-2" />
-                  <span>통화 {plan.voice || plan.voiceAmount || '-'}</span>
+                  <span>통화 {formatQuota(plan.voice || plan.voiceAmount)}</span>
                </div>
                <div className="d-flex align-items-center">
                   <FontAwesomeIcon icon={faEnvelope} className="text-primary me-2" />
-                  <span>문자 {plan.sms || plan.smsAmount || '-'}</span>
+                  <span>문자 {formatQuota(plan.sms || plan.smsAmount)}</span>
                </div>
             </div>
 
