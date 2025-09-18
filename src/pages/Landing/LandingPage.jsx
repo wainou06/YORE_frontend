@@ -4,6 +4,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { fetchSurveys } from '@/features/survey/surveySlice'
 
+import { getPlans } from '@/features/plans/planSlice'
+
 import carrierSKT from '@assets/images/carrier/SK.png'
 import carrierKT from '@assets/images/carrier/kt.png'
 import carrierLGU from '@assets/images/carrier/LGU.png'
@@ -15,69 +17,22 @@ import LoginWidget from '@components/common/LoginWidget'
 import RecommendPlans from '@components/plans/RecommendPlans'
 import { Autoplay, Pagination } from 'swiper/modules'
 
-// 기본 요금제 데이터
-const defaultPlans = [
-   {
-      id: 1,
-      name: '7GB 요금제',
-      data: '7GB',
-      voice: '200',
-      sms: '100',
-      price: 6900,
-      carrier: 'SKT',
-      networkType: 'LTE',
-      description: '부담없는 데이터 요금제',
-      features: ['데이터 소진 시 저속 무제한', '부가서비스 무료'],
-   },
-   {
-      id: 2,
-      name: '15GB 요금제',
-      data: '15GB',
-      voice: '300',
-      sms: '200',
-      price: 10900,
-      carrier: 'KT',
-      networkType: 'LTE',
-      description: '실속있는 데이터 요금제',
-      features: ['데이터 소진 시 저속 무제한', '부가서비스 2개 무료'],
-   },
-   {
-      id: 3,
-      name: '71GB 요금제',
-      data: '71GB',
-      voice: '무제한',
-      sms: '무제한',
-      price: 16900,
-      carrier: 'LG U+',
-      networkType: '5G',
-      description: '넉넉한 데이터 요금제',
-      features: ['데이터 완전 무제한', '부가서비스 3개 무료'],
-   },
-   {
-      id: 4,
-      name: '무제한 요금제',
-      data: '무제한',
-      voice: '무제한',
-      sms: '무제한',
-      price: 18900,
-      carrier: 'SKT',
-      networkType: '5G',
-      description: '완전 무제한 요금제',
-      features: ['데이터/통화/문자 무제한', '모든 부가서비스 무료'],
-   },
-]
-
 const LandingPage = () => {
    const { isAuthenticated } = useSelector((state) => state.auth)
    const dispatch = useDispatch()
    const navigate = useNavigate()
    const [recommendedPlans, setRecommendedPlans] = useState([])
    const surveys = useSelector((state) => state.survey)
+   const plans = useSelector((state) => state.plans.plans)
+   const imgUrl = import.meta.env.VITE_APP_API_URL
 
    useEffect(() => {
-      // 설문 리스트 불러오기 (최초 1회)
+      // 설문 리스트, 요금제 리스트 불러오기 (최초 1회)
       dispatch(fetchSurveys())
+      dispatch(getPlans())
    }, [dispatch])
+
+   console.log('요금 리스트:', plans)
 
    useEffect(() => {
       // surveys.surveys 배열에서 좋아요 순 정렬 및 추천 요금제 추출
@@ -124,22 +79,23 @@ const LandingPage = () => {
                            <SwiperSlide className="Slide1 rounded ">
                               <div className="Slide-bg rounded">
                                  <h3 className="text-white">
-                                    맞춤 요금제를
-                                    <br /> 리서치 하세요
+                                    맞춤 요금제를 YORE에서
+                                    <br />
+                                    리서치 하세요
                                  </h3>
                                  <div className="mt-40">
-                                    <a href="/">YORE</a>
+                                    <a href="/">👉 지금 시작하기</a>
                                  </div>
                               </div>
                            </SwiperSlide>
                            <SwiperSlide className="Slide2 rounded">
                               <div className="Slide-bg rounded">
                                  <h3 className="text-white">
-                                    당신에게 딱 맞는
-                                    <br /> 요금제를 찾아드립니다
+                                    당신에게 알맞는
+                                    <br /> 요금제를 찾아보세요
                                  </h3>
                                  <div className="mt-40">
-                                    <a href="/plans">바로가기</a>
+                                    <a href="/plans">👉 바로가기</a>
                                  </div>
                               </div>
                            </SwiperSlide>
@@ -151,7 +107,7 @@ const LandingPage = () => {
                                     <br /> 최적의 선택을!
                                  </h3>
                                  <div className="mt-40">
-                                    <a href="/carriers">바로가기</a>
+                                    <a href="/carriers">👉 바로가기</a>
                                  </div>
                               </div>
                            </SwiperSlide>
@@ -164,7 +120,7 @@ const LandingPage = () => {
                                  </h3>
                                  <p className="text-white">첫 가입 시, 쿠폰 증정!</p>
                                  <div className="mt-40">
-                                    <a href="/signup">가입하기</a>
+                                    <a href="/signup">👉 가입하기</a>
                                  </div>
                               </div>
                            </SwiperSlide>
@@ -190,30 +146,42 @@ const LandingPage = () => {
             <div className="container">
                <h2 className="text-center mb-5">요금제</h2>
                <div className="row justify-content-center g-4">
-                  {defaultPlans.map((plan) => (
-                     <div key={plan.id} className="col-lg-3 col-md-6 col-12">
-                        <div className="plan-card" onClick={() => navigate(`/plans/${plan.id}`)}>
-                           <div className="plan-card-container">
-                              <div className="plan-content">
-                                 <div className="plan-title">{plan.name}</div>
-                                 <div className="plan-feature">
-                                    ✅ 데이터 {plan.data}
-                                    {plan.data !== '무제한' && ' + 1Mbps'}
+                  {plans.length > 0 ? (
+                     plans.slice(0, 4).map((plan) => (
+                        <div key={plan.id} className="col-lg-3 col-md-6 col-12">
+                           <div className="plan-card" onClick={() => navigate(`/plans/${plan.id}`)}>
+                              <div className="plan-card-container">
+                                 <div className="img-content">
+                                    {/* 요금제 이미지 (planImgUrl) */}
+                                    {plan.planImgUrl && (
+                                       <div className="plan-img">
+                                          <img src={plan.planImgUrl.startsWith('/') ? imgUrl + plan.planImgUrl : `${imgUrl}${plan.planImgUrl}`} alt={plan.name} />
+                                       </div>
+                                    )}
                                  </div>
-                                 <div className="plan-feature">✅ 통화 {plan.voice}</div>
-                                 <div className="plan-feature">✅ 문자 {plan.sms}</div>
-                              </div>
-                              <div className="price-container">
-                                 <div className="price-original">￦{(plan.price + 1000).toLocaleString()}</div>
-                                 <div className="d-flex align-items-end gap-2">
-                                    <div className="price-current">￦{plan.price.toLocaleString()}</div>
-                                    <div className="price-unit">/월</div>
+                                 <div className="plan-content">
+                                    <div className="plan-title">{plan.name}</div>
+                                    <div className="plan-feature">
+                                       ✅ 데이터 {['99999', '999999', 99999, 999999].includes(plan.data) ? '무제한' : plan.data}
+                                       {['99999', '999999', 99999, 999999].includes(plan.data) || plan.data === '무제한' ? '' : ' + 1Mbps'}
+                                    </div>
+                                    <div className="plan-feature">✅ 통화 {['99999', '999999', 99999, 999999].includes(plan.voice) ? '무제한' : plan.voice}</div>
+                                    <div className="plan-feature">✅ 문자 {['99999', '999999', 99999, 999999].includes(plan.sms) ? '무제한' : plan.sms}</div>
+                                 </div>
+                                 <div className="price-container">
+                                    <div className="price-original">￦{(plan.basePrice + 1000).toLocaleString()}</div>
+                                    <div className="d-flex align-items-end gap-2">
+                                       <div className="price-current">￦{plan.basePrice.toLocaleString()}</div>
+                                       <div className="price-unit">/월</div>
+                                    </div>
                                  </div>
                               </div>
                            </div>
                         </div>
-                     </div>
-                  ))}
+                     ))
+                  ) : (
+                     <div className="text-center">요금제가 없습니다.</div>
+                  )}
                </div>
             </div>
          </section>
