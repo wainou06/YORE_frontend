@@ -19,7 +19,6 @@ const initialState = {
    },
 }
 
-// Service Management Thunks
 export const fetchServices = createAsyncThunk('agency/fetchServices', async (params, { rejectWithValue }) => {
    try {
       const response = await servicesAPI.getAllServices(params)
@@ -65,7 +64,6 @@ export const deleteService = createAsyncThunk('agency/deleteService', async (id,
    }
 })
 
-// Analytics Thunks
 export const fetchServiceStats = createAsyncThunk('agency/fetchServiceStats', async (serviceId, { rejectWithValue }) => {
    try {
       const response = await analyticsAPI.getServiceDetailStats(serviceId)
@@ -98,7 +96,6 @@ const agencySlice = createSlice({
    },
    extraReducers: (builder) => {
       builder
-         // Services Management
          .addCase(fetchServices.pending, (state) => {
             state.loading = true
             state.error = null
@@ -170,7 +167,6 @@ const agencySlice = createSlice({
             state.error = action.payload
          })
 
-         // Analytics
          .addCase(fetchServiceStats.pending, (state) => {
             state.loading = true
             state.error = null
@@ -201,7 +197,6 @@ const agencySlice = createSlice({
 
 export const { resetAgencyState, setPage, clearError } = agencySlice.actions
 
-// Selectors
 export const selectServices = (state) => state.agency.services
 export const selectSelectedService = (state) => state.agency.selectedService
 export const selectAnalytics = (state) => state.agency.analytics

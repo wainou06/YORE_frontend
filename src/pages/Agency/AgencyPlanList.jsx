@@ -27,12 +27,8 @@ const AgencyPlanList = () => {
 
    const handleFilterChange = (newFilters) => setFilters(newFilters)
 
-   console.log('요금제 목록:', plans)
-
-   // 필터링 useMemo로 최적화
    const filteredPlans = useMemo(() => {
       return (plans || []).filter((plan) => {
-         // status(승인) 필드: null/undefined 방어 및 정책 반영
          const status = plan.status || plan.approvalStatus || 'pending'
          if (filters.approval !== 'all') {
             if (filters.approval === 'pending' && status !== 'pending') return false
@@ -101,7 +97,6 @@ const AgencyPlanList = () => {
                                     <h5 className="card-title mb-0">{plan.name}</h5>
                                     <div>
                                        {(() => {
-                                          // status(승인) 필드: null/undefined 방어 및 정책 반영
                                           const status = plan.status || plan.approvalStatus || 'pending'
                                           let badgeClass = 'bg-warning',
                                              label = '승인 대기중'
@@ -152,7 +147,6 @@ const AgencyPlanList = () => {
                                     <div className="badge bg-info">{plan.dis === '0' ? '무약정' : `${plan.dis}개월`}</div>
                                  </div>
 
-                                 {/* 혜택 리스트 안전 파싱 및 표시 */}
                                  {(() => {
                                     let benefits = []
                                     try {

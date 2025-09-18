@@ -97,7 +97,7 @@ const LoginWidget = () => {
          await dispatch(showModalThunk({ type: 'alert', placeholder: '로그인 되었습니다.' })).unwrap()
          await dispatch(fetchNotifications())
       } catch (err) {
-         console.error('로그인 실패:', err)
+         dispatch(showModalThunk({ type: 'alert', placeholder: error || '로그인에 실패하였습니다.' }))
       }
    }
 
@@ -148,7 +148,7 @@ const LoginWidget = () => {
             console.log('임시 비밀번호:', tempPassword)
          }
       } catch (err) {
-         console.error(err)
+         dispatch(showModalThunk({ type: 'alert', placeholder: error || '비밀번호 찾기를 실패하였습니다.' }))
       }
    }
 
