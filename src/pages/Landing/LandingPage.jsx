@@ -11,6 +11,7 @@ import carrierKT from '@assets/images/carrier/kt.png'
 import carrierLGU from '@assets/images/carrier/LGU.png'
 
 import '@assets/css/PlanCard.css'
+import '@assets/css/LandingPage.css'
 import 'swiper/css/pagination'
 
 import LoginWidget from '@components/common/LoginWidget'
@@ -197,11 +198,11 @@ const LandingPage = () => {
                      { name: 'LG U+', logo: carrierLGU },
                   ].map((carrier, index) => (
                      <div key={index} className="col-md-4 col-12 text-center g-4">
-                        <div className="rounded-circle bg-sub d-inline-flex align-items-center justify-content-center" style={{ width: '200px', height: '200px' }}>
-                           <div>
-                              <img src={carrier.logo} alt={carrier.name} style={{ width: '120px', height: 'auto', marginBottom: '10px' }} />
-                              <h4>{carrier.name}</h4>
+                        <div className="landing-affiliate-circle">
+                           <div className='carrier-logo'>
+                              <img src={carrier.logo} alt={carrier.name} className="logo-img" />
                            </div>
+                           <h4 className="landing-affiliate-name mt-20">{carrier.name}</h4>
                         </div>
                      </div>
                   ))}
