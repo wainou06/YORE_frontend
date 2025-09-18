@@ -129,6 +129,13 @@ const PlanCreatePage = () => {
          } else {
             setPlanData((prev) => ({ ...prev, data: value }))
          }
+      } else if (name === 'voice' || name === 'sms') {
+         // '무제한' 입력 시 999999로 변환
+         if (value.trim() === '무제한') {
+            setPlanData((prev) => ({ ...prev, [name]: '999999' }))
+         } else {
+            setPlanData((prev) => ({ ...prev, [name]: value }))
+         }
       } else {
          setPlanData((prev) => ({ ...prev, [name]: value }))
       }

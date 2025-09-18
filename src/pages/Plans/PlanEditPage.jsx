@@ -234,13 +234,20 @@ const PlanEditPage = () => {
       }
       const formData = new FormData()
       formData.append('planData', JSON.stringify(planPayload))
-      images.forEach((img) => {
+      // 대표이미지(메인) 우선 순서로 정렬 후 업로드
+      const sortedImages = [...images].sort((a, b) => (b.isMain ? 1 : 0) - (a.isMain ? 1 : 0))
+      // 기존 이미지의 imgURL 정보도 함께 전송 (대표이미지 정보 포함)
+      const existingImgUrls = sortedImages.filter((img) => !img.file && img.imgURL).map((img) => ({ imgURL: img.imgURL, isMain: img.isMain }))
+      if (existingImgUrls.length > 0) {
+         formData.append('existingImgUrls', JSON.stringify(existingImgUrls))
+      }
+      sortedImages.forEach((img) => {
          if (img.file) formData.append('images', img.file)
       })
       try {
          await dispatch(updatePlan({ id, data: formData })).unwrap()
          dispatch(showModalThunk({ type: 'alert', placeholder: '요금제가 수정되었습니다.' }))
-         navigate(isAdminRoute ? '/admin/plans' : '/plans')
+         navigate(isAdminRoute ? '/admin/plans' : '/agency/plans')
       } catch (err) {
          dispatch(showModalThunk({ type: 'alert', placeholder: '수정 실패: ' + (err?.message || err) }))
       }
