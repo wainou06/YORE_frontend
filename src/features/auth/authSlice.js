@@ -69,11 +69,11 @@ export const changePassword = createAsyncThunk('auth/changePassword', async (pas
    try {
       const response = await authAPI.changePassword(passwordData)
       if (!response.data.success) {
-         return rejectWithValue(response.data.message || '비밀번호 변경 실패')
+         return rejectWithValue({ message: response.data.message || '비밀번호 변경 실패' })
       }
       return response.data
    } catch (error) {
-      return rejectWithValue(error.response?.data?.message || '비밀번호 변경 실패')
+      return rejectWithValue({ message: error.response?.data?.message || '비밀번호 변경 실패' })
    }
 })
 

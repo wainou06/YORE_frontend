@@ -57,10 +57,15 @@ const MySettings = () => {
                setNewPassword('')
                setConfirmPassword('')
             } else {
-               dispatch(showModalThunk({ type: 'alert', placeholder: '비밀번호 변경에 실패했습니다.' }))
+               const msg = res.message || '비밀번호 변경에 실패했습니다.'
+               dispatch(showModalThunk({ type: 'alert', placeholder: msg }))
             }
          })
-         .catch((err) => alert(err))
+         .catch((err) => {
+            console.log('비밀번호 변경 에러:', err)
+            const msg = err?.message || err?.data?.message || err?.response?.data?.message || '입력값 검증 실패'
+            dispatch(showModalThunk({ type: 'alert', placeholder: msg }))
+         })
    }
 
    // 이메일 변경
@@ -78,10 +83,20 @@ const MySettings = () => {
                setEmail(newEmail)
                setNewEmail('')
             } else {
-               dispatch(showModalThunk({ type: 'alert', placeholder: '이메일 변경에 실패했습니다.' }))
+               const msg = res.message || (res.errors && res.errors[0]?.msg) || '이메일 변경에 실패했습니다.'
+               dispatch(showModalThunk({ type: 'alert', placeholder: msg }))
             }
          })
-         .catch((err) => alert(err))
+         .catch((err) => {
+            console.log('이메일 변경 에러:', err)
+            let msg = ''
+            if (typeof err === 'string') {
+               msg = err
+            } else {
+               msg = err?.message || err?.errors?.[0]?.msg || err?.data?.message || err?.response?.data?.message || '입력값 검증 실패'
+            }
+            dispatch(showModalThunk({ type: 'alert', placeholder: msg }))
+         })
    }
 
    // 생일 변경
@@ -97,10 +112,15 @@ const MySettings = () => {
             if (res.success) {
                dispatch(showModalThunk({ type: 'alert', placeholder: '생일이 업데이트 되었습니다.' }))
             } else {
-               dispatch(showModalThunk({ type: 'alert', placeholder: '생일 업데이트에 실패했습니다.' }))
+               const msg = res.message || '생일 업데이트에 실패했습니다.'
+               dispatch(showModalThunk({ type: 'alert', placeholder: msg }))
             }
          })
-         .catch((err) => alert(err))
+         .catch((err) => {
+            console.log('생일 변경 에러:', err)
+            const msg = err?.message || err?.data?.message || err?.response?.data?.message || '입력값 검증 실패'
+            dispatch(showModalThunk({ type: 'alert', placeholder: msg }))
+         })
    }
 
    return (

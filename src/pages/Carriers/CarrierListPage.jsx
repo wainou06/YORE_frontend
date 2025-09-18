@@ -55,7 +55,7 @@ const PlanCard = ({ plan }) => {
             <h5 className="card-title">{plan.name}</h5>
             <p className="card-text text-primary fw-bold">월 {plan.price.toLocaleString()}원</p>
             <p className="card-text">데이터 {plan.data}</p>
-            <button className="btn btn-outline-primary w-100">자세히 보기</button>
+            <button className="btn btn-outline-primary w-100">COMING SOON...</button>
          </div>
       </div>
    )
