@@ -136,6 +136,20 @@ const CarrierSection = ({ carrier }) => {
 const CarrierListPage = () => {
    const [activeCarrier, setActiveCarrier] = useState(carriers[0].id)
 
+   // 통신사별 배경색 지정
+   const carrierBg = {
+      SKT: '#e3383b',
+      KT: '#1c89ed',
+      'LG U+': '#e6007e',
+   }
+
+   const getActiveBg = (carrier) => {
+      if (activeCarrier === carrier.id) {
+         return { backgroundColor: carrierBg[carrier.name], color: '#fff', border: 'none' }
+      }
+      return {}
+   }
+
    return (
       <div className="carriers-page">
          <div className="bg-light py-5">
@@ -143,7 +157,7 @@ const CarrierListPage = () => {
                <h1 className="text-center mb-4">통신사 요금제</h1>
                <div className="d-flex justify-content-center gap-3 flex-wrap mb-4">
                   {carriers.map((carrier) => (
-                     <button key={carrier.id} className={`btn btn-lg ${activeCarrier === carrier.id ? 'btn-primary' : 'btn-outline-primary'}`} onClick={() => setActiveCarrier(carrier.id)}>
+                     <button key={carrier.id} className={`btn btn-lg ${activeCarrier === carrier.id ? '' : 'btn-outline-primary'}`} style={getActiveBg(carrier)} onClick={() => setActiveCarrier(carrier.id)}>
                         {carrier.name}
                      </button>
                   ))}
