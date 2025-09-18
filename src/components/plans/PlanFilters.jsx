@@ -1,4 +1,5 @@
 import { useState } from 'react'
+const DEFAULT_CARRIERS = ['SKT', 'KT', 'LG U+']
 
 const PlanFilters = ({ onFilterChange, carrierOptions }) => {
    const [filters, setFilters] = useState({
