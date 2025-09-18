@@ -97,7 +97,9 @@ const PlanDetailPage = () => {
    // displayPlan 변경 시 대표 이미지(mainImg) 갱신
    useEffect(() => {
       const images = getImages(displayPlan)
-      setMainImg(images[0]?.imgURL || (displayPlan ? displayPlan.planImgUrl || displayPlan.planImg : '') || '')
+      // mainImg: 'Y'가 있으면 그 이미지, 없으면 첫 번째 이미지
+      const mainImageObj = images.find((img) => img.mainImg === 'Y')
+      setMainImg(mainImageObj?.imgURL || images[0]?.imgURL || (displayPlan ? displayPlan.planImgUrl || displayPlan.planImg : '') || '')
    }, [displayPlan, getImages])
 
    // 통신사 변경 핸들러
@@ -168,7 +170,17 @@ const PlanDetailPage = () => {
       return null
    }
 
-   const images = getImages(displayPlan)
+   // mainImg가 'Y'인 이미지를 항상 첫 번째로 오도록 정렬
+   let images = getImages(displayPlan)
+   if (images.length > 1) {
+      images = [...images].sort((a, b) => (b.mainImg === 'Y' ? 1 : 0) - (a.mainImg === 'Y' ? 1 : 0))
+   }
+
+   // 무제한 표시 함수
+   const getQuotaDisplay = (val) => {
+      if (val === '999999' || val === '99999' || Number(val) === 999999 || Number(val) === 99999) return '무제한'
+      return val
+   }
 
    return (
       <div className="container py-5">
@@ -178,17 +190,11 @@ const PlanDetailPage = () => {
                   {/* 요금제 이미지 갤러리 */}
                   {images.length > 0 && (
                      <div>
-                        <img src={getFullImgUrl(mainImg || images[0]?.imgURL)} alt={displayPlan.name} className="card-img-top mb-2" style={{ width: 240, height: 240, objectFit: 'cover', borderTopLeftRadius: '0.5rem', borderTopRightRadius: '0.5rem', aspectRatio: '1 / 1' }} />
+                        <img src={getFullImgUrl(mainImg || images[0]?.imgURL)} alt={displayPlan.name} className="card-img-top mb-2 plan-main-img" />
                         {images.length > 1 && (
-                           <div className="d-flex gap-2 mt-2">
+                           <div className="d-flex justify-content-center gap-2 mt-2">
                               {images.map((img, idx) => (
-                                 <img
-                                    key={img.imgURL}
-                                    src={getFullImgUrl(img.imgURL)}
-                                    alt={`썸네일${idx + 1}`}
-                                    style={{ width: 60, height: 60, objectFit: 'cover', aspectRatio: '1 / 1', border: mainImg === img.imgURL ? '2px solid #007bff' : '1px solid #ccc', borderRadius: 8, cursor: 'pointer' }}
-                                    onClick={() => setMainImg(img.imgURL)}
-                                 />
+                                 <img key={img.imgURL} src={getFullImgUrl(img.imgURL)} alt={`썸네일${idx + 1}`} className={`plan-thumb-img${mainImg === img.imgURL ? ' selected' : ''}`} onClick={() => setMainImg(img.imgURL)} />
                               ))}
                            </div>
                         )}
@@ -227,7 +233,7 @@ const PlanDetailPage = () => {
                            <select className="form-select" value={selectedPlanId || ''} onChange={(e) => handlePlanOptionChange(Number(e.target.value))}>
                               {planOptions.map((p) => (
                                  <option key={p.id} value={p.id}>
-                                    {p.name} ({p.data}/{p.voice}/{p.sms}) - {p.basePrice.toLocaleString()}원{p.age ? ` / 연령:${p.age}` : ''}
+                                    {p.name} ({getQuotaDisplay(p.data)}/{getQuotaDisplay(p.voice)}/{getQuotaDisplay(p.sms)}) - {p.basePrice.toLocaleString()}원{p.age ? ` / 연령:${p.age}` : ''}
                                     {p.dis ? ` / 약정:${p.dis}개월` : ''}
                                  </option>
                               ))}
@@ -244,7 +250,7 @@ const PlanDetailPage = () => {
                               <FontAwesomeIcon icon={faWifi} className="text-primary me-2" size="2x" />
                               <div>
                                  <div className="small text-muted">데이터</div>
-                                 <strong>{displayPlan.data}</strong>
+                                 <strong>{getQuotaDisplay(displayPlan.data)}</strong>
                               </div>
                            </div>
                         </div>
@@ -253,7 +259,7 @@ const PlanDetailPage = () => {
                               <FontAwesomeIcon icon={faMobileAlt} className="text-primary me-2" size="2x" />
                               <div>
                                  <div className="small text-muted">통화</div>
-                                 <strong>{displayPlan.voice}</strong>
+                                 <strong>{getQuotaDisplay(displayPlan.voice)}</strong>
                               </div>
                            </div>
                         </div>
@@ -262,7 +268,7 @@ const PlanDetailPage = () => {
                               <FontAwesomeIcon icon={faEnvelope} className="text-primary me-2" size="2x" />
                               <div>
                                  <div className="small text-muted">문자</div>
-                                 <strong>{displayPlan.sms}</strong>
+                                 <strong>{getQuotaDisplay(displayPlan.sms)}</strong>
                               </div>
                            </div>
                         </div>

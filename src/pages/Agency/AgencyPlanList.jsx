@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import PlanFilters from '@/components/shared/PlanFilters'
@@ -17,6 +17,7 @@ const INITIAL_FILTERS = {
 
 const AgencyPlanList = () => {
    const dispatch = useDispatch()
+   const navigate = useNavigate()
    const { plans = [], loading, error } = useSelector((state) => state.plans)
    const [filters, setFilters] = useState(INITIAL_FILTERS)
 
@@ -94,7 +95,7 @@ const AgencyPlanList = () => {
                   <div className="row g-4">
                      {filteredPlans.map((plan) => (
                         <div key={plan.id} className="col-md-6">
-                           <div className="card h-100">
+                           <div className="card h-100" style={{ cursor: 'pointer' }} onClick={() => navigate(`/plans/${plan.id}`)}>
                               <div className="card-body">
                                  <div className="d-flex justify-content-between align-items-start mb-3">
                                     <h5 className="card-title mb-0">{plan.name}</h5>
