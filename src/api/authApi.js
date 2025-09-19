@@ -23,6 +23,13 @@ export const authAPI = {
          headers: { Authorization: token ? `Bearer ${token}` : '' },
       })
    },
+
+   deleteAccount: () => {
+      const token = localStorage.getItem('token')
+      return api.delete('/auth/delete-account', {
+         headers: { Authorization: token ? `Bearer ${token}` : '' },
+      })
+   },
 }
 
 export default authAPI

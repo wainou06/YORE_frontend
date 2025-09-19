@@ -110,6 +110,18 @@ export const updateUserPlanStatus = createAsyncThunk('auth/updateUserPlanStatus'
    }
 })
 
+export const deleteAccount = createAsyncThunk('auth/deleteAccount', async (_, { rejectWithValue }) => {
+   try {
+      const token = localStorage.getItem('token')
+      const response = await axios.delete('/auth/delete-account', {
+         headers: { Authorization: `Bearer ${token}` },
+      })
+      return response.data
+   } catch (err) {
+      return rejectWithValue(err.response.data)
+   }
+})
+
 const authSlice = createSlice({
    name: 'auth',
    initialState,
