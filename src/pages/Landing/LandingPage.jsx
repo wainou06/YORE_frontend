@@ -7,7 +7,7 @@ import { fetchSurveys } from '@/features/survey/surveySlice'
 import { getPlans } from '@/features/plans/planSlice'
 
 import carrierSKT from '@assets/images/carrier/SK.png'
-import carrierKT from '@assets/images/carrier/kt.png'
+import carrierKT from '@assets/images/carrier/KT.png'
 import carrierLGU from '@assets/images/carrier/LGU.png'
 
 import '@assets/css/PlanCard.css'
