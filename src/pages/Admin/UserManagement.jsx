@@ -61,7 +61,7 @@ const UserManagement = () => {
 
    const onKeydownKey = (e) => {
       if (e.key === 'Enter') {
-         handleSearch()
+         handleSearch(e)
          return
       }
    }
