@@ -8,7 +8,10 @@ import { fetchNotifications } from '@features/notification/notificationSlice'
 
 export const AdminSidebar = () => {
    let localdark = localStorage.getItem('theme')
-   if (!localdark) localdark = 'light'
+   if (!localdark) {
+      localdark = 'light'
+      localStorage.setItem('theme', 'light')
+   }
    const [darkMode, setDarkMode] = useState(localdark)
    const [currentPage, setCurrentPage] = useState(0)
    const [showDropdown, setShowDropdown] = useState(false)

@@ -9,7 +9,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'slick-carousel/slick/slick.css'
 import 'react-toastify/dist/ReactToastify.css'
 import 'slick-carousel/slick/slick-theme.css'
-import { ModalAlert, ModalConfirm, ModalPrompt, ModalManagerLogin, ModalPw } from './components/common/modal'
+import { ModalAlert, ModalConfirm, ModalPrompt, ModalManagerLogin, ModalPw } from './components/common/Modal'
 
 function ModalRoot() {
    const modal = useSelector((state) => state.modal)
