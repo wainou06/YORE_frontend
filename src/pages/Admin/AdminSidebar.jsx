@@ -15,7 +15,6 @@ export const AdminSidebar = () => {
    const notifications = useSelector((state) => state.notification.notifications)
    const unreadCount = notifications.filter((n) => !n.isRead).length
    const dispatch = useDispatch()
-   const modal = useSelector((state) => state.modal)
 
    useEffect(() => {
       const pathname = window.location.pathname

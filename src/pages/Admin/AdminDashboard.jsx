@@ -53,7 +53,6 @@ const AdminDashboard = () => {
             newNewUsers: home.data?.newNewUsers,
             pastAverageOrder: home.data?.pastAverageOrder,
          })
-         console.log(home)
       }
    }, [loading])
 
