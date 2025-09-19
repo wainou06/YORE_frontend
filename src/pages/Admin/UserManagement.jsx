@@ -104,7 +104,7 @@ const UserManagement = () => {
                                  <th>가입일</th>
                                  <th>주문 수</th>
                                  <th>역할</th>
-                                 <th>관리</th>
+                                 <th>보기</th>
                               </tr>
                            </thead>
                            <tbody>

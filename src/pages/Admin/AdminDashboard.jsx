@@ -19,6 +19,9 @@ const AdminDashboard = () => {
       averageOrder: 0,
       totalOrders: 0,
       conversionRate: 0,
+      newTotalRevenue: 0,
+      newNewUsers: 0,
+      pastAverageOrder: 0,
       recentOrders: [],
    })
    const { loading, home } = useSelector((state) => state.analytics)
@@ -46,7 +49,11 @@ const AdminDashboard = () => {
             newUsers: home.data?.newUsers,
             averageOrder: home.data?.averageOrder,
             recentOrders: home.data?.recentOrders,
+            newTotalRevenue: home.data?.newTotalRevenue,
+            newNewUsers: home.data?.newNewUsers,
+            pastAverageOrder: home.data?.pastAverageOrder,
          })
+         console.log(home)
       }
    }, [loading])
 
@@ -65,19 +72,32 @@ const AdminDashboard = () => {
                   <div className="stat-card">
                      <h3>총 사용자 수</h3>
                      <div className="stat-value">{(stats.totalUsers ?? 0).toLocaleString()}</div>
-                     {stats.newUsers > 0 && <div className="stat-change positive">+{stats.newUsers}</div>}
+                     {stats.newUsers > 0 && stats.totalUsers != stats.newUsers && <div className="stat-change positive">+{((stats.newUsers / (stats.totalUsers - stats.newUsers)) * 100).toFixed(1)}%</div>}
                   </div>
                   <div className="stat-card">
                      <h3>총 수익</h3>
                      <div className="stat-value">₩{(stats.totalRevenue ?? 0).toLocaleString()}</div>
+                     {stats.newTotalRevenue > 0 && <div className="stat-change positive">+{((stats.newTotalRevenue / (stats.totalRevenue - stats.newTotalRevenue)) * 100).toFixed(1)}%</div>}
                   </div>
                   <div className="stat-card">
-                     <h3>신규 가입자(하루)</h3>
+                     <h3>신규 가입자(일주일)</h3>
                      <div className="stat-value">{(stats.newUsers ?? 0).toLocaleString()}</div>
+                     {stats.newUsers - stats.newNewUsers != 0 && (
+                        <div className={`stat-change ${stats.newUsers - stats.newNewUsers > 0 ? 'positive' : 'negative'}`}>
+                           {stats.newUsers - stats.newNewUsers > 0 && '+'}
+                           {(((stats.newUsers - stats.newNewUsers) / stats.newNewUsers) * 100).toFixed(1)}%
+                        </div>
+                     )}
                   </div>
                   <div className="stat-card">
                      <h3>평균 결제 금액</h3>
-                     <div className="stat-value">₩{(stats.averageOrder ?? 0).toLocaleString()}</div>
+                     <div className="stat-value">₩{(stats.pastAverageOrder ?? 0).toLocaleString()}</div>
+                     {stats.pastAverageOrder != stats.averageOrder && (
+                        <div className={`stat-change ${stats.pastAverageOrder > stats.averageOrder ? 'positive' : 'negative  '}`}>
+                           {stats.pastAverageOrder > stats.averageOrder && '+'}
+                           {(((stats.pastAverageOrder - stats.averageOrder) / stats.averageOrder) * 100).toFixed(1)}%
+                        </div>
+                     )}
                   </div>
                </div>
                <section className="recent-section">
