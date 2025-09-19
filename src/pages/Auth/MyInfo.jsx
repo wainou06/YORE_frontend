@@ -71,7 +71,7 @@ const Myinfo = () => {
                   </div>
 
                   <div className="col-12 col-md-4 d-none d-md-flex align-items-start justify-content-center">
-                     <img src="/src/assets/images/myInfo.png" alt="세팅 이미지" className="img-fluid responsive-settings" />
+                     <img src="/src/assets/images/myInfo.jpg" alt="세팅 이미지" className="img-fluid responsive-settings" />
                   </div>
                </div>
             </div>
