@@ -75,7 +75,7 @@ const Myinfo = () => {
                   </div>
 
                   <div className="col-12 col-md-4 d-none d-md-flex align-items-start justify-content-center">
-                     <img src="../../../public/images/myInfo.jpg" alt="나의 정보 이미지" className="img-fluid responsive-settings" />
+                     <img src="/images/myInfo.jpg" alt="나의 정보 이미지" className="img-fluid responsive-settings" />
                   </div>
                </div>
             </div>
