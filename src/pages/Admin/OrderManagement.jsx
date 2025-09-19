@@ -1,5 +1,4 @@
 import { getOrdersStatusThunk } from '@/features/analytics/analyticsSlice'
-import { faL } from '@fortawesome/free-solid-svg-icons'
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -45,17 +44,6 @@ const OrderManagement = () => {
       setCurrentPage(1)
       setFilterName(searchTerm)
       setFilterStatus(statusFilter)
-   }
-
-   const handleRefund = async (orderId) => {
-      if (!window.confirm('정말 환불 처리하시겠습니까?')) return
-
-      try {
-         setOrders(orders.map((order) => (order.id === orderId ? { ...order, status: 'refunded' } : order)))
-      } catch (error) {
-         console.error('환불 처리 실패:', error)
-         alert('환불 처리에 실패했습니다. 다시 시도해주세요.')
-      }
    }
 
    const onKeydownKey = (e) => {

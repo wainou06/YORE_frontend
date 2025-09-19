@@ -2,6 +2,7 @@ import { getPlansStatusThunk, putPlanStatusThunk } from '@/features/analytics/an
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { showModalThunk } from '@/features/modal/modalSlice'
 
 const PlanManagement = () => {
    const navigate = useNavigate()
@@ -39,7 +40,7 @@ const PlanManagement = () => {
             ]
             setCarriers(carriersList)
          } catch (error) {
-            console.error('목록 로드 실패:', error)
+            await dispatch(showModalThunk({ type: 'alert', placeholder: '통신사 목록 로드 실패' })).unwrap()
          }
       }
 
@@ -59,7 +60,7 @@ const PlanManagement = () => {
          await dispatch(putPlanStatusThunk({ planId, newStatus })).unwrap()
          dispatch(getPlansStatusThunk({ currentPage, filter }))
       } catch (error) {
-         console.error('요금제 상태 변경 실패:', error)
+         await dispatch(showModalThunk({ type: 'alert', placeholder: '요금제 상태 변경 실패' })).unwrap()
       }
    }
 

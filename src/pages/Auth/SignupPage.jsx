@@ -61,7 +61,7 @@ const SignupPage = () => {
             navigate('/')
          }
       } catch (err) {
-         console.error('회원가입 에러:', err)
+         dispatch(showModalThunk({ type: 'alert', placeholder: '회원가입에 실패하였습니다.' }))
       }
    }
 

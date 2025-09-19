@@ -21,7 +21,6 @@ const AdminLayout = () => {
    }, [dispatch])
 
    if (!isAuthenticated) {
-      console.log('관리자 정보 없음 - AdminLayout')
       dispatch(clearAdminError()) // 관리자 인증 실패 시 에러 초기화
       return <Navigate to="/" replace />
    }

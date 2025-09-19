@@ -1,0 +1,28 @@
+/* 제휴사 원형 영역 */
+.landing-affiliate-circle {
+   padding: 60px;
+   border-radius: 50%;
+   background: var(--bs-sub, #f8f9fa);
+   display: flex;
+   flex-direction: column;
+   justify-self: center;
+   max-width: 250px;
+   max-height: 250px;
+}
+
+.carrier-logo,
+.landing-affiliate-circle h4 {
+   flex: 1;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+.logo-img {
+   max-height: 150px;
+   object-fit: contain;
+}
+
+.landing-affiliate-name {
+   text-align: center;
+}

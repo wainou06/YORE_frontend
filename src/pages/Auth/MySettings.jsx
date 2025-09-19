@@ -61,7 +61,6 @@ const MySettings = () => {
             }
          })
          .catch((err) => {
-            console.log('비밀번호 변경 에러:', err)
             const msg = err?.message || err?.data?.message || err?.response?.data?.message || '입력값 검증 실패'
             dispatch(showModalThunk({ type: 'alert', placeholder: msg }))
          })
@@ -86,7 +85,6 @@ const MySettings = () => {
             }
          })
          .catch((err) => {
-            console.log('이메일 변경 에러:', err)
             let msg = ''
             if (typeof err === 'string') {
                msg = err
@@ -114,7 +112,6 @@ const MySettings = () => {
             }
          })
          .catch((err) => {
-            console.log('생일 변경 에러:', err)
             const msg = err?.message || err?.data?.message || err?.response?.data?.message || '입력값 검증 실패'
             dispatch(showModalThunk({ type: 'alert', placeholder: msg }))
          })

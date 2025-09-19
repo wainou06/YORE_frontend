@@ -5,7 +5,6 @@ import '@assets/css/RecommendCard.css'
 const RecommendPlans = ({ plans, onLike }) => {
    const navigate = useNavigate()
    const BASE_URL = import.meta.env.VITE_APP_API_URL || ''
-   console.log('추천 요금제:', plans)
    return (
       <div className="container">
          <h2 className="text-center mb-5">추천 요금제</h2>
