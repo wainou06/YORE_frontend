@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { getMyUserPlanBill } from '@/features/userPlans/userPlanSlice'
+import { getMyUserPlanBill, resetUserPlanBill } from '@/features/userPlans/userPlanSlice'
 import { selectUser, getProfile } from '@/features/auth/authSlice'
 import '@assets/css/MyInfo.css'
 
@@ -17,6 +17,10 @@ const Myinfo = () => {
 
    useEffect(() => {
       dispatch(getMyUserPlanBill())
+
+      return () => {
+         dispatch(resetUserPlanBill()) // 이전 사용자 정보 초기화
+      }
    }, [dispatch])
 
    useEffect(() => {
@@ -44,7 +48,7 @@ const Myinfo = () => {
                      <div className="col-12 mb-4">
                         <div className="text">
                            <h2>내 요금제</h2>
-                           <p>요금제: {planName}</p>
+                           <p>요금제: {planName ? planName : '요금제를 구매하지 않았습니다.'}</p>
                         </div>
                         <button onClick={() => navigate('plansettings')}>요금제 관리</button>
                      </div>
@@ -52,7 +56,7 @@ const Myinfo = () => {
                      <div className="col-12 mb-4">
                         <div className="text">
                            <h2>요금 청구서</h2>
-                           <p>월 요금: {monthlyFee ? `${monthlyFee.toLocaleString()} 원` : '불러오는 중...'}</p>
+                           <p>월 요금: {monthlyFee ? `${monthlyFee.toLocaleString()} 원` : '청구된 요금이 없습니다.'}</p>
                         </div>
                         <button onClick={() => navigate('billing')}>청구서 보기</button>
                      </div>

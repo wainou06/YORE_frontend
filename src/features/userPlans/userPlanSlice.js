@@ -42,7 +42,11 @@ const initialState = {
 const userPlanSlice = createSlice({
    name: 'userPlans',
    initialState,
-   reducers: {},
+   reducers: {
+      resetUserPlanBill: (state) => {
+         state.userPlanBill = null
+      },
+   },
    extraReducers: (builder) => {
       builder
          // 생성
@@ -90,4 +94,5 @@ const userPlanSlice = createSlice({
    },
 })
 
+export const { resetUserPlanBill } = userPlanSlice.actions
 export default userPlanSlice.reducer
