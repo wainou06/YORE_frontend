@@ -51,7 +51,7 @@ const UserManagement = () => {
       try {
          setUsers(users.map((user) => (user.id === userId ? { ...user, status: newStatus } : user)))
       } catch (error) {
-         console.error('사용자 상태 변경 실패:', error)
+         await dispatch(showModalThunk({ type: 'alert', placeholder: '사용자 상태 변경 실패' })).unwrap()
       }
    }
 

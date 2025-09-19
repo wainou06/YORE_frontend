@@ -196,9 +196,7 @@ const PlanEditPage = () => {
       if (!validateForm()) return
       // 실제로 저장될 부가서비스가 1개 이상인지 체크
       const filteredServices = newServices.filter((svc) => svc.name && svc.price)
-      // 디버깅용 콘솔 출력
-      console.log('newServices:', newServices)
-      console.log('filteredServices:', filteredServices)
+
       // 입력란이 1개만 있고 값이 모두 비어 있을 때도 저장 차단
       if (filteredServices.length === 0 && newServices.length === 1) {
          dispatch(showModalThunk({ type: 'alert', placeholder: '최소 1개 이상의 부가서비스를 입력해야 합니다.' }))

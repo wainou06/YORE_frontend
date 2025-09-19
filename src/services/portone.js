@@ -26,7 +26,6 @@ const getAccessToken = async () => {
       const data = await response.json()
       return data.accessToken
    } catch (error) {
-      console.error('Access Token 발급 실패:', error)
       throw error
    }
 }
@@ -75,7 +74,6 @@ const createPaymentRequest = async (orderData) => {
       const data = await response.json()
       return data
    } catch (error) {
-      console.error('결제 요청 생성 실패:', error)
       throw error
    }
 }
@@ -96,7 +94,6 @@ const getPaymentStatus = async (paymentId) => {
       const data = await response.json()
       return data
    } catch (error) {
-      console.error('결제 상태 조회 실패:', error)
       throw error
    }
 }
@@ -122,7 +119,6 @@ const cancelPayment = async (paymentId, reason) => {
       const data = await response.json()
       return data
    } catch (error) {
-      console.error('결제 취소 실패:', error)
       throw error
    }
 }

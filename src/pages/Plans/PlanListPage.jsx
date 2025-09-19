@@ -14,8 +14,6 @@ const PlanListPage = () => {
    const [loading, setLoading] = useState(true)
    const [error, setError] = useState(null)
 
-   console.log('요금제 목록: ', plans)
-
    const handleSearch = (e) => {
       e.preventDefault()
       setSearchParams({ search: searchTerm })
