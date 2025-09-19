@@ -18,8 +18,8 @@ const SignupPage = () => {
       confirmPassword: '',
       name: '',
       phone: '',
-      businessNumber: '', // 기업회원 전용
-      companyName: '', // 기업회원 전용
+      businessNumber: '',
+      companyName: '',
    })
 
    const handleChange = (e) => {
@@ -33,7 +33,6 @@ const SignupPage = () => {
    const handleSubmit = async (e) => {
       e.preventDefault()
 
-      // 비밀번호 확인
       if (formData.password !== formData.confirmPassword) {
          dispatch(showModalThunk({ type: 'alert', placeholder: '비밀번호가 일치하지 않습니다.' }))
          return
@@ -43,10 +42,9 @@ const SignupPage = () => {
          email: formData.email,
          password: formData.password,
          name: formData.name,
-         userid: formData.email.split('@')[0], // userid 자동 생성 (이메일 앞부분 사용)
+         userid: formData.email.split('@')[0],
          phone: formData.phone,
          access: userType === 'personal' ? 'user' : 'agency',
-         // 기업회원인 경우 추가 정보
          ...(userType === 'business' && {
             agency: {
                businessNumber: formData.businessNumber,
@@ -67,7 +65,6 @@ const SignupPage = () => {
       }
    }
 
-   // 에러 처리
    useEffect(() => {
       if (error) {
          dispatch(showModalThunk({ type: 'alert', placeholder: `${error}` }))
@@ -84,7 +81,6 @@ const SignupPage = () => {
                   <div className="card-body p-4">
                      <h2 className="text-center mb-4">회원가입</h2>
 
-                     {/* 회원 유형 선택 */}
                      <div className="btn-group w-100 mb-4">
                         <button type="button" className={`btn ${userType === 'personal' ? 'btn-primary' : 'btn-outline-primary'}`} onClick={() => setUserType('personal')}>
                            개인회원
@@ -105,7 +101,6 @@ const SignupPage = () => {
 
                      <hr className="my-4" />
 
-                     {/* 회원가입 폼 */}
                      <form onSubmit={handleSubmit}>
                         <div className="mb-3">
                            <label className="form-label">이메일</label>

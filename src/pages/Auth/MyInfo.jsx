@@ -15,15 +15,13 @@ const Myinfo = () => {
    const transaction = userPlanBill?.transaction
    const monthlyFee = transaction?.installmentAmount || transaction?.amount || ''
 
-   // 요금제 정보 가져오기
    useEffect(() => {
       dispatch(getMyUserPlanBill())
    }, [dispatch])
 
-   // 새로고침 시에도 user 정보 가져오기
    useEffect(() => {
       if (!user) {
-         dispatch(getProfile()) // 로그인 상태면 서버에서 user 정보 가져와서 Redux store 채움
+         dispatch(getProfile())
       }
    }, [dispatch, user])
 

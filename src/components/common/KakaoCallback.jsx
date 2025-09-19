@@ -16,7 +16,6 @@ const KakaoCallback = () => {
       const urlParams = new URLSearchParams(window.location.search)
       const token = urlParams.get('token')
       const name = urlParams.get('name')
-      // state 파라미터로 rememberMe 전달
       const rememberMe = urlParams.get('state') === 'true'
 
       if (token && name) {
@@ -30,7 +29,6 @@ const KakaoCallback = () => {
             sessionStorage.setItem('userName', decodeURIComponent(name))
             if (refreshToken) sessionStorage.setItem('refreshToken', refreshToken)
          }
-         // 프로필 및 알림 동기화
          dispatch(getProfile()).then(() => {
             dispatch(fetchNotifications())
             navigate('/')
