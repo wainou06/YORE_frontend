@@ -19,11 +19,6 @@ const KakaoCallback = () => {
       // state 파라미터로 rememberMe 전달
       const rememberMe = urlParams.get('state') === 'true'
 
-      // 여기 확인
-      console.log('Frontend received token:', token)
-      console.log('Frontend received name:', name)
-      console.log('Frontend received rememberMe:', rememberMe)
-
       if (token && name) {
          const refreshToken = urlParams.get('refreshToken')
          if (rememberMe) {

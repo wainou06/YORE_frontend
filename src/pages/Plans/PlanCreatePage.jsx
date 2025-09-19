@@ -185,7 +185,6 @@ const PlanCreatePage = () => {
    // 제출
    const handleSubmit = async (e) => {
       e.preventDefault()
-      console.log(admin)
       if (!validateForm()) return
       if (!admin && !agencyInfo?.id) {
          dispatch(showModalThunk({ type: 'alert', placeholder: '통신사 정보가 없습니다. 다시 로그인하거나 관리자에게 문의하세요.' }))
@@ -232,7 +231,6 @@ const PlanCreatePage = () => {
       } else {
          delete planPayload.services
       }
-      console.log('Submitting plan payload:', planPayload)
       const formData = new FormData()
       formData.append('planData', JSON.stringify(planPayload))
       images.forEach((img) => formData.append('images', img.file))

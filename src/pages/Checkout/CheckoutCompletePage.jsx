@@ -37,7 +37,6 @@ const CheckoutCompletePage = () => {
                throw new Error('결제가 완료되지 않았습니다.')
             }
          } catch (error) {
-            console.error('결제 확인 실패:', error)
             setError(error.message)
             setStatus('error')
             dispatch(paymentFailure(error.message))

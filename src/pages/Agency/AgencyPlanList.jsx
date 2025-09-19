@@ -27,8 +27,6 @@ const AgencyPlanList = () => {
 
    const handleFilterChange = (newFilters) => setFilters(newFilters)
 
-   console.log('요금제 목록:', plans)
-
    // 필터링 useMemo로 최적화
    const filteredPlans = useMemo(() => {
       return (plans || []).filter((plan) => {

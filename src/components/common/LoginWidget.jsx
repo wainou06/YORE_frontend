@@ -26,11 +26,6 @@ const LoginWidget = () => {
 
    const notifications = useSelector((state) => state.notification.notifications)
    const unreadCount = notifications.filter((n) => !n.isRead).length
-   // 알림 상태 콘솔 출력
-   useEffect(() => {
-      console.log('[알림 상태]', notifications)
-      console.log('[읽지 않은 알림 개수]', unreadCount)
-   }, [notifications, unreadCount])
 
    const [showDropdown, setShowDropdown] = useState(false)
    const [loginType, setLoginType] = useState('personal')
@@ -97,7 +92,7 @@ const LoginWidget = () => {
          await dispatch(showModalThunk({ type: 'alert', placeholder: '로그인 되었습니다.' })).unwrap()
          await dispatch(fetchNotifications())
       } catch (err) {
-         console.error('로그인 실패:', err)
+         await dispatch(showModalThunk({ type: 'alert', placeholder: '로그인에 실패했습니다.' })).unwrap()
       }
    }
 
@@ -148,14 +143,12 @@ const LoginWidget = () => {
             console.log('임시 비밀번호:', tempPassword)
          }
       } catch (err) {
-         console.error(err)
+         await dispatch(showModalThunk({ type: 'alert', placeholder: '비밀번호 찾기에 실패했습니다.' })).unwrap()
       }
    }
 
    return (
       <div className="card shadow-sm p-4">
-         {/* 알림 드롭다운 props 콘솔 출력 */}
-         {isAuthenticated && user && <>{console.log('[NotificationDropdown props]', { notifications, unreadCount, user })}</>}
          {isAuthenticated && user ? (
             user.access === 'user' ? (
                <>

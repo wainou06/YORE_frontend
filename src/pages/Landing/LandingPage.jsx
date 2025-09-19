@@ -33,8 +33,6 @@ const LandingPage = () => {
       dispatch(getPlans())
    }, [dispatch])
 
-   console.log('요금 리스트:', plans)
-
    useEffect(() => {
       // surveys.surveys 배열에서 좋아요 순 정렬 및 추천 요금제 추출
       if (Array.isArray(surveys.surveys) && surveys.surveys.length > 0) {
@@ -199,7 +197,7 @@ const LandingPage = () => {
                   ].map((carrier, index) => (
                      <div key={index} className="col-md-4 col-12 text-center g-4">
                         <div className="landing-affiliate-circle">
-                           <div className='carrier-logo'>
+                           <div className="carrier-logo">
                               <img src={carrier.logo} alt={carrier.name} className="logo-img" />
                            </div>
                            <h4 className="landing-affiliate-name mt-20">{carrier.name}</h4>

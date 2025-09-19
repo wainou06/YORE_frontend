@@ -80,7 +80,6 @@ const PriceSummary = ({ plan: propPlan, options }) => {
                installmentMonths: paymentMethod === 'card' && installment ? Number(installmentMonths) : null,
                installmentAmount: paymentMethod === 'card' && installment ? Math.ceil(totalPrice / Number(installmentMonths)) : null,
             }
-            console.log('결제 요청 payload', transactionPayload)
             await dispatch(createTransaction(transactionPayload)).unwrap()
             setSuccess(true)
          } catch (err) {

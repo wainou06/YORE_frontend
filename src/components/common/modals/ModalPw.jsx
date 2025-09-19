@@ -27,7 +27,6 @@ export const ModalForgetPassword = () => {
             setTempPassword(res.data.message || '해당 사용자가 존재하지 않습니다.')
          }
       } catch (err) {
-         console.error(err)
          setTempPassword('서버 오류가 발생했습니다.')
       }
    }
