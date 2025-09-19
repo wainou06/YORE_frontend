@@ -4,7 +4,6 @@ import { Navigation, FreeMode } from 'swiper/modules'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 
-// Swiper 스타일
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/free-mode'

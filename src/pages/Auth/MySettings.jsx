@@ -122,7 +122,7 @@ const MySettings = () => {
       try {
          const res = await authAPI.deleteAccount()
          if (res.data.success) {
-            localStorage.removeItem('token') // 토큰 제거
+            localStorage.removeItem('token')
             navigate('/')
             dispatch(showModalThunk({ type: 'alert', placeholder: '회원 탈퇴에 성공했습니다.' }))
          } else {
@@ -171,7 +171,6 @@ const MySettings = () => {
                         </div>
                      </div>
 
-                     {/* 회원 탈퇴 */}
                      <div className="card p-3 shadow-none border-0 mt-3">
                         <h5 className="card-title mb-4">회원 탈퇴</h5>
                         <div className="d-flex justify-content-end">
