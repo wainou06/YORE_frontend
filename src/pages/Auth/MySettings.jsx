@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { getProfile, selectUser, selectIsAuthenticated, changePassword, updateProfile, changeBirth } from '@features/auth/authSlice'
+import authAPI from '@/api/authApi'
 import { showModalThunk } from '../../features/modal/modalSlice'
 import '@assets/css/MySettings.css'
 
@@ -117,6 +118,21 @@ const MySettings = () => {
          })
    }
 
+   const handleDeleteAccount = async () => {
+      try {
+         const res = await authAPI.deleteAccount()
+         if (res.data.success) {
+            localStorage.removeItem('token') // 토큰 제거
+            navigate('/')
+            dispatch(showModalThunk({ type: 'alert', placeholder: '회원 탈퇴에 성공했습니다.' }))
+         } else {
+            dispatch(showModalThunk({ type: 'alert', placeholder: '회원 탈퇴에 실패했습니다.' }))
+         }
+      } catch (err) {
+         dispatch(showModalThunk({ type: 'alert', placeholder: '회원 탈퇴중 오류가 발생했습니다.' }))
+      }
+   }
+
    return (
       <div className="container content_box py-5">
          <div className="row justify-content-center">
@@ -154,10 +170,20 @@ const MySettings = () => {
                            </button>
                         </div>
                      </div>
+
+                     {/* 회원 탈퇴 */}
+                     <div className="card p-3 shadow-none border-0 mt-3">
+                        <h5 className="card-title mb-4">회원 탈퇴</h5>
+                        <div className="d-flex justify-content-end">
+                           <button className="btn btn-danger" onClick={handleDeleteAccount}>
+                              탈퇴
+                           </button>
+                        </div>
+                     </div>
                   </div>
 
                   <div className="col-12 col-md-4 d-none d-md-flex align-items-start justify-content-center">
-                     <img src="/src/assets/images/settings.svg" alt="세팅 이미지" className="img-fluid responsive-settings" />
+                     <img src="/src/assets/images/settings.png" alt="세팅 이미지" className="img-fluid responsive-settings" />
                   </div>
                </div>
             </div>
