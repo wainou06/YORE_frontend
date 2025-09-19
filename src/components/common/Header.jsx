@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch, faBars, faTimes, faChartLine } from '@fortawesome/free-solid-svg-icons'
-import logo from '@assets/images/logo.png'
+import logo from '../../../public/images/logo.png'
 
 const Header = () => {
    const [isMenuOpen, setIsMenuOpen] = useState(false)

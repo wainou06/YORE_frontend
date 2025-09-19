@@ -11,11 +11,11 @@
 }
 
 .banner-swiper .Slide1 {
-   background: url('../images/banner/banner1.jpg') no-repeat center;
+   background: url('../../../public/images/banner/banner1.jpg') no-repeat center;
    background-size: cover;
 }
 .Slide1 .Slide-bg {
-   background: url('../images//banner//banner1.png') no-repeat center;
+   background: url('../../../public/images/banner/banner1.png') no-repeat center;
    background-size: cover;
    height: 100%;
    padding: 60px;
@@ -42,7 +42,7 @@
 }
 
 .banner-swiper .Slide2 {
-   background: url('../images/banner/banner2.jpg') no-repeat center;
+   background: url('../../../public/images/banner/banner2.jpg') no-repeat center;
    background-size: cover;
 }
 .Slide2 .Slide-bg {
@@ -54,7 +54,7 @@
 }
 
 .banner-swiper .Slide3 {
-   background: url('../images/banner/banner3.jpg') no-repeat center;
+   background: url('../../../public/images/banner/banner3.jpg') no-repeat center;
    background-size: cover;
 }
 .Slide3 .Slide-bg {
@@ -68,7 +68,7 @@
 }
 
 .banner-swiper .Slide4 {
-   background: url('../images/banner/banner4.jpg') no-repeat center;
+   background: url('../../../public/images/banner/banner4.jpg') no-repeat center;
    background-size: cover;
 }
 .Slide4 .Slide-bg {
