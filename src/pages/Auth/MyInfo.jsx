@@ -19,7 +19,7 @@ const Myinfo = () => {
       dispatch(getMyUserPlanBill())
 
       return () => {
-         dispatch(resetUserPlanBill()) // 이전 사용자 정보 초기화
+         dispatch(resetUserPlanBill())
       }
    }, [dispatch])
 

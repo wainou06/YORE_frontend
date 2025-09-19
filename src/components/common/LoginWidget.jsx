@@ -17,7 +17,6 @@ const LoginWidget = () => {
    const loading = useSelector(selectAuthLoading)
    const error = useSelector(selectAuthError)
 
-   // 로그인된 상태에서 알림 자동 fetch
    useEffect(() => {
       if (isAuthenticated && user) {
          dispatch(fetchNotifications())
@@ -34,7 +33,6 @@ const LoginWidget = () => {
    const [rememberMe, setRememberMe] = useState(false)
    const [userName, setUserName] = useState('')
 
-   // 아이디 저장 초기화
    useEffect(() => {
       const savedEmail = localStorage.getItem('savedEmail')
       if (savedEmail) {
@@ -46,13 +44,11 @@ const LoginWidget = () => {
       if (savedName) setUserName(savedName)
    }, [])
 
-   // 토큰 있으면 프로필 조회
    useEffect(() => {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token')
       if (token && token.trim() !== '') dispatch(getProfile())
    }, [dispatch])
 
-   // 토큰 없는데 유저가 남아있으면 초기화
    useEffect(() => {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token')
       if ((!token || token.trim() === '') && (user || isAuthenticated)) {
@@ -82,7 +78,6 @@ const LoginWidget = () => {
             }
          }
 
-         // 로그인 성공 후 프로필 조회 및 userName 저장
          const profile = await dispatch(getProfile()).unwrap()
          if (profile?.name) {
             localStorage.setItem('userName', profile.name)
@@ -102,9 +97,9 @@ const LoginWidget = () => {
          dispatch(logout()).finally(() => {
             localStorage.removeItem('token')
             sessionStorage.removeItem('token')
-            localStorage.removeItem('userName') // ✅ userName 제거
+            localStorage.removeItem('userName')
             sessionStorage.removeItem('userName')
-            setUserName('') // 상태 초기화
+            setUserName('')
             if (!rememberMe) {
                localStorage.removeItem('savedEmail')
                setEmail('')
@@ -117,7 +112,7 @@ const LoginWidget = () => {
          dispatch({ type: 'auth/resetAuthState' })
          localStorage.removeItem('token')
          sessionStorage.removeItem('token')
-         localStorage.removeItem('userName') // ✅ userName 제거
+         localStorage.removeItem('userName')
          sessionStorage.removeItem('userName')
          setUserName('')
          if (!rememberMe) {
@@ -131,7 +126,7 @@ const LoginWidget = () => {
    }
 
    const getKakaoAuthUrl = () => {
-      const base = `https://kauth.kakao.com/oauth/authorize?client_id=${import.meta.env.VITE_APP_KAKAO_LOGIN_REST}`
+      const base = `${import.meta.env.VITE_KAKAO_BASE_URL}/oauth/authorize?client_id=${import.meta.env.VITE_APP_KAKAO_LOGIN_REST}`
       const redirect = encodeURIComponent(import.meta.env.VITE_KAKAO_REDIRECT_URI)
       return `${base}&redirect_uri=${redirect}&response_type=code&scope=profile_nickname&prompt=login&state=${rememberMe}`
    }
