@@ -12,6 +12,7 @@ import servicesReducer from '@features/services/serviceSlice'
 import transactionReducer from '@features/transactions/transactionSlice'
 import notificationReducer from '@features/notification/notificationSlice'
 import surveyReducer from '@features/survey/surveySlice'
+import userServicesReducer from '@features/userServices/userServicesSlice'
 
 export const store = configureStore({
    reducer: {
@@ -28,5 +29,6 @@ export const store = configureStore({
       transactions: transactionReducer,
       notification: notificationReducer,
       survey: surveyReducer,
+      userServices: userServicesReducer,
    },
 })
