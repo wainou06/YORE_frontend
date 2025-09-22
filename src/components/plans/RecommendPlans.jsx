@@ -5,6 +5,15 @@ import '@assets/css/RecommendCard.css'
 const RecommendPlans = ({ plans, onLike }) => {
    const navigate = useNavigate()
    const BASE_URL = import.meta.env.VITE_APP_API_URL || ''
+
+   // 무제한 표시 함수 (문자열/숫자 모두 처리)
+   const getUnlimited = (value, unit) => {
+      const num = Number(value)
+      if (num === 99999 || num === 999999) return '무제한'
+      if (value === null || value === undefined) return '-'
+      return `${value}${unit}`
+   }
+
    return (
       <div className="container">
          <h2 className="text-center mb-5">추천 요금제</h2>
@@ -22,7 +31,7 @@ const RecommendPlans = ({ plans, onLike }) => {
                            <div className="recommend-card-info">
                               <p>추천 연령대: {plan.age}대</p>
                               <p>
-                                 {plan.data}GB | {plan.voice}분 | {plan.sms}건
+                                 {getUnlimited(plan.data, 'GB')} | {getUnlimited(plan.voice, '분')} | {getUnlimited(plan.sms, '건')}
                               </p>
                               <p className="mb-0">약정 기간: {plan.dis}개월</p>
                            </div>
