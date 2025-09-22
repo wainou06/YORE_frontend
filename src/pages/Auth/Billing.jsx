@@ -1,15 +1,24 @@
 import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { getMyUserPlanBill } from '@/features/userPlans/userPlanSlice'
+import { fetchUserServices } from '@/features/userServices/userServicesSlice'
 import '@assets/css/Billing.css'
 
 const Billing = () => {
    const dispatch = useDispatch()
    const { userPlanBill, loading, error } = useSelector((state) => state.userPlans)
+   const { userServices, loading: userServicesLoading, error: userServicesError } = useSelector((state) => state.userServices)
+   const user = useSelector((state) => state.auth?.user) // 로그인 유저 정보
 
    useEffect(() => {
       dispatch(getMyUserPlanBill())
    }, [dispatch])
+
+   useEffect(() => {
+      if (user?.id) {
+         dispatch(fetchUserServices(user.id))
+      }
+   }, [dispatch, user?.id])
 
    const planName = userPlanBill?.planName || ''
    const status = userPlanBill?.status || ''
@@ -44,8 +53,20 @@ const Billing = () => {
 
                         <div className="card p-3 shadow-none border-0 mt-3">
                            <h5 className="card-title">부가 서비스</h5>
-                           <p>부가 서비스: 유튜브 프리미엄</p>
-                           <p>금액: 4,500원</p>
+                           {userServicesLoading ? (
+                              <p>부가 서비스 불러오는 중...</p>
+                           ) : userServicesError ? (
+                              <p className="text-danger">{userServicesError}</p>
+                           ) : userServices?.length > 0 ? (
+                              userServices.map((svc) => (
+                                 <div key={svc.id}>
+                                    <p>부가 서비스: {svc.service?.name || svc.serviceId}</p>
+                                    <p>금액: {svc.monthly_fee?.toLocaleString()}원</p>
+                                 </div>
+                              ))
+                           ) : (
+                              <p>부가 서비스 없음</p>
+                           )}
                         </div>
 
                         {loading && <div className="text-center my-3">불러오는 중...</div>}
