@@ -76,12 +76,12 @@ const AdminDashboard = () => {
                   <div className="stat-card">
                      <h3>총 수익</h3>
                      <div className="stat-value">₩{(stats.totalRevenue ?? 0).toLocaleString()}</div>
-                     {stats.newTotalRevenue > 0 && <div className="stat-change positive">+{((stats.newTotalRevenue / (stats.totalRevenue - stats.newTotalRevenue)) * 100).toFixed(1)}%</div>}
+                     {stats.newTotalRevenue > 0 && stats.totalRevenue > stats.newTotalRevenue && <div className="stat-change positive">+{((stats.newTotalRevenue / (stats.totalRevenue - stats.newTotalRevenue)) * 100).toFixed(1)}%</div>}
                   </div>
                   <div className="stat-card">
                      <h3>신규 가입자(일주일)</h3>
                      <div className="stat-value">{(stats.newUsers ?? 0).toLocaleString()}</div>
-                     {stats.newUsers - stats.newNewUsers != 0 && (
+                     {stats.newUsers - stats.newNewUsers != 0 && stats.newNewUsers > 0 && (
                         <div className={`stat-change ${stats.newUsers - stats.newNewUsers > 0 ? 'positive' : 'negative'}`}>
                            {stats.newUsers - stats.newNewUsers > 0 && '+'}
                            {(((stats.newUsers - stats.newNewUsers) / stats.newNewUsers) * 100).toFixed(1)}%
@@ -91,7 +91,7 @@ const AdminDashboard = () => {
                   <div className="stat-card">
                      <h3>평균 결제 금액</h3>
                      <div className="stat-value">₩{(stats.pastAverageOrder ?? 0).toLocaleString()}</div>
-                     {stats.pastAverageOrder != stats.averageOrder && (
+                     {stats.pastAverageOrder != stats.averageOrder && stats.averageOrder > 0 && (
                         <div className={`stat-change ${stats.pastAverageOrder > stats.averageOrder ? 'positive' : 'negative  '}`}>
                            {stats.pastAverageOrder > stats.averageOrder && '+'}
                            {(((stats.pastAverageOrder - stats.averageOrder) / stats.averageOrder) * 100).toFixed(1)}%
